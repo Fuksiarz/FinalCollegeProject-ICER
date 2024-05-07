@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import "./AddProduct.css";
 import {AuthContext} from '../../account/auth-context';
 import {Icon} from "@iconify/react";
@@ -15,6 +15,7 @@ import {stopCamera} from "../API/stopCamera";
 import {updateFood} from "../API/updateFood";
 import {cameraControl} from "../API/cameraControl";
 import {sendImageToFlask} from "../API/sendImageToFlask";
+
 
 //funkcja zajmująca się dodawaniem prodktu
 function AddProduct() {
@@ -62,7 +63,12 @@ function AddProduct() {
     const [imageForIdentyficationURL, setImageForIdentyficationURL] = useState(null);
 
     const [imageIdentyficationInfo,setImageIdentyficationInfo] = useState([]);
+    const [info, setInfo] = useState('');
+    const [stop, setStop] = useState(false);
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
 
+    let stopRecording = null;
     //przy zatwierdzaniu formularza:
     const handleSubmit = (e) => {
         //nie odświeżaj
@@ -84,7 +90,7 @@ function AddProduct() {
     useEffect(() => {
 
 
-    }, [refresh, imageIdentyfication,streamCamera,stopCamera]);//odśwież po zmianie tych wartości
+    }, [refresh, imageIdentyfication,streamCamera]);//odśwież po zmianie tych wartości
 
 
     //przełącz widoczność opcji identyfikacji
@@ -99,17 +105,29 @@ function AddProduct() {
         setOneIdCameraOptions(!oneIdCameraOptions)
     }
 
+    const startCamera = () => {
+        stopRecording = cameraControl(videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo,streamCamera);
+        setStreamCamera(true);
+    };
+
+    const stopCamera = () => {
+        if (stopRecording)
+            stopRecording();
+            setStreamCamera(false);
+    };
+
+
+
     return (
         <>
             {/* kiedy jest obraz z kamery to wyśletlaj: */}
             {streamCamera ?
                 /* kontener posiadający obraz z api */
-                <div className="rightCameraOptionUsed"><img className="rightCameraOptionView" src={streamCamera} key={streamCamera} alt="foodId"/>
-
+                <div className="rightCameraOptionUsed"><video ref={videoRef} autoPlay playsInline className="rightCameraOptionView" />
+                    <canvas ref={canvasRef} style={{ display: "none" }} />
                     {/* konener, który przy naciśnięciu zatrzymuje kamerę */}
-                    <div onClick={() => {
-                        stopCamera({updateFood}, productBackpack, setStreamCamera, setProductBackpack, sessionId)
-                    }} className="stopCameraButton"><Icon className="stopCameraButtonIcon"
+                    {info && <div className="info-overlay">{info}</div>}
+                    <div onClick={stopCamera} className="stopCameraButton"><Icon className="stopCameraButtonIcon"
                                                           icon="fluent-emoji-high-contrast:stop-button"
                                                           style={{color: '#f50000'}}/></div>
                 </div> :/* kiedy nie ma obrazu z kamery to wyświetl: */
@@ -224,8 +242,8 @@ function AddProduct() {
                                         <label><h5> identyfikuj </h5></label>
                                         {/* kontener z opcjami po naciśnięciu */}
                                         <div className="cameraOptions"
-                                             /* w zależności od wartości zmiennej showCameraOptions pokaż bądź
-                                             nie pokazuj poniższych kontenerów */
+                                            /* w zależności od wartości zmiennej showCameraOptions pokaż bądź
+                                            nie pokazuj poniższych kontenerów */
                                              style={{display: showCameraOptions ? 'flex' : 'none'}}>
                                             {/* kontener z opcjami relatywny, rodzic posiada pozycję absolutną */}
                                             <div className="cameraOptionsRelative">
@@ -237,7 +255,7 @@ function AddProduct() {
                                                         /* kontener, w którym możemy dodać zdjęcie  */
                                                         <div className="chooseFormOfId"
 
-                                                             //nie odświeżaj
+                                                            //nie odświeżaj
                                                              onClick={event => event.stopPropagation()}>
                                                             {/* jeśli nie ma podglądu to pokaż pole wejściowe pliku bądź zdjęcia */}
                                                             {!imageForIdentyficationURL && <>
@@ -259,9 +277,8 @@ function AddProduct() {
 
                                                 </div>
                                                 {/* Kontener, który po naciśnięciu pozwala na indentyfikację wideo */}
-                                                <div className="rightCameraOption" onClick={() => {
-                                                    cameraControl(setStreamCamera)
-                                                }}>
+                                                <div onClick={startCamera} className="rightCameraOption"
+                                                >
                                                     <label><h5>wiele</h5></label>
                                                     <Icon icon="oui:ml-create-multi-metric-job"/>
                                                 </div>
