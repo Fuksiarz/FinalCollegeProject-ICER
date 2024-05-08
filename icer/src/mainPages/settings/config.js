@@ -2,7 +2,7 @@
 //magazyn z paroma potrzebnymi zmiennymi
 
 //używane URL w całej aplikacji
-const API_URL = "http://192.168.1.237:5000";
+const API_URL = "http://localhost:5000";
 
 //http://127.0.0.1:5000
 //http://192.168.0.130:5000

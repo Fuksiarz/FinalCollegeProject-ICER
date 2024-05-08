@@ -5,7 +5,6 @@ export const cameraControl = (videoRef, canvasRef, setStreamCamera, setProductBa
     const frameRate = 100;
     const interval = 20000 / frameRate;
 
-    // Funkcja `stopRecording` powinna zwracać właściwą funkcję
     const stopRecording = () => {
         isRecording = false;
 
@@ -38,11 +37,10 @@ export const cameraControl = (videoRef, canvasRef, setStreamCamera, setProductBa
         }
     };
 
-    // Ustaw wyższą rozdzielczość dla wyświetlanego obrazu
     const videoConstraints = {
         video: {
-            width: { ideal: 640 },
-            height: { ideal: 480 },
+            width: { ideal: 1080 },
+            height: { ideal: 1080 },
             frameRate: frameRate,
             advanced: [{ facingMode: "user", codec: "video/x-motion-jpeg" }],
         },
@@ -63,7 +61,6 @@ export const cameraControl = (videoRef, canvasRef, setStreamCamera, setProductBa
                             const canvas = canvasRef.current;
                             const context = canvas.getContext("2d");
 
-                            // Ustaw niższą rozdzielczość dla przesyłanego obrazu
                             const targetWidth = 224;
                             const targetHeight = 224;
                             canvas.width = targetWidth;
@@ -71,18 +68,18 @@ export const cameraControl = (videoRef, canvasRef, setStreamCamera, setProductBa
                             context.clearRect(0, 0, canvas.width, canvas.height);
                             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                            context.font = "20px Arial";
-                            context.fillStyle = "red";
-                            context.fillText("Informacje nakładane na obraz", 10, 30);
-
-                            const frameBase64 = canvas.toDataURL("image/jpeg");
+                            const frameBase64 = canvas.toDataURL("image/jpeg").split(",")[1];  // Upewnij się, że przesyłasz czyste base64
                             console.log("Wysyłany obraz:", frameBase64);
 
-                            const analysisResult = await sendFrameToFlask(frameBase64.split(",")[1]);
+                            const analysisResult = await sendFrameToFlask(frameBase64);
 
-                            if (analysisResult && analysisResult.product) {
-                                setProductBackpack((prev) => [...prev, analysisResult.product]);
-                                setInfo(`Rozpoznany produkt: ${analysisResult.product.nazwa}`);
+                            if (analysisResult && analysisResult.length > 0) {
+                                const firstResponse = analysisResult[0];
+                                if (firstResponse.message) {
+                                    setInfo(`Otrzymano wiadomość: ${firstResponse.message}`);
+                                } else if (firstResponse.error) {
+                                    setInfo(`Wystąpił błąd: ${firstResponse.error}`);
+                                }
                             }
                         }
 

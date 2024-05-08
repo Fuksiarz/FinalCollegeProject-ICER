@@ -1,18 +1,18 @@
 import axios from 'axios';
+import {API_URL} from "../../settings/config";
 
-const FLASK_API_URL = "https://example-flask-api.com"; // Zmień na odpowiedni URL
-
+// Updated function to send the correct payload
 export const sendFrameToFlask = async (frameBase64) => {
     try {
-        const response = await axios.post(`${FLASK_API_URL}/analyze_frame`, {
-            frameBase64,
+        const response = await axios.post(`${API_URL}/adison_molotow`, {
+            images: [frameBase64],  // Encapsulate frameBase64 into an 'images' array
         }, {
             headers: {
                 "Content-Type": "application/json",
             },
         });
 
-        return response.data; // Zakładam, że `response.data` zawiera odpowiedź z serwera Flask
+        return response.data; // Assuming `response.data` contains the response from the Flask server
     } catch (error) {
         console.error("Error sending frame to Flask server:", error);
         return null;

@@ -24,7 +24,8 @@ from modules.image_handler import handle_image_upload, change_user_profile
 from modules.scan_module.decoder import decode_qr_code  # ,decode_barcode
 from modules.scan_module.gen import generate_qr_code  # ,generate_barcode
 from modules.value_manager import ProductManager
-
+import base64
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -917,7 +918,7 @@ def delete_all_notification():
         user_id = user_result['id']
 
         notification_value = data.get('notificationValue')
-        
+
         # Usunięcie wszystkich powiadomień danego użytkownika
         if notification_value == 0:
             # Aktualizacja tylko tych powiadomień, które mają wartość 1
@@ -1326,7 +1327,7 @@ def edit_user():
 def index():
     # Pusty ciąg znaków dla odpowiedzi chatbota
     bot_response = ""
-    
+
     if request.method == 'POST':
         # Pobierz dane wejściowe użytkownika z formularza
         user_input = request.form['user_input']
@@ -1388,6 +1389,34 @@ def generate_qr_code_route():
     # Redirect
     return redirect(url_for('index'))
 
+
+
+@app.route('/adison_molotow', methods=['POST'])
+def get_frame():
+    data = request.json
+    print(data)
+    if data is None or 'images' not in data:
+        return jsonify({'error': 'No images provided'}), 400
+
+    images_data = data['images']
+    responses = []
+    for idx, image_data in enumerate(images_data):
+        if image_data.startswith('data:image'):
+            header, image_data = image_data.split(';base64,')
+
+        try:
+            image_bytes = base64.b64decode(image_data)
+            # Generowanie unikalnej nazwy pliku za pomocą timestamp
+            timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+            file_extension = 'jpg'  # Zmiana na JPG
+            image_filename = f'received_image_{timestamp}_{idx}.{file_extension}'
+            with open(image_filename, 'wb') as f:
+                f.write(image_bytes)
+            responses.append({'message': f'Image received successfully: {image_filename}'})
+        except Exception as e:
+            responses.append({'error': str(e)})
+
+    return jsonify(responses), 200
 
 @app.route('/decode_qr_code', methods=['POST'])
 def decode_qr_code_route():
@@ -1457,7 +1486,7 @@ def receive_data():
     print("Received data:", data)# Wydrukuj otrzymane dane na konsoli w celach debugowania lub rejestracji.
     # Zwraca odpowiedź pomyślnym odebraniu danych.
     return jsonify({"status": "Dane odebrane pomyślnie"})
-    
+
 
 @app.route('/start_camera_monitoring', methods=['POST'])
 def start_camera_monitoring_route():
@@ -1595,4 +1624,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')

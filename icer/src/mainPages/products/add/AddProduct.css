@@ -225,27 +225,30 @@
     transition: transform 0.2s;
 }
 /* kontener posiadający obraz wideo z api */
-.rightCameraOptionUsed{
-    position:relative;
-    bottom:1%;
-    right:0;
-    width:100vw;
-    height:100vh;
-    z-index: 100;/* na wierzchu */
-
+.rightCameraOptionUsed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100; /* aby znajdowało się na wierzchu */
+    overflow: hidden; /* zapobiegnij przewijaniu */
 }
-/*obraz wideo z api*/
-.rightCameraOptionView{
-    position:relative;
-    display:flex;
-    height:100%;
-    width:100%;
+
+/* obraz wideo z api */
+.rightCameraOptionView {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover; /* zapewnij wypełnienie ekranu */
 }
 /*przycisk zatrzymywania identyfikacji żywności*/
 .stopCameraButton{
     z-index: 1000;/* aby był widoczny */
-    position:relative;
-    bottom: 15vh;
+    position:fixed;
+    bottom: 2vh;
     left:42.5%;
     height:15vh;
     width:15vw;
