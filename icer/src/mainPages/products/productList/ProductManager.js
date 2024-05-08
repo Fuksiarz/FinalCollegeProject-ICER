@@ -24,7 +24,7 @@ function ProductManager({
     const [minDimension, setMinDimension] = useState(0);
 
     //inicjowanie zmiennej, która posiada wymiar okna listy produktów
-    const [dimension,setDimension]=useState({width:0, height:0});
+    const [widthDimension,setWidthDimension]=useState(0);
 
     //referencja do prawego przycisku listy zakupów, listy produktów wyczerpanych
     const rightButtonDivRef = useRef(null);
@@ -34,6 +34,7 @@ function ProductManager({
 
     //referencja do kontenera ustawień
     const sidebarRef = useRef(null);
+
 
     //zmiana wartości określającej czy ustawienia są widoczne
     const toggleSidebar = () => {
@@ -51,9 +52,9 @@ function ProductManager({
                 for (let entry of entries) {
                     const { width, height } = entry.contentRect;
                     // przypisanie stanu na mniejszą wartość z width i height
-                    setMinDimension(Math.min(width, height));
+                    setMinDimension(Math.min(width,height));
                     //przypisanie wymiarów
-                    setDimension({width:width,height:height})
+                    setWidthDimension(width)
 
                 }
             });
@@ -63,7 +64,7 @@ function ProductManager({
             // Czyszczenie przy odmontowywaniu
             return () => resizeObserver.unobserve(observeTarget);
         }
-    }, [dimension,minDimension,editingProduct, productData]);//odśwież kiedy któryś z tych elementów ulegnie zmianie
+    }, [widthDimension,minDimension,editingProduct, productData]);//odśwież kiedy któryś z tych elementów ulegnie zmianie
 
     //jeśli element zostanie naciśnięty nadaj wartość do selectedProductId jako jego id
     const handleProductClick = (productId) => {
@@ -143,7 +144,7 @@ function ProductManager({
                                 key={index} //jego index
                                 data={data} //dane
                                 handleRemove={productActions.handleRemove} //usuwanie produktu
-                                dimension={dimension} //wymiar
+                                widthDimension={widthDimension} //wymiar
                                 minDimension={minDimension} //mniejsza wartość z wymiaru
                                 handleEditClick={productActions.handleEditClick} //edycja produktu
                                 handleIncrease={productActions.handleIncrease} //dodanie ilości produktu

@@ -27,6 +27,7 @@ function ProductItem({
                          isHidden,
                          onProductClick,
                          minDimension,
+                         widthDimension,
                          rightButtonDivRef
                      }) {
 
@@ -48,15 +49,15 @@ function ProductItem({
     //przupisanie ustawienia dla strony lodówki
     const smallProductsCountSetting = getFridgeSizeIndex();
     //ustawianie wartości do obramówki, przekazujemy filter i dane, ustawiamy szerokość obramówki
-    const styl = GetBorderStyle(data, filter, 3);
+    const styl = GetBorderStyle(data, filter, 2 );
     //przupisanie ustawienia dla strony produktów
     const infoProductsNumeric = infoProducts ? 1 : 0;
     //w zależności od ustawień pokaż bądź ukryj informacje o produktach
     const [info, setInfo] = useState(infoProductsNumeric);
     //ustalanie wysokości i szerokości elementu listy w lodówce
-    const itemWidth = !isSelected ? minDimension * (smallProductsCount[smallProductsCountSetting] / 100) : minDimension * 95 / 100;
+    const itemWidth = !isSelected ? (widthDimension * (1 - 0.008* smallProductsCount[smallProductsCountSetting] )-smallProductsCount[smallProductsCountSetting]*3)/smallProductsCount[smallProductsCountSetting] : minDimension * (1 - 0.01);
     //ustalanie wysokości i szerokości elementu listy na stronie produktów
-    const itemWidthMedium = minDimension * ((mediumProductsCount[mediumProductsCountSetting]) / 100);
+    const itemWidthMedium = (widthDimension * (1 - 0.04* mediumProductsCount[mediumProductsCountSetting] )-mediumProductsCount[mediumProductsCountSetting]*3)/mediumProductsCount[mediumProductsCountSetting] ; //tworzenie obiektu, który posiada możliwe akcje na produkcie opisane w funkcji
     //tworzenie obiektu, który posiada możliwe akcje na produkcie opisane w funkcji
     const useProduct = useProductItem(data, handleDecrease, handleIncrease, handleZero, handleRemove, setIsSelected)
     // referencja do elementu do animacji przy przenoszeniu do listy wyczerpanych
@@ -66,8 +67,10 @@ function ProductItem({
     useEffect(() => {
         //ustawianie wartości przy odświeżaniu aby zmiany pojawiały się od razu
         setInfo(infoProducts ? 1 : 0);
+        console.log(minDimension)
+
     }, [getFridgeSizeIndex,
-        getProductsSizeIndex, infoProducts])//odświeżanie przy zmianie wartości elementów
+        getProductsSizeIndex, infoProducts,minDimension,widthDimension])//odświeżanie przy zmianie wartości elementów
 
 
     try {//jeśli są dane to
@@ -78,14 +81,16 @@ function ProductItem({
             switch (size) {
                 case 'small':
                     return (
+
                         //wyświetla na stronie głównej - lodówce
                         <div key={index}
+
                             //ustawianie klasy względem tego czy produkt jest zaznaczony i czy jest ukryty
                              className={`productItemSmall ${isSelected ? 'selected' : ''} ${isHidden ? 'hidden' : ''}`}
                             //ustawianie zdjęcia jako tło produtku
                              style={{
-                                 backgroundImage: `url(${picGetter})`, border: styl, flex: `1 0 ${itemWidth}px`, // Ustawienie szerokości elementu
-                                 height: `${itemWidth}px`
+                                 backgroundImage: `url(${picGetter})`, border: styl, flex: `0 0 ${isSelected ? '98%' : `${itemWidth}px`}`, // Ustawienie szerokości elementu
+                                 height: `${itemWidth}px`,
                              }}
                              onClick={() => onProductClick(data.id)}>
 
@@ -104,6 +109,7 @@ function ProductItem({
                                 :
                                 /*w przeciwnym wypadku wyświetl funkcję ProductItemSmall */
                                 <ProductItemSmall/>
+
                             }
 
                         </div>
@@ -122,10 +128,10 @@ function ProductItem({
                                  backgroundImage: `url(${picGetter})`,
                                  //ustawienie obramówki
                                  border: styl,
-                                 flex: `1 0 ${itemWidthMedium}px`,
+                                 flex: `0 0 ${itemWidthMedium}px`,
                                  height: `${itemWidthMedium}px`,
                                  // ustawienie wielkości czcionki
-                                 fontSize: getFontSize(mediumProductsCountSetting, minDimension)
+                                 fontSize: getFontSize(mediumProductsCountSetting, minDimension, widthDimension)
                              }}
                             //przy naciśnięciu zmień wartość info na przeciwną
                              onClick={() => setInfo(!info)}>

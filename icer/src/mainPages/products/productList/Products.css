@@ -115,7 +115,9 @@
     width: 100%; /* Zajmowanie całej dostępnej szerokości */
 
     overflow-y: auto;
-    justify-content: space-around;
+    justify-content: center; /* Wyrównanie do początku */
+    align-content: flex-start; /* Ustawienie rzędów na początku */
+
     margin:auto;
 }
 
