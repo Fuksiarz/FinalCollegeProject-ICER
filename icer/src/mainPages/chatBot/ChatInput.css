@@ -10,6 +10,10 @@
     justify-content: space-between; /*równa odległość między elementami*/
     display: flex;
 }
+.chat-input-container.minimized{
+
+    background:transparent;
+}
 
 .chatInput {
     width:78%;
@@ -34,6 +38,13 @@
     width:8%;
     justify-items: center;
     align-content: center;
+
+}
+.minimize-button.minimized{
+
+    position:fixed;
+    bottom: 0;
+    left:10px;
 
 }
 .minimize-buttonIcon {

@@ -20,17 +20,17 @@ import {GenerateQR} from "./mainPages/products/QR/GenerateQR";
 import {handleClickToggleMenu} from "./mainPages/hooks/handleClickToggleMenu";
 
 //główna funkcja na której podmieniają się elementy podstron aplikacji
-function Main() {
+function Main({chatIsMinimized,setChatIsMinimized}) {
     //zmienna określająca czy widoczne jest pierwsze czy drugie menu
     const [secoundMenu, setSecoundMenu] = useState(false);
 
-    const [isMinimized,setIsMinimized] = useState(false);
     //zmienna określająca czy menu jest rozwinięte
     const [isOpen, setIsOpen] = useState(true);
     //zmienna określająca czy ikony są widoczne
     const [isIcon, setIsIcon] = useState(true);
     // zmienna przetrzymująca informację na temat szerokości okna
     const [lowResolution, setLowResolution] = useState(window.innerWidth);
+
 
     //funkcja wykonujaca wylogowanie
     const { logout } = useContext(AuthContext);
@@ -39,6 +39,7 @@ function Main() {
     const onToggleMenu = () => {
         //wywołanie funkcji posiadającej logikę od zamykania bądź otwierania menu wraz z potrzebnymi wartościami
         handleClickToggleMenu(isOpen, setIsOpen, isIcon, setIsIcon);
+
     };
 
     //funkcja wylogowania
@@ -62,7 +63,7 @@ function Main() {
             window.removeEventListener('resize', handleResize);
         };
 
-    }, [isOpen, lowResolution]);// odświeża się przy zmianie wartości wskazanych zmiennych
+    }, [isOpen, lowResolution,chatIsMinimized]);// odświeża się przy zmianie wartości wskazanych zmiennych
 
 
     return (
@@ -90,7 +91,7 @@ function Main() {
                             <Route path="/Ustawienia" element={<Settings where='settings'/>}/>
                             <Route path="/Pomoc" element={<Help/>}/>
                             <Route path="/Zaloguj" element={<Login/>}/>
-                            <Route path="/Chatbot" element={<ChatContainer/>}/>
+                            <Route path="/Chatbot" element={<ChatContainer chatIsMinimized={chatIsMinimized} setChatIsMinimized={setChatIsMinimized} />} />
                             <Route path="/Advert" element={<Advert/>}/>
                             <Route path="/GenerateQR" element={<GenerateQR/>}/>
 
@@ -166,7 +167,7 @@ function Main() {
                                             </div>
                                         </Link>
                                         {/* link do pomocy */}
-                                        <Link to="/Chatbot">
+                                        <Link onClick={() => setChatIsMinimized(2)} to="/Chatbot">
                                             <div className="navDiv">
                                                 {isIcon ? <h3>chatbot</h3> :
                                                     <Icon className="menuIcons" icon="bx:bot" />}

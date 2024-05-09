@@ -67,7 +67,6 @@ function ProductItem({
     useEffect(() => {
         //ustawianie wartości przy odświeżaniu aby zmiany pojawiały się od razu
         setInfo(infoProducts ? 1 : 0);
-        console.log(minDimension)
 
     }, [getFridgeSizeIndex,
         getProductsSizeIndex, infoProducts,minDimension,widthDimension])//odświeżanie przy zmianie wartości elementów
