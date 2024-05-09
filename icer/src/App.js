@@ -30,6 +30,9 @@ function App() {
                 {/* Show Advert if user is logged in and adIsOn is true */}
                 {user ?  <Main />  : <Login />}
                 {/*{user ? (adIsOn ? <Advert adIsOn= {adIsOn} setAdIsOn={setAdIsOn} /> : <Main />) : <Login />}*/}
+
+
+
             </Router>
         </SettingsProvider>
     );

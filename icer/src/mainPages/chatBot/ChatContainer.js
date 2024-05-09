@@ -2,8 +2,6 @@
 import React, {useState} from 'react';
 import MessageList from './MessageList';
 import ChatInput from './ChatInput';
-import Help from "../Help";
-import {Icon} from '@iconify/react';
 import axios from "axios";
 import {API_URL} from "../settings/config";
 import {Fridge} from "../products/fridge/Fridge";
@@ -17,13 +15,13 @@ function ChatContainer() {
     const [messages, setMessages] = useState([]);
 
     //zmienna określająca czy chat został zminimalizowany
-    const [isMinimized, setIsMinimized] = useState(false);
+
 
     //funkcja wysyłająca wiadomość od uzytkownika i pobierająca odpowiedź
     const handleBotResponse = async (userMessage) => {
         try {
             const response = await axios.post(`${API_URL}/get_response`, {
-                user_input: userMessage
+                user_input: userMessage,
 
             });
             //zapisywanie odpowiedzi
@@ -45,25 +43,12 @@ function ChatContainer() {
     };
 
 
-    //jeśli zminimalizowane zwróć ikonkę
-    if (isMinimized) {
-        return (
-            <div className="chat-container">
-                <div className="chat-icon-container">
-
-                    <span role="img" aria-label="Chat Icon" className="ChatIcona" onClick={() => setIsMinimized(false)}><Icon className="chatOpenIcon" icon="bi:chat-dots" hFlip={true} /></span>
-
-                </div>
-                <Main />
-            </div>
-        );
-    }
     //zwróć chat
     return (
         //kontener z chatem
         <div className="chat-container">
             {/*przycisk do minimalizowania i powiększania chatu*/}
-            <button className="minimize-button" onClick={() => setIsMinimized(true)}><Icon className="minimizeIcon" icon="solar:minimize-square-3-outline" rotate={1} /></button>
+
 
             {/*funkcja posiadająca listę wiadomości, przekazujemy jej zmienną, która posiada konwerację*/}
             <MessageList messages={messages}/>
