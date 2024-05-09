@@ -12,9 +12,16 @@ import {Link} from "react-router-dom";
 function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
 
     //zmienna posiadająca historię konwersacji
-    const [messages, setMessages] = useState([]);
-    console.log(chatIsMinimized)
-
+    const [messages, setMessages] = useState(() => {
+        const savedMessages = localStorage.getItem('chatMessages');
+        return savedMessages ? JSON.parse(savedMessages) : [];
+    });
+    const saveMessagesToLocalStorage = (messages) => {
+        localStorage.setItem('chatMessages', JSON.stringify(messages));
+    };
+    useEffect(() => {
+        saveMessagesToLocalStorage(messages);
+    }, [messages]);
 
 
     //funkcja wysyłająca wiadomość od uzytkownika i pobierająca odpowiedź
@@ -53,9 +60,9 @@ function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
         <>
 
             {chatIsMinimized === 3 ?
-                <div className='chatbotIconMinimized' onClick={()=>{handleToggleMinimize(2)}}>
+                <div className='chatbotIconMinimizedDiv' onClick={()=>{handleToggleMinimize(2)}}>
                     <Link to="/Chatbot">
-                        <Icon className="minimize-buttonIcon" icon="bx:bot"/>
+                        <Icon className="chatbotIconMinimized" icon="bx:bot"/>
 
                 </Link>
                 </div>
