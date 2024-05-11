@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import { API_URL } from "../settings/config";
+import React, {useEffect, useRef, useState} from "react";
+import {API_URL} from "../settings/config";
 import './Advert.css';
 import io from 'socket.io-client';
-import { cameraControlForAdvert } from "../products/API/cameraControlForAdvert";
+import {cameraControlForAdvert} from "../products/API/cameraControlForAdvert";
 import axios from "axios"; // Upewnij się, że ścieżka do importu jest poprawna
 
 export function Advert({adIsOn, setAdIsOn}) {
@@ -11,7 +11,7 @@ export function Advert({adIsOn, setAdIsOn}) {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [finishWord, setFinishWord] = useState("");
-
+    const [isRecording, setIsRecording] = useState(true);
     useEffect(() => {
         //łączymy się z api
         socketRef.current = io(API_URL);
@@ -53,33 +53,34 @@ export function Advert({adIsOn, setAdIsOn}) {
         //jeśli przesłane zostało słowo 'finished' to znaczy, że wideo zostało zakończone
         if (finishWord === 'finished') {
             //ustawiamy reklamę na 'false'
-            setAdIsOn(false);
+            setIsRecording(false);
             setVideoFeedUrl(null);
+
         } else { //w przeciwnym razie dalej pobieraj wideo
             fetchVideoFeed();
         }
         fetchVideoFeed();
 
-    }, [finishWord,adIsOn]); // odświeżaj po zmianie tych wartości
+    }, [finishWord, adIsOn]); // odświeżaj po zmianie tych wartości
 
     useEffect(() => {
         console.log('adIsOn zmieniło wartość na:', adIsOn);
     }, [adIsOn]);
 
     useEffect(() => {
-        if (adIsOn) {
-            console.log('Próba uruchomienia kontroli kamery', videoRef.current, canvasRef.current);
-            const stopRecording = cameraControlForAdvert(videoRef, canvasRef, setAdIsOn);
-
-           if(!adIsOn) stopRecording();
-
-            }
-
-    }, [adIsOn, videoRef.current, canvasRef.current]);
+        if (adIsOn && isRecording) {
+            console.log('Uruchamianie kontroli kamery', videoRef.current, canvasRef.current);
+            const stopRecording = cameraControlForAdvert(videoRef, canvasRef, isRecording,setAdIsOn);
+            return () => {
+                console.log('Zatrzymywanie kamery');
+                stopRecording();
+            };
+        }
+    }, [adIsOn, isRecording]);
     return (
         <div className="advertContainer">
             <video className="invisibleTargetsForCamera" ref={videoRef} autoPlay muted></video>
-            <canvas className="invisibleTargetsForCamera" ref={canvasRef} style={{ display:"none"}}></canvas>
+            <canvas className="invisibleTargetsForCamera" ref={canvasRef} style={{display: "none"}}></canvas>
             {adIsOn && videoFeedUrl && <img className="advertImage" src={videoFeedUrl} alt="Video Feed"/>}
         </div>
     );

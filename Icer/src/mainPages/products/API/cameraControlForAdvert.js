@@ -1,20 +1,21 @@
 import { sendFrameToFlask } from "./sendFrameToFlask";
 
-export const cameraControlForAdvert = (videoRef, canvasRef, setStreamCamera) => {
-    let isRecording = true;
+export const cameraControlForAdvert = (videoRef, canvasRef,isRecording,setAdIsOn) => {
+
     const frameRate = 100;
     const interval = 20000 / frameRate;
 
     const stopRecording = () => {
-        isRecording = false;
 
-        if (videoRef.current && videoRef.current.srcObject) {
+
+        if (videoRef.current && videoRef.current.srcObject ) {
+
             const tracks = videoRef.current.srcObject.getTracks();
             tracks.forEach((track) => track.stop());
             videoRef.current.srcObject = null;
+            setAdIsOn(false)
         }
 
-        setStreamCamera(false);
     };
 
     const getUserMedia = (constraints) => {
@@ -50,9 +51,9 @@ export const cameraControlForAdvert = (videoRef, canvasRef, setStreamCamera) => 
         getUserMedia(videoConstraints)
             .then((stream) => {
                 if (videoRef.current) {
-                    console.log('tu')
+
                     videoRef.current.srcObject = stream;
-                    setStreamCamera(true);
+
 
                     const captureAndSendFrames = async () => {
                         if (!isRecording) return;
@@ -71,7 +72,7 @@ export const cameraControlForAdvert = (videoRef, canvasRef, setStreamCamera) => 
 
                             const frameBase64 = canvas.toDataURL("image/jpeg").split(",")[1];  // Upewnij się, że przesyłasz czyste base64
 
-                            console.log(frameBase64)
+
                             const analysisResult = await sendFrameToFlask(frameBase64);
 
                             if (analysisResult && analysisResult.length > 0) {
@@ -92,11 +93,11 @@ export const cameraControlForAdvert = (videoRef, canvasRef, setStreamCamera) => 
             })
             .catch((error) => {
                 console.error("Error accessing camera:", error);
-                setStreamCamera(false);
+
             });
     } else {
         console.error("Camera requires HTTPS lub localhost.");
-        setStreamCamera(false);
+
     }
 
     return stopRecording;

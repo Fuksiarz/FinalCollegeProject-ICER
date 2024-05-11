@@ -68,7 +68,7 @@ function AddProduct() {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
 
-    let stopRecording = null;
+    const [stopRecording, setStopRecording] = useState(null);
     //przy zatwierdzaniu formularza:
     const handleSubmit = (e) => {
         //nie odświeżaj
@@ -106,15 +106,21 @@ function AddProduct() {
     }
 
     const startCamera = () => {
-        stopRecording = cameraControl(videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo);
+        const stopRecordingFunc = cameraControl(videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo);
+        setStopRecording(() => stopRecordingFunc);
         setStreamCamera(true);
     };
-
     const stopCamera = () => {
-        if (stopRecording)
+        console.log("Attempting to stop the camera.");
+        if (stopRecording) {
+            console.log("stopRecording is defined, calling it.");
             stopRecording();
             setStreamCamera(false);
+        } else {
+            console.log("stopRecording is undefined.");
+        }
     };
+
 
 
 

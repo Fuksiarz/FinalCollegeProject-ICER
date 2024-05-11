@@ -110,10 +110,8 @@ function ProductManager({
                                         <button
                                             className={`leftButton ${filter === 'current' ? 'active' : ''}`}
                                             onClick={() => setFilter('current')}>
-
-                                            <Icon className="menuIcons" icon="tabler:fridge"/>
                                             <h2 className="productListTopButtonsH2">aktualne
-
+                                                <Icon className="menuIcons" icon="tabler:fridge"/>
                                             </h2>
 
                                         </button>
