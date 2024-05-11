@@ -110,7 +110,12 @@ function ProductManager({
                                         <button
                                             className={`leftButton ${filter === 'current' ? 'active' : ''}`}
                                             onClick={() => setFilter('current')}>
-                                            <h2 className="productListTopButtonsH2">aktualne</h2>
+
+                                            <Icon className="menuIcons" icon="tabler:fridge"/>
+                                            <h2 className="productListTopButtonsH2">aktualne
+
+                                            </h2>
+
                                         </button>
                                     </div>
 
@@ -121,7 +126,10 @@ function ProductManager({
                                         <button
                                             className={`rightButton ${filter === 'old' ? 'active' : ''}`}
                                             onClick={() => setFilter('old')}>
-                                            <h2 className="productListTopButtonsH2">wyczerpane</h2>
+                                            <h2 className="productListTopButtonsH2">wyczerpane
+                                                <Icon className="menuIcons" icon="ph:trash-bold"/>
+                                            </h2>
+
                                         </button>
                                     </div>
 

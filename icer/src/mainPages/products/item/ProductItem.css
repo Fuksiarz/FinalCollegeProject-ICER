@@ -159,12 +159,15 @@
 
 }
 .card{
+    background-color: rgba(122, 126, 150, 0.1);
+    font-family: "Times New Roman";
     position:relative;
     display:flex;
     flex-direction: column;
     justify-content: space-evenly;
     height:100%;
     width:100%;
+
 }
 
 .productItem.animating {
