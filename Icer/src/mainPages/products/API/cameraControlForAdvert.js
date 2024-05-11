@@ -1,6 +1,6 @@
 import { sendFrameToFlask } from "./sendFrameToFlask";
 
-export const cameraControl = (videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo) => {
+export const cameraControlForAdvert = (videoRef, canvasRef, setStreamCamera) => {
     let isRecording = true;
     const frameRate = 100;
     const interval = 20000 / frameRate;
@@ -50,6 +50,7 @@ export const cameraControl = (videoRef, canvasRef, setStreamCamera, setProductBa
         getUserMedia(videoConstraints)
             .then((stream) => {
                 if (videoRef.current) {
+                    console.log('tu')
                     videoRef.current.srcObject = stream;
                     setStreamCamera(true);
 
@@ -70,15 +71,15 @@ export const cameraControl = (videoRef, canvasRef, setStreamCamera, setProductBa
 
                             const frameBase64 = canvas.toDataURL("image/jpeg").split(",")[1];  // Upewnij się, że przesyłasz czyste base64
 
-
+                            console.log(frameBase64)
                             const analysisResult = await sendFrameToFlask(frameBase64);
 
                             if (analysisResult && analysisResult.length > 0) {
                                 const firstResponse = analysisResult[0];
                                 if (firstResponse.message) {
-                                    setInfo(`Otrzymano wiadomość: ${firstResponse.message}`);
+                                    console.log(`Otrzymano wiadomość: ${firstResponse.message}`);
                                 } else if (firstResponse.error) {
-                                    setInfo(`Wystąpił błąd: ${firstResponse.error}`);
+                                    console.log(`Wystąpił błąd: ${firstResponse.error}`);
                                 }
                             }
                         }

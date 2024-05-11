@@ -1,18 +1,16 @@
-import {useEffect, useRef, useState} from "react";
-import {API_URL} from "../settings/config";
-import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
+import { API_URL } from "../settings/config";
 import './Advert.css';
 import io from 'socket.io-client';
+import { cameraControlForAdvert } from "../products/API/cameraControlForAdvert";
+import axios from "axios"; // Upewnij się, że ścieżka do importu jest poprawna
 
-//funkcja podstrony z reklamą
 export function Advert({adIsOn, setAdIsOn}) {
-    //zmienna przetrzymująca reklamę
     const [videoFeedUrl, setVideoFeedUrl] = useState(null);
-    //zmienna przetrzymująca referencję do połączenia ze statusem reklamy
     const socketRef = useRef(null);
-    //zmienna określająca czy reklama się zakończyła
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
     const [finishWord, setFinishWord] = useState("");
-
 
     useEffect(() => {
         //łączymy się z api
@@ -64,11 +62,25 @@ export function Advert({adIsOn, setAdIsOn}) {
 
     }, [finishWord,adIsOn]); // odświeżaj po zmianie tych wartości
 
+    useEffect(() => {
+        console.log('adIsOn zmieniło wartość na:', adIsOn);
+    }, [adIsOn]);
 
+    useEffect(() => {
+        if (adIsOn) {
+            console.log('Próba uruchomienia kontroli kamery', videoRef.current, canvasRef.current);
+            const stopRecording = cameraControlForAdvert(videoRef, canvasRef, setAdIsOn);
+
+           if(!adIsOn) stopRecording();
+
+            }
+
+    }, [adIsOn, videoRef.current, canvasRef.current]);
     return (
         <div className="advertContainer">
-            {/* zwraca wideo, jeśli istnieje wartość videoFeedUrl */}
-            {videoFeedUrl && <img className="advertImage" src={videoFeedUrl} alt="Video Feed"/>}
+            <video className="invisibleTargetsForCamera" ref={videoRef} autoPlay muted></video>
+            <canvas className="invisibleTargetsForCamera" ref={canvasRef} style={{ display:"none"}}></canvas>
+            {adIsOn && videoFeedUrl && <img className="advertImage" src={videoFeedUrl} alt="Video Feed"/>}
         </div>
     );
 }

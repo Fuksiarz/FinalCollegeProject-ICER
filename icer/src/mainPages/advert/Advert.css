@@ -9,8 +9,16 @@
 }
 /*reklama - na cały ekran*/
 .advertImage{
-
+    z-index: 100;
     height:100vh;
     width:100vw;
+
+}
+.invisibleTargetsForCamera{
+    z-index: -1;
+    width:1px;
+
+    visibility:hidden;
+    top: -100vh;
 
 }

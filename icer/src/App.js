@@ -32,12 +32,23 @@ function App() {
             <Router>
                 <ToastContainer/>
                 {/* Show Advert if user is logged in and adIsOn is true */}
-                {user ?  <><Main chatIsMinimized={chatIsMinimized} setChatIsMinimized = {setChatIsMinimized} />
+                {/*{user ?  <><Main chatIsMinimized={chatIsMinimized} setChatIsMinimized = {setChatIsMinimized} />*/}
 
-                {chatIsMinimized === 3 && <ChatContainer chatIsMinimized={chatIsMinimized} setChatIsMinimized={setChatIsMinimized} /> }</>
+                {/*{chatIsMinimized === 3 && <ChatContainer chatIsMinimized={chatIsMinimized} setChatIsMinimized={setChatIsMinimized} /> }</>*/}
 
-                    : <Login />}
-                {/*{user ? (adIsOn ? <Advert adIsOn= {adIsOn} setAdIsOn={setAdIsOn} /> : <Main />) : <Login />}*/}
+                {/*    : <Login />}*/}
+
+                {user ? (adIsOn ? <Advert adIsOn= {adIsOn} setAdIsOn={setAdIsOn} />
+                 :
+                 <>
+                 <Main chatIsMinimized={chatIsMinimized} setChatIsMinimized = {setChatIsMinimized} />
+
+                {chatIsMinimized === 3 && <ChatContainer chatIsMinimized={chatIsMinimized} setChatIsMinimized={setChatIsMinimized} /> }
+                </>
+                )
+                :
+                 <Login />
+                 }
 
 
 
