@@ -13,44 +13,37 @@ file_lock = threading.Lock()
 # Globalna zmienna przechowująca rozpoznane produkty 
 food_list = []
 
-# Ścieżka do pliku JSON zawierającego nazwy klas
-json_file_path = 'modules/foodIdent_module/classes.json'
-with open(json_file_path, 'r') as json_file:
-    data = json.load(json_file)
-class_names = data.get('class_names', [])
-
-# Ładowanie modeli
-def load_models(model_paths):
-    models = []
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-    
-    for model_path in model_paths:
-        model_file_path = os.path.join(current_directory, model_path)
-        model = tf.keras.models.load_model(model_file_path)
-        models.append(model)
-    
-    return models
-
-# Ścieżki do modeli, które będą załadowane
-model_paths = ["model_1.h5", "model_2.h5"]
-models = load_models(model_paths) 
+# # Ścieżka do pliku JSON zawierającego nazwy klas
+# json_file_path = 'modules/foodIdent_module/classes.json'
+# with open(json_file_path, 'r') as json_file:
+#     data = json.load(json_file)
+# class_names = data.get('class_names', [])
+#
+# # Ładowanie modeli
+# def load_models(model_paths):
+#     models = []
+#     current_directory = os.path.dirname(os.path.abspath(__file__))
+#
+#     for model_path in model_paths:
+#         model_file_path = os.path.join(current_directory, model_path)
+#         model = tf.keras.models.load_model(model_file_path)
+#         models.append(model)
+#
+#     return models
+#
+# # Ścieżki do modeli, które będą załadowane
+# model_paths = ["model_1.h5", "model_2.h5"]
+# models = load_models(model_paths)
 
 
 # Zmienne globalne do kontrolowania camera_thread
-camera_thread = None
-camera_running = False
 
-def predict_with_model(model, img_tensor):
-    pred = model.predict(img_tensor)
-    pred_class_index = tf.argmax(pred, axis=1).numpy()[0]
-    return pred, pred_class_index
-    
+
 def model_predict(model, img_tensor):
     # Przewiduj i zwracaj zarówno predykcję i indeks klasy
     pred = model.predict(img_tensor)
     pred_class_index = tf.argmax(pred, axis=1).numpy()[0]
     return pred, pred_class_index
-    
 
 def load_and_prep_image(filename, img_shape=224):
     # Odczytaj plik obrazu
@@ -73,68 +66,68 @@ def load_and_prep_image(filename, img_shape=224):
 
 
 # Predykcja
-def pred_and_plot(models, img, class_names, food_list, username):
-    # Przygotowanie obrazu
-    img_tensor = tf.convert_to_tensor(img, dtype=tf.float32)
-    if len(img_tensor.shape) == 3:
-        img_tensor = tf.expand_dims(img_tensor, axis=0)
-
-    # Inicjalizacja zmiennych do głosowania na klasy
-    votes = {class_name: 0 for class_name in class_names}
-    probabilities = []
-    detailed_predictions = []
-
-    # Uruchom wiele modeli równocześnie by szybciej przewidywać
-    with ThreadPoolExecutor(max_workers=len(models)) as executor:
-        futures = {executor.submit(model_predict, model, img_tensor): model for model in models}
-
-        for future in as_completed(futures):
-            try:
-                pred, pred_class_index = future.result()
-                pred_class_name = class_names[pred_class_index]
-                votes[pred_class_name] += 1
-                probabilities.append(np.max(pred))
-                detailed_predictions.append((pred, pred_class_index, pred_class_name))
-            except Exception as e:
-                print(f"Błąd w przewidywaniu modelu: {e}")
-
-    # Określenie klasy z największą liczbą głosów
-    max_votes = max(votes.values())
-    winners = [class_name for class_name, vote in votes.items() if vote == max_votes]
-
-    if len(winners) != 1:
-        # Obliczenie średnich prawdopodobieństw w przypadku remisu
-        avg_probabilities = {class_name: 0 for class_name in class_names}
-        for pred, _, pred_class_name in detailed_predictions:
-            avg_probabilities[pred_class_name] += np.max(pred)
-        for class_name in avg_probabilities:
-            avg_probabilities[class_name] /= list(votes.values()).count(max_votes)
-        pred_class = max(avg_probabilities, key=avg_probabilities.get)
-    else:
-        pred_class = winners[0]
-
-    # Określenie maksymalnej wartości prawdopodobieństwa
-    max_pred_value = max(probabilities)
-
-    # Jeśli prawdopodobieństwo jest większe niż wymagane i przewidziana klasa nie jest dodana, to dodaj
-    if max_pred_value >= 0.70 and pred_class not in food_list:
-        food_list.append(pred_class)
-
-    # Ustalenie ścieżki do zapisu pliku
-    current_dir = os.path.dirname(__file__)
-    project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
-    save_dir = os.path.join(project_root, 'static', 'scanned')
-    os.makedirs(save_dir, exist_ok=True)
-
-    # Użyj nazwy użytkownika przy zapisywaniu nazwy
-    json_file_path = os.path.join(save_dir, f'{username}_food_list.json')
-
-    # Zapisz food_list
-    with file_lock:
-        with open(json_file_path, 'w') as json_file:
-            json.dump(food_list, json_file, indent=4)
-
-    return food_list
+# def pred_and_plot(models, img, class_names, food_list, username):
+#     # Przygotowanie obrazu
+#     img_tensor = tf.convert_to_tensor(img, dtype=tf.float32)
+#     if len(img_tensor.shape) == 3:
+#         img_tensor = tf.expand_dims(img_tensor, axis=0)
+#
+#     # Inicjalizacja zmiennych do głosowania na klasy
+#     votes = {class_name: 0 for class_name in class_names}
+#     probabilities = []
+#     detailed_predictions = []
+#
+#     # Uruchom wiele modeli równocześnie by szybciej przewidywać
+#     with ThreadPoolExecutor(max_workers=len(models)) as executor:
+#         futures = {executor.submit(model_predict, model, img_tensor): model for model in models}
+#
+#         for future in as_completed(futures):
+#             try:
+#                 pred, pred_class_index = future.result()
+#                 pred_class_name = class_names[pred_class_index]
+#                 votes[pred_class_name] += 1
+#                 probabilities.append(np.max(pred))
+#                 detailed_predictions.append((pred, pred_class_index, pred_class_name))
+#             except Exception as e:
+#                 print(f"Błąd w przewidywaniu modelu: {e}")
+#
+#     # Określenie klasy z największą liczbą głosów
+#     max_votes = max(votes.values())
+#     winners = [class_name for class_name, vote in votes.items() if vote == max_votes]
+#
+#     if len(winners) != 1:
+#         # Obliczenie średnich prawdopodobieństw w przypadku remisu
+#         avg_probabilities = {class_name: 0 for class_name in class_names}
+#         for pred, _, pred_class_name in detailed_predictions:
+#             avg_probabilities[pred_class_name] += np.max(pred)
+#         for class_name in avg_probabilities:
+#             avg_probabilities[class_name] /= list(votes.values()).count(max_votes)
+#         pred_class = max(avg_probabilities, key=avg_probabilities.get)
+#     else:
+#         pred_class = winners[0]
+#
+#     # Określenie maksymalnej wartości prawdopodobieństwa
+#     max_pred_value = max(probabilities)
+#
+#     # Jeśli prawdopodobieństwo jest większe niż wymagane i przewidziana klasa nie jest dodana, to dodaj
+#     if max_pred_value >= 0.70 and pred_class not in food_list:
+#         food_list.append(pred_class)
+#
+#     # Ustalenie ścieżki do zapisu pliku
+#     current_dir = os.path.dirname(__file__)
+#     project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
+#     save_dir = os.path.join(project_root, 'static', 'scanned')
+#     os.makedirs(save_dir, exist_ok=True)
+#
+#     # Użyj nazwy użytkownika przy zapisywaniu nazwy
+#     json_file_path = os.path.join(save_dir, f'{username}_food_list.json')
+#
+#     # Zapisz food_list
+#     with file_lock:
+#         with open(json_file_path, 'w') as json_file:
+#             json.dump(food_list, json_file, indent=4)
+#
+#     return food_list
 
 
 # Proces wideo i przekazanie nazwy użytkownika
@@ -213,7 +206,7 @@ def start_camera(username):
             food_list.clear()
     except Exception as e:
         print(f"Error while clearing existing data: {e}")
-    
+
     global camera_running, camera_thread, camera_status
 
     # Sprawdzanie, czy kamera nie jest już uruchomiona
@@ -238,5 +231,308 @@ def stop_camera():
 
 
 
+# NOWE FUNKCJE
+
+# def clear_food_username(username):
+#     # Sprawdź, czy lista food_list nie jest pusta
+#     try:
+#         if f'{username}_food_list.json':
+#             # Czyszczenie, jeśli lista nie jest pusta
+#             food_list.clear()
+#     except Exception as e:
+#         print(f"Error while clearing existing data: {e}")
+#
+#     return username
 
 
+
+
+from flask import current_app as app
+from pathlib import Path
+
+def clear_food_username(username):
+    base_dir = Path(app.config['FOOD_LIST_DIR'])
+    file_path = base_dir / f'{username}_food_list.json'
+    try:
+        # Upewnij się, że katalog istnieje
+        base_dir.mkdir(parents=True, exist_ok=True)
+
+        with open(file_path, 'w') as file:
+            file.write('[]')  # Pusta lista JSON
+    except Exception as e:
+        print(f"Error while handling the file: {e}")
+
+    return username
+
+
+#NOWA PREDYKCJA
+
+
+import json
+import numpy as np
+import tensorflow as tf
+from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+import json
+import numpy as np
+import tensorflow as tf
+from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# Globalne zmienne do przechowywania załadowanych modeli i nazw klas
+global models
+global class_names
+
+def preload():
+    global models, class_names
+
+    # Ładowanie konfiguracji nazw klas
+    json_file_path = 'modules/foodIdent_module/classes.json'
+    with open(json_file_path, 'r') as json_file:
+        data = json.load(json_file)
+    class_names = data.get('class_names', [])
+
+    # Ładowanie modeli
+    model_paths = ["model_1.h5", "model_2.h5"]
+    models = load_models(model_paths)
+
+def load_models(model_paths):
+    models = []
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    for model_path in model_paths:
+        model_file_path = os.path.join(current_directory, model_path)
+        model = tf.keras.models.load_model(model_file_path)
+        models.append(model)
+    return models
+
+
+
+def predict_and_update_food_list(tmp_path, username):
+    global models, class_names
+
+    # Przygotowanie obrazu
+    img = load_and_prep_image(tmp_path)
+    img_tensor = tf.convert_to_tensor(img, dtype=tf.float32)
+    if len(img_tensor.shape) == 3:
+        img_tensor = tf.expand_dims(img_tensor, axis=0)
+
+    # Inicjalizacja zmiennych do głosowania na klasy
+    votes = {class_name: 0 for class_name in class_names}
+    probabilities = []
+    detailed_predictions = []
+
+    # Uruchomienie predykcji za pomocą wielu modeli
+    with ThreadPoolExecutor(max_workers=len(models)) as executor:
+        futures = {executor.submit(model_predict, model, img_tensor): model for model in models}
+
+        for future in as_completed(futures):
+            try:
+                pred, pred_class_index = future.result()
+                pred_class_name = class_names[pred_class_index]
+                votes[pred_class_name] += 1
+                probability = np.max(pred)
+                probabilities.append(probability)
+                detailed_predictions.append((pred, pred_class_index, pred_class_name))
+            except Exception as e:
+                print(f"Błąd w przewidywaniu modelu: {e}")
+
+    # Określenie klasy z największą liczbą głosów
+    max_votes = max(votes.values())
+    winners = [class_name for class_name, vote in votes.items() if vote == max_votes]
+
+    # Oblicz maksymalne prawdopodobieństwo dla zwycięzców
+    max_probability = max([probability for (_, _, pred_class_name), probability in zip(detailed_predictions, probabilities) if pred_class_name in winners])
+
+    if len(winners) != 1:
+        avg_probabilities = {class_name: 0 for class_name in class_names}
+        for (pred, _, pred_class_name), probability in zip(detailed_predictions, probabilities):
+            if pred_class_name in winners:
+                avg_probabilities[pred_class_name] += probability
+        for class_name in avg_probabilities:
+            avg_probabilities[class_name] /= list(votes.values()).count(max_votes)
+        pred_class = max(avg_probabilities, key=avg_probabilities.get)
+    else:
+        pred_class = winners[0]
+
+    # Jeśli pewność maksymalna jest mniejsza niż 75%, zwróć 'uncertain'
+    if max_probability < 0.75:
+        pred_class = 'uncertain'
+
+    # Aktualizacja pliku użytkownika
+    update_food_list(username, pred_class)
+
+def update_food_list(username, pred_class):
+    base_dir = Path(app.config['FOOD_LIST_DIR'])
+    file_path = base_dir / f'{username}_food_list.json'
+    try:
+        base_dir.mkdir(parents=True, exist_ok=True)
+        if file_path.exists():
+            with open(file_path, 'r') as file:
+                food_list = json.load(file)
+        else:
+            food_list = []
+
+        if pred_class not in food_list:
+            food_list.append(pred_class)
+
+        with open(file_path, 'w') as file:
+            json.dump(food_list, file)
+
+    except Exception as e:
+        print(f"Error while updating food list: {e}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def pred_and_plot(models, img, class_names, food_list, username):
+    # Przygotowanie obrazu
+    img_tensor = tf.convert_to_tensor(img, dtype=tf.float32)
+    if len(img_tensor.shape) == 3:
+        img_tensor = tf.expand_dims(img_tensor, axis=0)
+
+    # Inicjalizacja zmiennych do głosowania na klasy
+    votes = {class_name: 0 for class_name in class_names}
+    probabilities = []
+    detailed_predictions = []
+
+    # Uruchom wiele modeli równocześnie by szybciej przewidywać
+    with ThreadPoolExecutor(max_workers=len(models)) as executor:
+        futures = {executor.submit(model_predict, model, img_tensor): model for model in models}
+
+        for future in as_completed(futures):
+            try:
+                pred, pred_class_index = future.result()
+                pred_class_name = class_names[pred_class_index]
+                votes[pred_class_name] += 1
+                probabilities.append(np.max(pred))
+                detailed_predictions.append((pred, pred_class_index, pred_class_name))
+            except Exception as e:
+                print(f"Błąd w przewidywaniu modelu: {e}")
+
+    # Określenie klasy z największą liczbą głosów
+    max_votes = max(votes.values())
+    winners = [class_name for class_name, vote in votes.items() if vote == max_votes]
+
+    if len(winners) != 1:
+        # Obliczenie średnich prawdopodobieństw w przypadku remisu
+        avg_probabilities = {class_name: 0 for class_name in class_names}
+        for pred, _, pred_class_name in detailed_predictions:
+            avg_probabilities[pred_class_name] += np.max(pred)
+        for class_name in avg_probabilities:
+            avg_probabilities[class_name] /= list(votes.values()).count(max_votes)
+        pred_class = max(avg_probabilities, key=avg_probabilities.get)
+    else:
+        pred_class = winners[0]
+
+    # Określenie maksymalnej wartości prawdopodobieństwa
+    max_pred_value = max(probabilities)
+
+    # Jeśli prawdopodobieństwo jest większe niż wymagane i przewidziana klasa nie jest dodana, to dodaj
+    if max_pred_value >= 0.70 and pred_class not in food_list:
+        food_list.append(pred_class)
+
+    # Ustalenie ścieżki do zapisu pliku
+    current_dir = os.path.dirname(__file__)
+    project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
+    save_dir = os.path.join(project_root, 'static', 'scanned')
+    os.makedirs(save_dir, exist_ok=True)
+
+    # Użyj nazwy użytkownika przy zapisywaniu nazwy
+    json_file_path = os.path.join(save_dir, f'{username}_food_list.json')
+
+    # Zapisz food_list
+    with file_lock:
+        with open(json_file_path, 'w') as json_file:
+            json.dump(food_list, json_file, indent=4)
+
+    return food_list
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# def pred_and_plot(models, img, class_names, username):
+#     img_tensor = tf.convert_to_tensor(img, dtype=tf.float32)
+#     if len(img_tensor.shape) == 3:
+#         img_tensor = tf.expand_dims(img_tensor, axis=0)
+#
+#     votes = {class_name: 0 for class_name in class_names}
+#     probabilities = []
+#
+#     with ThreadPoolExecutor(max_workers=len(models)) as executor:
+#         futures = {executor.submit(model_predict, model, img_tensor): model for model in models}
+#         for future in as_completed(futures):
+#             pred, pred_class_index = future.result()
+#             pred_class_name = class_names[pred_class_index]
+#             votes[pred_class_name] += 1
+#             probabilities.append(np.max(pred))
+#
+#     max_votes = max(votes.values())
+#     winners = [class_name for class_name, vote in votes.items() if vote == max_votes]
+#     pred_class = max(winners, key=lambda x: votes[x])
+#
+#     # Odczytaj aktualną listę jedzenia z pliku
+#     food_list_path = os.path.join('path_to_food_list_directory', f'{username}_food_list.json')
+#     with open(food_list_path, 'r') as file:
+#         food_list = json.load(file)
+#
+#     # Dodaj nowe przewidywanie do listy jedzenia, jeśli spełnia kryteria
+#     if np.max(probabilities) >= 0.70 and pred_class not in food_list:
+#         food_list.append(pred_class)
+#
+#         # Zapisz zmodyfikowaną listę jedzenia
+#         with open(food_list_path, 'w') as file:
+#             json.dump(food_list, file, indent=4)
+#
+#     return food_list
