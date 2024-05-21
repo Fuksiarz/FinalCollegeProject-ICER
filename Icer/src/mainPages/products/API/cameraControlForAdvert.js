@@ -1,21 +1,20 @@
+import axios from 'axios';
+import { API_URL } from "../../settings/config";
 import { sendFrameToFlaskForAdvert } from "./sendFrameToFlaskForAdvert";
 
-export const cameraControlForAdvert = (videoRef, canvasRef,isRecording,setAdIsOn, setGotCamera) => {
-
+export const cameraControlForAdvert = (videoRef, canvasRef, isRecording, setIsRecording, setAdIsOn, setGotCamera) => {
     const frameRate = 100;
     const interval = 20000 / frameRate;
 
     const stopRecording = () => {
-
-
-        if (videoRef.current && videoRef.current.srcObject ) {
-
+        if (videoRef.current && videoRef.current.srcObject) {
             const tracks = videoRef.current.srcObject.getTracks();
             tracks.forEach((track) => track.stop());
             videoRef.current.srcObject = null;
-            setAdIsOn(false)
+            setAdIsOn(false);
+            setIsRecording(false);
+            console.log('Kamera zatrzymana'); // Log do debugowania
         }
-
     };
 
     const getUserMedia = (constraints) => {
@@ -50,10 +49,8 @@ export const cameraControlForAdvert = (videoRef, canvasRef,isRecording,setAdIsOn
     if (window.isSecureContext || window.location.hostname === "localhost") {
         getUserMedia(videoConstraints)
             .then((stream) => {
-                if (videoRef.current) {
-
+                if (videoRef.current && isRecording) {
                     videoRef.current.srcObject = stream;
-
 
                     const captureAndSendFrames = async () => {
                         if (!isRecording) return;
@@ -71,8 +68,7 @@ export const cameraControlForAdvert = (videoRef, canvasRef,isRecording,setAdIsOn
                             context.clearRect(0, 0, canvas.width, canvas.height);
                             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                            const frameBase64 = canvas.toDataURL("image/jpeg").split(",")[1];  // Upewnij się, że przesyłasz czyste base64
-
+                            const frameBase64 = canvas.toDataURL("image/jpeg").split(",")[1];
 
                             const analysisResult = await sendFrameToFlaskForAdvert(frameBase64);
 
@@ -94,11 +90,10 @@ export const cameraControlForAdvert = (videoRef, canvasRef,isRecording,setAdIsOn
             })
             .catch((error) => {
                 console.error("Error accessing camera:", error);
-                setGotCamera(0)
+                setGotCamera(0);
             });
     } else {
         console.error("Camera requires HTTPS lub localhost.");
-
     }
 
     return stopRecording;

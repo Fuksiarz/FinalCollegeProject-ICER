@@ -11,6 +11,7 @@ export const updateFood = (setProductBackpack, setStreamCamera) => {
             //w razie powodzenia wyświetl komunikat
             toast.success('nowe produkty w torbie z zakupami!');
             console.log(response.data)
+
             // Dodajemy datę do każdego produktu
             const updatedProducts = response.data.map(product => ({
                 ...product,

@@ -31,7 +31,7 @@ function App() {
         <SettingsProvider>
             <Router>
                 <ToastContainer/>
-                {/* Show Advert if user is logged in and adIsOn is true */}
+                 {/*Show Advert if user is logged in and adIsOn is true*/}
                 {/*{user ?  <><Main chatIsMinimized={chatIsMinimized} setChatIsMinimized = {setChatIsMinimized} />*/}
 
                 {/*{chatIsMinimized === 3 && <ChatContainer chatIsMinimized={chatIsMinimized} setChatIsMinimized={setChatIsMinimized} /> }</>*/}

@@ -111,11 +111,13 @@ function AddProduct() {
         setStreamCamera(true);
     };
     const stopCamera = () => {
+        updateFood(setProductBackpack, setStreamCamera);
         console.log("Attempting to stop the camera.");
         if (stopRecording) {
             console.log("stopRecording is defined, calling it.");
             stopRecording();
             setStreamCamera(false);
+
         } else {
             console.log("stopRecording is undefined.");
         }
