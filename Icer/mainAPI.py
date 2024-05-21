@@ -1732,14 +1732,10 @@ def get_frame():
     responses = []
     print(data)
     for idx, image_data in enumerate(images_data):
-        if image_data.startswith('data:image'):
-            header, image_data = image_data.split(';base64,')
-
         try:
             image_bytes = base64.b64decode(image_data)
             # Użycie tempfile do stworzenia tymczasowego pliku
-            file_extension = header.split('/')[1]  # np. "png" dla "image/png"
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.' + file_extension, dir=temp_dir) as tmp:
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.png', dir=temp_dir) as tmp:
                 tmp.write(image_bytes)
                 tmp_path = tmp.name  # Zapisz ścieżkę do pliku tymczasowego
 
@@ -2111,6 +2107,7 @@ def advert_reciever():
 
     image_data = data['image']
 
+
     # Usunięcie prefiksu `data:image/png;base64,` jeśli istnieje
     if image_data.startswith('data:image'):
 
@@ -2163,8 +2160,8 @@ def advert_reciever():
         return jsonify(response), 200
 
     except Exception as e:
-        print(f"Exception: {e}")
         return jsonify({"error": str(e)}), 500
+
 
 @app.route('/start_video', methods=['POST'])
 def start_video():
@@ -2193,6 +2190,7 @@ def serve_video(filename):
         return send_from_directory(video_dir, filename, as_attachment=False)
     except FileNotFoundError:
         return jsonify({"error": "File not found"}), 404
+
 
 @app.route('/control_video', methods=['POST'])
 def control_video():
