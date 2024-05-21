@@ -1886,18 +1886,19 @@ def upload_predictor():
 
             # Próba odczytu kodu QR
             decoded_data = decode_qr_code(file_path)
-            if decoded_data:
+            if decoded_data and decoded_data != "QR code not detected":
                 print("QR Code decoded: ", decoded_data)
                 return f"Decoded QR Code Data: {decoded_data}"
 
-            # Dokonanie predykcji na podstawie przesłanego obrazu
+            print("No QR Code detected, proceeding with food prediction.")
 
-            pred_class = pred_and_plot(model, file_path, class_names,"username")  # Użyj rzeczywistej zmiennej username
+            # Dokonanie predykcji na podstawie przesłanego obrazu
+            pred_class = pred_and_plot(model, file_path, class_names, "username")  # Użyj rzeczywistej zmiennej username
             if pred_class:
                 print("Food identified: ", pred_class)
                 return f"Food identified: {pred_class}"
             else:
-                print("No food detected or QR code found.")
+                print("No food detected.")
                 return "No food detected or QR code found."
         else:
             print("Invalid file type.")
