@@ -1128,7 +1128,7 @@ def update_food_list():
         # Pobierz nazwę użytkownika z sesji lub z argumentów
         username = session.get('username', 'root')  # Domyślnie root, do testow, pozniej bd trzeba to wywalic
         project_path = os.path.dirname(os.path.abspath(__file__))
-        user_food_list_path = os.path.join('/users_lists', f'{username}_food_list.json')
+        user_food_list_path = os.path.join('./users_lists', f'{username}_food_list.json')
 
         # Tworzenie instancji klasy DatabaseConnector
         db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
