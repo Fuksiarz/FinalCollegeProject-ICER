@@ -2164,6 +2164,7 @@ def advert_reciever():
         print(f"Exception: {e}")
         return jsonify({"error": str(e)}), 500
 
+
 @app.route('/start_video', methods=['POST'])
 def start_video():
     if not request.is_json:
@@ -2180,9 +2181,32 @@ def start_video():
     try:
         video_state["video_choice"] = video_choice
         video_state["playing"] = True
-        return send_from_directory(video_dir, video_file, as_attachment=False)
+        video_url = f'/video/{video_file}'
+        return jsonify({"video_url": video_url, "message": "Start playing video"}), 200
     except FileNotFoundError:
         return jsonify({"error": "File not found"}), 404
+
+@app.route('/video/<filename>', methods=['GET'])
+def serve_video(filename):
+    try:
+        return send_from_directory(video_dir, filename, as_attachment=False)
+    except FileNotFoundError:
+        return jsonify({"error": "File not found"}), 404
+
+@app.route('/control_video', methods=['POST'])
+def control_video():
+    if not request.is_json:
+        return jsonify({"error": "Invalid input format. Expected JSON"}), 400
+
+    data = request.get_json()
+    action = data.get('action')
+
+    if action not in ['play', 'pause']:
+        return jsonify({"error": "Invalid action. Expected 'play' or 'pause'"}), 400
+
+    video_state["playing"] = (action == 'play')
+
+    return jsonify({"message": f"Video is now {action}ed", "video_playing": video_state["playing"]}), 200
 
 
 
