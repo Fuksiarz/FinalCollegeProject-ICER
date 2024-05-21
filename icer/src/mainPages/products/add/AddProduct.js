@@ -106,7 +106,7 @@ function AddProduct() {
     }
 
     const startCamera = () => {
-        const stopRecordingFunc = cameraControl(videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo);
+        const stopRecordingFunc = cameraControl(videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo, user);
         setStopRecording(() => stopRecordingFunc);
         setStreamCamera(true);
     };

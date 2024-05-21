@@ -1,6 +1,6 @@
 import { sendFrameToFlask } from "./sendFrameToFlask";
 
-export const cameraControlForAdvert = (videoRef, canvasRef,isRecording,setAdIsOn) => {
+export const cameraControlForAdvert = (videoRef, canvasRef,isRecording,setAdIsOn, setGotCamera) => {
 
     const frameRate = 100;
     const interval = 20000 / frameRate;
@@ -59,6 +59,7 @@ export const cameraControlForAdvert = (videoRef, canvasRef,isRecording,setAdIsOn
                         if (!isRecording) return;
 
                         if (videoRef.current && canvasRef.current) {
+                            setGotCamera(1);
                             const video = videoRef.current;
                             const canvas = canvasRef.current;
                             const context = canvas.getContext("2d");
@@ -93,7 +94,7 @@ export const cameraControlForAdvert = (videoRef, canvasRef,isRecording,setAdIsOn
             })
             .catch((error) => {
                 console.error("Error accessing camera:", error);
-
+                setGotCamera(0)
             });
     } else {
         console.error("Camera requires HTTPS lub localhost.");

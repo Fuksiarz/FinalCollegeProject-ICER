@@ -1,6 +1,7 @@
-import { sendFrameToFlask } from "./sendFrameToFlask";
+import { sendFrameToFlaskFoodId } from "./sendFrameToFlaskFoodId";
 
-export const cameraControl = (videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo) => {
+
+export const cameraControl = (videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo, user) => {
     let isRecording = true;
     const frameRate = 100;
     const interval = 20000 / frameRate;
@@ -71,7 +72,7 @@ export const cameraControl = (videoRef, canvasRef, setStreamCamera, setProductBa
                             const frameBase64 = canvas.toDataURL("image/jpeg").split(",")[1];  // Upewnij się, że przesyłasz czyste base64
 
 
-                            const analysisResult = await sendFrameToFlask(frameBase64);
+                            const analysisResult = await sendFrameToFlaskFoodId(frameBase64,user);
 
                             if (analysisResult && analysisResult.length > 0) {
                                 const firstResponse = analysisResult[0];
