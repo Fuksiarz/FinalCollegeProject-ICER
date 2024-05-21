@@ -1730,6 +1730,7 @@ def get_frame():
     images_data = data['images']
     username = data['username']  # Pobieranie nazwy użytkownika z żądania
     responses = []
+    print(data)
     for idx, image_data in enumerate(images_data):
         if image_data.startswith('data:image'):
             header, image_data = image_data.split(';base64,')
@@ -2098,6 +2099,7 @@ video_state = {
 @app.route('/advert_reciever', methods=['POST'])
 def advert_reciever():
     # Sprawdzenie, czy dane są przekazywane w formacie JSON
+
     if not request.is_json:
         return jsonify({"error": "Invalid input format. Expected JSON"}), 400
 
@@ -2111,12 +2113,12 @@ def advert_reciever():
 
     # Usunięcie prefiksu `data:image/png;base64,` jeśli istnieje
     if image_data.startswith('data:image'):
-        print("Found prefix, removing it.")
+
         image_data = image_data.split(',')[1]
 
     try:
         # Dekodowanie danych base64
-        print("Decoding base64 image data.")
+
         image_bytes = base64.b64decode(image_data)
 
         # Tworzenie pliku tymczasowego w katalogu tmp i zapisywanie obrazu jako JPG
@@ -2124,23 +2126,23 @@ def advert_reciever():
             tmp.write(image_bytes)
             tmp_path = tmp.name
 
-        print(f"Temporary image file saved at: {tmp_path}")
+        print('jest')
 
         # Odczytywanie zapisanego obrazu
         image = cv2.imread(tmp_path)
 
         if image is None:
-            print(f"Failed to load image from {tmp_path}")
+
             return jsonify({"error": "Failed to load image"}), 500
 
-        print(f"Image loaded successfully from {tmp_path}")
+
 
         # Wykrywanie twarzy i oczu
         detected_faces, detected_eyes = detect_faces_and_eyes(image)
 
         # Usuwanie pliku tymczasowego
         os.remove(tmp_path)
-        print(f"Temporary image file {tmp_path} deleted")
+
 
         # Aktualizacja stanu wideo, jeśli jest wybrany videoplayback.mp4
         if video_state["video_choice"] == 1:
@@ -2180,11 +2182,32 @@ def start_video():
     try:
         video_state["video_choice"] = video_choice
         video_state["playing"] = True
-        return send_from_directory(video_dir, video_file, as_attachment=False)
+        video_url = f'/video/{video_file}'
+        return jsonify({"video_url": video_url, "message": "Start playing video"}), 200
     except FileNotFoundError:
         return jsonify({"error": "File not found"}), 404
 
+@app.route('/video/<filename>', methods=['GET'])
+def serve_video(filename):
+    try:
+        return send_from_directory(video_dir, filename, as_attachment=False)
+    except FileNotFoundError:
+        return jsonify({"error": "File not found"}), 404
 
+@app.route('/control_video', methods=['POST'])
+def control_video():
+    if not request.is_json:
+        return jsonify({"error": "Invalid input format. Expected JSON"}), 400
+
+    data = request.get_json()
+    action = data.get('action')
+
+    if action not in ['play', 'pause']:
+        return jsonify({"error": "Invalid action. Expected 'play' or 'pause'"}), 400
+
+    video_state["playing"] = (action == 'play')
+
+    return jsonify({"message": f"Video is now {action}ed", "video_playing": video_state["playing"]}), 200
 
 
 
