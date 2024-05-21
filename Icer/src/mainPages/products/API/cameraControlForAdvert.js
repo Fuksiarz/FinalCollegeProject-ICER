@@ -1,4 +1,4 @@
-import { sendFrameToFlask } from "./sendFrameToFlask";
+import { sendFrameToFlaskForAdvert } from "./sendFrameToFlaskForAdvert";
 
 export const cameraControlForAdvert = (videoRef, canvasRef,isRecording,setAdIsOn, setGotCamera) => {
 
@@ -74,7 +74,7 @@ export const cameraControlForAdvert = (videoRef, canvasRef,isRecording,setAdIsOn
                             const frameBase64 = canvas.toDataURL("image/jpeg").split(",")[1];  // Upewnij się, że przesyłasz czyste base64
 
 
-                            const analysisResult = await sendFrameToFlask(frameBase64);
+                            const analysisResult = await sendFrameToFlaskForAdvert(frameBase64);
 
                             if (analysisResult && analysisResult.length > 0) {
                                 const firstResponse = analysisResult[0];

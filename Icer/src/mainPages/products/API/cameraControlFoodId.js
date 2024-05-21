@@ -1,7 +1,7 @@
 import { sendFrameToFlaskFoodId } from "./sendFrameToFlaskFoodId";
 
 
-export const cameraControl = (videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo, user) => {
+export const cameraControlFoodId = (videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo, user) => {
     let isRecording = true;
     const frameRate = 100;
     const interval = 20000 / frameRate;

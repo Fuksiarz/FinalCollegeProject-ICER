@@ -13,7 +13,7 @@ import {handleBackpackClick} from "../hooks/handleBackpackClick";
 import {chooseImageForIdentyfiaction} from "../hooks/chooseImageForIdentyfication";
 import {stopCamera} from "../API/stopCamera";
 import {updateFood} from "../API/updateFood";
-import {cameraControl} from "../API/cameraControl";
+import {cameraControlFoodId} from "../API/cameraControlFoodId";
 import {sendImageToFlask} from "../API/sendImageToFlask";
 
 
@@ -106,7 +106,7 @@ function AddProduct() {
     }
 
     const startCamera = () => {
-        const stopRecordingFunc = cameraControl(videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo, user);
+        const stopRecordingFunc = cameraControlFoodId(videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo, user);
         setStopRecording(() => stopRecordingFunc);
         setStreamCamera(true);
     };
