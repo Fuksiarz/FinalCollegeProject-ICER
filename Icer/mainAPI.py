@@ -1869,13 +1869,13 @@ def upload_predictor():
         if 'file' not in request.files:
             flash('Brak części pliku', 'error')
             print("No file part in request")
-            return "No file part provided"
+            return jsonify({"status": "error", "message": "No file part provided"})
 
         file = request.files['file']
         if file.filename == '':
             flash('Nie wybrano pliku', 'error')
             print("No file selected")
-            return "No file selected"
+            return jsonify({"status": "error", "message": "No file selected"})
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
@@ -1888,7 +1888,7 @@ def upload_predictor():
             decoded_data = decode_qr_code(file_path)
             if decoded_data and decoded_data != "QR code not detected":
                 print("QR Code decoded: ", decoded_data)
-                return f"Decoded QR Code Data: {decoded_data}"
+                return jsonify({"status": "success", "type": "qr", "data": decoded_data})
 
             print("No QR Code detected, proceeding with food prediction.")
 
@@ -1896,16 +1896,16 @@ def upload_predictor():
             pred_class = pred_and_plot(model, file_path, class_names, "username")  # Użyj rzeczywistej zmiennej username
             if pred_class:
                 print("Food identified: ", pred_class)
-                return f"Food identified: {pred_class}"
+                return jsonify({"status": "success", "type": "food", "data": pred_class})
             else:
                 print("No food detected.")
-                return "No food detected or QR code found."
+                return jsonify({"status": "error", "message": "No food detected or QR code found."})
         else:
             print("Invalid file type.")
-            return "Invalid file type. Please upload an image file."
+            return jsonify({"status": "error", "message": "Invalid file type. Please upload an image file."})
 
     print("Handled as non-POST request")
-    return "Send a POST request with an image"
+    return jsonify({"status": "error", "message": "Send a POST request with an image"})
 
 
 
