@@ -131,7 +131,7 @@ function EditAccount(props) {
                 <form onSubmit={handleSubmit}>
                     <div className="accountName"> {/*kontener z polem edycji nazwy użytkownika*/}
                         <h3>
-                            Username:
+                            Nowa nazwa:
                         </h3>
                         <input /*element wejściowy tworzenia informacji do zaktualizowania nazwy użytkownika*/
                             type="text" //typ wejścia
@@ -145,7 +145,7 @@ function EditAccount(props) {
                     {/*kontener z polem edycji hasła użytkownika*/}
                     <div className="accountPassword">
                         <h3>
-                            New Password:
+                            Nowe hasło:
                         </h3>
                         <input /*element wejściowy tworzenia informacji do zaktualizowania hasła użytkownika*/
                             type="password" // użycie typu password, aby ukryć wpisywane hasło

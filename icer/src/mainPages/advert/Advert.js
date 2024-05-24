@@ -13,7 +13,7 @@ export function Advert({ adIsOn, setAdIsOn }) {
     const stopRecordingRef = useRef(null); // Ref do przechowywania funkcji stopRecording
 
     useEffect(() => {
-        if (adIsOn) {
+
             const fetchVideoFeed = () => {
                 axios.post(`${API_URL}/start_video`, { video_choice: gotCamera }, {
                     headers: { 'Content-Type': 'application/json' }
@@ -27,8 +27,8 @@ export function Advert({ adIsOn, setAdIsOn }) {
                     });
             };
             fetchVideoFeed();
-        }
-    }, [adIsOn, gotCamera]);
+        
+    }, [adIsOn, gotCamera,isRecording]);
 
     const handleVideoEnd = () => {
         setIsRecording(false);

@@ -28,7 +28,7 @@ function RegisterForm({onRegister, onSwitchToLogin}) {
                        type="text"
                        value={username}
                        onChange={e => setUsername(e.target.value)}
-                       placeholder="Username"
+                       placeholder="Nazwa"
                 />
 
                 {/*pobieramy dane wejściowe od użytkownika odnośnie hasła*/}
@@ -36,7 +36,7 @@ function RegisterForm({onRegister, onSwitchToLogin}) {
                        type="password"
                        value={password}
                        onChange={e => setPassword(e.target.value)}
-                       placeholder="Password"
+                       placeholder="Hasło"
                 />
 
                 {/*przycisk zatwierdzający informacje, zarejestruj*/}
