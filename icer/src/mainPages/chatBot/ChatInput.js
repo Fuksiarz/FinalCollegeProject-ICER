@@ -2,14 +2,14 @@
 import React, {useState} from 'react';
 import './ChatInput.css';
 import {Icon} from "@iconify/react";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 /*funkcja przyjmująca wiadomość od użytkownika, przyjmuje funkcję wysyłania wiadomości*/
 function ChatInput({ onSendMessage, onToggleMinimize  }) {
 
     //zmienna posiadająca wpisywaną wiadomość
     const [inputValue, setInputValue] = useState('');
-
+    const navigate = useNavigate(); // Use navigate
     //po zatwierdzeniu
     const handleSubmit = (e) => {
         //nie odświeżaj strony
@@ -22,11 +22,16 @@ function ChatInput({ onSendMessage, onToggleMinimize  }) {
         setInputValue('');
     };
 
+    const handleMinimizeClick = () => {
+        onToggleMinimize(3);
+        navigate(-1); // Przekierowanie na poprzednią podstronę
+    };
+
     return (
         <>
             {/*przy zatwierdzeniu wykonaj funkcję handleSubmit*/}
             <form  className="chat-input-container"  onSubmit={handleSubmit}>
-                <div className={`minimize-button`} onClick={() => onToggleMinimize(3)}>
+                <div className={`minimize-button`} onClick={handleMinimizeClick}>
 
                         <Icon className="minimize-buttonIcon" icon="solar:minimize-square-3-outline" rotate={1} />
 

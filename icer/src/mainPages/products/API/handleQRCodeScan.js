@@ -24,6 +24,7 @@ export const handleQRCodeScan = async (
             });
 
             if (response.data) {
+
                 //w razie powodzenia:
                 // zwrócone dane muszę przerobić aby były odpowiedno wyświetlane. Dodaję split, który
                 //jest wyznacznikiem oddzielonych wartości

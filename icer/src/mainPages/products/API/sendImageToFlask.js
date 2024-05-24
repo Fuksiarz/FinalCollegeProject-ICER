@@ -16,7 +16,7 @@ export const sendImageToFlask = async (setProduct, file, setImageForIdentyficati
             }
         });
         console.log('odpowiedz', response.data);
-
+        response.data.valueOf();
         // Aktualizuje listę produktów
         axios.get(`${API_URL}/api/update_food_list`)
             .then((response) => {
