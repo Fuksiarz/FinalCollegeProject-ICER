@@ -9,8 +9,8 @@ export function GetBorderStyle(data, filter, int) {
         //jeśli są dane to
         if (data) {
 
-            // wzależności od wartości data.trzecia_wartosc nadaj odpowiedni styl
-            switch (data.trzecia_wartosc) {
+            // wzależności od wartości data.swiezosc nadaj odpowiedni styl
+            switch (data.swiezosc) {
                 case 1:
                     borderStyle = `${int}px solid pink`;
                     break;
