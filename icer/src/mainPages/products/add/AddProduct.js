@@ -256,7 +256,7 @@ function AddProduct() {
                                             {/* kontener z opcjami relatywny, rodzic posiada pozycję absolutną */}
                                             <div className="cameraOptionsRelative">
                                                 {/* kontener, który posiada opcje identyfikacji po zdjęciu*/}
-                                                <div className="leftCameraOption" onClick={showOneIdCameraOptions}>
+                                                <div className="leftCameraOption"  onClick={showOneIdCameraOptions}>
                                                     <label><h5>jeden</h5></label>
                                                     {/* jeśli jest oneIdCameraOptions to pokaż:  */}
                                                     {oneIdCameraOptions &&
@@ -293,13 +293,15 @@ function AddProduct() {
 
                                             </div>
                                         </div>
-
+                                        <div>
                                         {/* ikona, która po naciśnięciu pokazuje opcje identyfikacji  */}
+                                        <Icon className="addPhotoFromDirIcon" icon="ph:qr-code" onClick={handleCameraClick}/>
                                         <Icon className="addPhotoFromDirIcon" icon="icon-park-twotone:camera-one"
+
                                               onClick={handleCameraClick}/>
 
                                         <span> <h5>jedzenie</h5> </span>
-
+                                        </div>
                                     </label>
                                 </div>
 
@@ -309,38 +311,6 @@ function AddProduct() {
                                 <button type="submit" className="addProductButton"><h4> Dodaj produkt </h4></button>
                             </div>
                             {/* kontener ze skanerem */}
-                            <div className="scanners">
-                                {/* etytkieta, której naciśnięcie wywoła skanowanie kodu QR */}
-                                <label onClick={() => {
-                                    handleQRCodeScan(qrImage,
-                                        setProduct,
-                                        setQrImage,
-                                        setQrImagePreview)
-                                }} className="scannerLabel">
-
-                                    {/* jeśli nie ma obrazu QR to pokaż ikonę */}
-                                    {!qrImage && <Icon className="qrIcon" icon="bx:qr-scan"/>}
-                                    {/* jeśli jest podlgąd QR to pokaż go   */}
-                                    {qrImagePreview && (
-                                        <img
-                                            src={qrImagePreview}
-                                            alt="Podgląd"
-                                            style={{maxWidth: '100px', maxHeight: '100px'}}
-                                        />
-                                    )}
-                                    <h5> Skanuj QR </h5>
-                                    {/* jeśli nie ma obrazku QR to pokaż pole od jego dodania:  */}
-                                    {!qrImage && <input
-                                        type="file"
-                                        id="file-input"
-                                        style={{display: 'none'}}
-                                        /* obsługiwanie zmiany kod QR  */
-                                        onChange={(e) => handleQRChange(e, setQrImage, setQrImagePreview)}
-                                    />}
-                                </label>
-
-                            </div>
-
 
                         </form>
 

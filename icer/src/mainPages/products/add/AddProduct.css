@@ -67,6 +67,9 @@
     text-align: center;
     margin-bottom:1vh;
 }
+.addPhotoFromDirDiv{
+    position:relative;
+}
 
 /* wewnętrzny kontener sekcji dodawania poprzez zdjęcie /filmik */
 .image-options{
@@ -224,6 +227,7 @@
     gap:0.2vh;
     transition: transform 0.2s;
 }
+
 /* kontener posiadający obraz wideo z api */
 .rightCameraOptionUsed {
     position: fixed;
