@@ -74,13 +74,13 @@ def allowed_file(filename):
 
 def run_daily_procedure():
     local_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
-    local_connector.connect()
+    local_connector.connect()   
     cursor = local_connector.connection.cursor(dictionary=True)
     try:
         # Wywołanie PROCEDURE UpdateTrzeciaWartosc
-        cursor.callproc('UpdateTrzeciaWartosc')
+        cursor.callproc('UpdateSwiezosc', (None,))
         # Wywołanie PROCEDURE Updatenotification
-        cursor.callproc('Updatenotification')
+        cursor.callproc('UpdatePowiadomienia')
         cursor.close()
         local_connector.get_connection().commit()
     except Exception as error:
@@ -389,6 +389,9 @@ def add_product():
         """
         cursor.execute(add_icer_query, (user_id, product_id, data['ilosc'], data['data_waznosci']))
 
+        # Wywołanie procedury UpdateSwiezosc dla nowo dodanego produktu
+        cursor.callproc('UpdateSwiezosc', (cursor.lastrowid,))
+
         # Wywołanie funkcji do obsługi przesyłania zdjęcia tylko jeśli dostępne są dane zdjęcia
         if image_data:
             handle_image_upload(db_connector, image_data, user_id, product_id)
@@ -655,7 +658,7 @@ def get_notifications():
 
         query = """
             SELECT Icer.id, Icer.UserID, Icer.produktID, Icer.ilosc, 
-            Icer.data_waznosci, Icer.trzecia_wartosc, Icer.default_photo,
+            Icer.data_waznosci, Icer.swiezosc, Icer.default_photo,
             Icer.powiadomienie,
             IF(Icer.default_photo = 1, Photos.lokalizacja, UserPhotos.lokalizacja) AS zdjecie_lokalizacja,
             Produkty.nazwa, Produkty.cena, Produkty.kalorie,
@@ -733,13 +736,13 @@ def get_products_with_red_flag():
         user_id = user_result['id']
         query = """
             SELECT Icer.id, Icer.UserID, Icer.produktID, Icer.ilosc, 
-                   Icer.data_waznosci, Icer.trzecia_wartosc,
+                   Icer.data_waznosci, Icer.swiezosc,
                    Produkty.nazwa, Produkty.cena, Produkty.kalorie,
                    Produkty.tluszcze, Produkty.weglowodany, Produkty.bialko,
                    Produkty.kategoria
             FROM Icer
             INNER JOIN Produkty ON Icer.produktID = Produkty.id
-            WHERE Icer.UserID = %s AND Icer.trzecia_wartosc >= 1
+            WHERE Icer.UserID = %s AND Icer.swiezosc >= 1
         """
         cursor.execute(query, (user_id,))
         results = cursor.fetchall()
@@ -790,7 +793,7 @@ def get_icer():
         # Modyfikacja zapytania SQL, aby pokazywać wszystkie informacje o produkcie
         query = """
             SELECT DISTINCT Icer.id, Icer.UserID, Icer.produktID, Icer.ilosc, 
-                   Icer.data_waznosci, Icer.trzecia_wartosc, Icer.default_photo,
+                   Icer.data_waznosci, Icer.swiezosc, Icer.default_photo,
                    IF(Icer.default_photo = 1, Photos.lokalizacja, UserPhotos.lokalizacja) AS zdjecie_lokalizacja,
                    Produkty.nazwa, Produkty.cena, Produkty.kalorie,
                    Produkty.tluszcze, Produkty.weglowodany, Produkty.bialko,

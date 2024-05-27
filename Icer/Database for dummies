@@ -56,7 +56,7 @@ BEGIN
         UserID INT,
         produktID INT,
         ilosc INT,
-        trzecia_wartosc TINYINT CHECK (trzecia_wartosc >= 0 AND trzecia_wartosc <= 4),
+        swiezosc TINYINT CHECK (swiezosc >= 0 AND swiezosc<= 4),
         data_waznosci DATE,
         data_otwarcia DATE,
         data_dodania TIMESTAMP,
@@ -68,11 +68,30 @@ BEGIN
 
     -- Tworzenie tabeli Photos
     CREATE TABLE IF NOT EXISTS Photos (
-      id INT PRIMARY KEY AUTO_INCREMENT,
-      produktID INT,
-      lokalizacja VARCHAR(255),
-      FOREIGN KEY (produktID) REFERENCES Produkty (id)
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        produktID INT,
+        lokalizacja VARCHAR(255),
+        FOREIGN KEY (produktID) REFERENCES Produkty (id)
     );
+
+    -- Wstawianie zdjęć dla produktów do tabeli Photos
+    INSERT INTO Photos (produktID, lokalizacja)
+    VALUES
+        ((SELECT id FROM Produkty WHERE nazwa = 'ciasto_czekoladowe'), 'ciasto_czekoladowe.jpg'),
+        ((SELECT id FROM Produkty WHERE nazwa = 'donut'), 'donut.jpg'),
+        ((SELECT id FROM Produkty WHERE nazwa = 'frytki'), 'frytki.jpg'),
+        ((SELECT id FROM Produkty WHERE nazwa = 'hamburger'), 'hamburger.jpg'),
+        ((SELECT id FROM Produkty WHERE nazwa = 'lasagne'), 'lasagne.jpg'),
+        ((SELECT id FROM Produkty WHERE nazwa = 'makaroniki'), 'makaroniki.jpg'),
+        ((SELECT id FROM Produkty WHERE nazwa = 'nalesniki'), 'nalesniki.jpg'),
+        ((SELECT id FROM Produkty WHERE nazwa = 'pizza'), 'pizza.jpg'),
+        ((SELECT id FROM Produkty WHERE nazwa = 'salatka_cezar'), 'salatka_cezar.jpg'),
+        ((SELECT id FROM Produkty WHERE nazwa = 'skrzydelka_z_kurczaka'), 'skrzydelka_z_kurczaka.jpg'),
+        ((SELECT id FROM Produkty WHERE nazwa = 'sushi'), 'sushi.jpg'),
+        ((SELECT id FROM Produkty WHERE nazwa = 'szarlotka'), 'szarlotka.jpg'),
+        ((SELECT id FROM Produkty WHERE nazwa = 'tiramisu'), 'tiramisu.jpg'),
+        ((SELECT id FROM Produkty WHERE nazwa = 'zeberka'), 'zeberka.jpg');
+
 
     -- Tworzenie tabeli UserPhotos
     CREATE TABLE IF NOT EXISTS UserPhotos (
@@ -114,7 +133,6 @@ END //
 
 
 
-
 -- Tworzenie procedury ModifyProductQuantity
 CREATE PROCEDURE ModifyProductQuantity(IN p_icerID INT, IN p_userID INT, IN p_action ENUM('add', 'subtract', 'zero', 'remove'))
 BEGIN
@@ -138,41 +156,48 @@ BEGIN
     UPDATE Icer SET ilosc = current_quantity WHERE id = p_icerID AND UserID = p_userID;
 END //
 
--- Tworzenie procedury UpdateTrzeciaWartosc
-CREATE PROCEDURE UpdateTrzeciaWartosc()
+-- Tworzenie procedury Swiezosc
+CREATE PROCEDURE UpdateSwiezosc(IN icer_id INT)
 BEGIN
-    -- Flagowanie produktów, które już wygasły
-    UPDATE Icer
-    SET trzecia_wartosc = 0
-    WHERE DATE(data_waznosci) < DATE(NOW());
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- W przypadku błędu cofamy zmiany
+        ROLLBACK;
+    END;
 
-    -- Flagowanie produktów z 1 dniem do końca ważności
-    UPDATE Icer
-    SET trzecia_wartosc = 1
-    WHERE DATE(data_waznosci) = DATE(NOW());
+    -- Rozpoczęcie transakcji
+    START TRANSACTION;
 
-    -- Flagowanie produktów z 3 dniami do końca ważności
-    UPDATE Icer
-    SET trzecia_wartosc = 2
-    WHERE DATE(data_waznosci) BETWEEN DATE(NOW()) AND DATE(NOW() + INTERVAL 3 DAY);
+    -- Aktualizacja wszystkich produktów, jeśli nie podano icer_id
+    IF icer_id IS NULL THEN
+        UPDATE Icer
+        SET swiezosc = CASE
+            WHEN DATE(data_waznosci) < DATE(NOW()) THEN 0
+            WHEN DATE(data_waznosci) = DATE(NOW()) THEN 1
+            WHEN DATE(data_waznosci) BETWEEN DATE(NOW()) AND DATE(NOW() + INTERVAL 3 DAY) THEN 2
+            WHEN DATE(data_waznosci) > DATE(NOW() + INTERVAL 3 DAY) AND DATE(data_waznosci) <= DATE(NOW() + INTERVAL 7 DAY) THEN 3
+            WHEN DATE(data_waznosci) > DATE(NOW() + INTERVAL 7 DAY) THEN 4
+            ELSE swiezosc -- zachowaj obecną wartość, jeśli żaden warunek nie jest spełniony
+        END;
+    ELSE
+        -- Aktualizacja konkretnego produktu, jeśli podano icer_id
+        UPDATE Icer
+        SET swiezosc = CASE
+            WHEN DATE(data_waznosci) < DATE(NOW()) AND id = icer_id THEN 0
+            WHEN DATE(data_waznosci) = DATE(NOW()) AND id = icer_id THEN 1
+            WHEN DATE(data_waznosci) BETWEEN DATE(NOW()) AND DATE(NOW() + INTERVAL 3 DAY) AND id = icer_id THEN 2
+            WHEN DATE(data_waznosci) > DATE(NOW() + INTERVAL 3 DAY) AND DATE(data_waznosci) <= DATE(NOW() + INTERVAL 7 DAY) AND id = icer_id THEN 3
+            WHEN DATE(data_waznosci) > DATE(NOW() + INTERVAL 7 DAY) AND id = icer_id THEN 4
+            ELSE swiezosc -- zachowaj obecną wartość, jeśli żaden warunek nie jest spełniony
+        END
+        WHERE id = icer_id;
+    END IF;
 
-    -- Flagowanie produktów z pomiędzy 3 a 7 dni do końca ważności
-    UPDATE Icer
-    SET trzecia_wartosc = 3
-    WHERE DATE(data_waznosci) > DATE(NOW() + INTERVAL 3 DAY) AND DATE(data_waznosci) <= DATE(NOW() + INTERVAL 7 DAY);
-
-    -- Flagowanie produktów z ponad 7 dni do końca ważności ale mniej niż miesiąc
-    UPDATE Icer
-    SET trzecia_wartosc = 4
-    WHERE DATE(data_waznosci) > DATE(NOW() + INTERVAL 7 DAY);
+    -- Zatwierdzenie transakcji
+    COMMIT;
 END //
 
--- Tworzenie procedury Updatenotification
-DELIMITER //
-
-DELIMITER //
-
-CREATE PROCEDURE Updatenotification()
+CREATE PROCEDURE UpdatePowiadomienia()
 BEGIN
     -- Sprawdzenie daty ostatniego wykonania procedury
     DECLARE last_exec_date DATE;
@@ -180,10 +205,10 @@ BEGIN
 
     -- Jeśli procedura nie została wykonana dzisiaj, to wykonaj procedurę aktualizacji powiadomień
     IF last_exec_date != CURDATE() THEN
-        -- Ustawienie powiadomienia na 1, gdy trzecia_wartosc jest mniejsza lub równa 2 oraz ilość produktu wynosi 0
+        -- Ustawienie powiadomienia na 1, gdy swiezosc jest mniejsza lub równa 2 oraz ilość produktu wynosi 0
         UPDATE Icer
         SET powiadomienie = 1
-        WHERE trzecia_wartosc <= 2 OR ilosc = 0;
+        WHERE swiezosc <= 2 OR ilosc = 0;
 
         -- Ustawienie daty ostatniego wykonania procedury na dzisiaj
         REPLACE INTO last_execution_date VALUES (CURDATE());
