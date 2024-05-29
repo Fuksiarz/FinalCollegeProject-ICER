@@ -2127,7 +2127,6 @@ def advert_reciever():
             tmp.write(image_bytes)
             tmp_path = tmp.name
 
-        print('jest')
 
         # Odczytywanie zapisanego obrazu
         image = cv2.imread(tmp_path)
