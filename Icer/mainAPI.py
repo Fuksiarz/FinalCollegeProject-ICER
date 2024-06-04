@@ -1,40 +1,35 @@
 import json
 import os
-import threading
 import uuid  # potrzebne do generowania unikalnych ID sesji
-import requests
+
+import base64
+import tempfile
+
+import cv2
+from flask import session, jsonify, request
+
+import numpy as np
+
 import bcrypt
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, request, render_template, redirect, url_for, make_response, \
-    flash, jsonify, session
-from flask import Response
+from flask import Flask
 from flask import current_app
+from flask import render_template, redirect, url_for, make_response, \
+    flash, send_from_directory
 from flask_cors import CORS
-### from flask_socketio import Namespace
 from flask_socketio import SocketIO
 from werkzeug.utils import secure_filename
 
-# from modules.scan_module.forms import BarcodeForm
-from modules.advert_module.monitor import generate_frames, detect_faces_and_eyes
+from modules.advert_module.monitor import detect_faces_and_eyes
 from modules.bot_module.bot import get_bot_response
 from modules.database_connector import DatabaseConnector
 from modules.foodIdent_module.foodIdent import pred_and_plot, load_model
-from modules.foodIdent_module.foodIdentVideo import start_camera, stop_camera, process_video, clear_food_username, \
-     predict_and_update_food_list, preload
+from modules.foodIdent_module.foodIdentVideo import clear_food_username, \
+    predict_and_update_food_list, preload
 from modules.image_handler import handle_image_upload, change_user_profile
-from modules.scan_module.decoder import decode_qr_code  # ,decode_barcode
-from modules.scan_module.gen import generate_qr_code  # ,generate_barcode
+from modules.scan_module.decoder import decode_qr_code
+from modules.scan_module.gen import generate_qr_code
 from modules.value_manager import ProductManager
-
-from flask import Flask
-from flask_cors import CORS
-
-import io
-import base64
-import tempfile
-from PIL import Image
-
-
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -42,13 +37,37 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 app.config['BARCODE_FOLDER'] = os.path.join(app.static_folder, 'barcodes')
 app.config['QR_CODE_FOLDER'] = os.path.join(app.static_folder, 'qrcodes')
 app.config['FOOD_LIST_DIR'] = './users_lists'
-app.config['SECRET_KEY'] = 'key'  # Replace with a strong secret key
-# app.config['BARCODE_FOLDER'] = 'static/barcodes
+app.config['SECRET_KEY'] = 'key'  # Zamienic na silne hasło
 
-# Loading model
+# Uzyskaj ścieżkę do katalogu głównego (gdzie znajduje się mainAPI.py)
+base_dir = os.path.dirname(os.path.abspath(__file__))
+# Ścieżka do katalogu tmp
+temp_dir = os.path.join(base_dir, 'tmp')
+os.makedirs(temp_dir, exist_ok=True)
+# Ścieżka do katalogu z plikami wideo
+video_dir = os.path.join(base_dir, 'static', 'adverts')
+
+#Startowanie wideo, wyślij 1 jeśli kamera jest i 0 jeśli kamery nie ma.
+
+# Upewnij się, że katalog tmp istnieje
+os.makedirs(temp_dir, exist_ok=True)
+
+# Status video
+video_state = {
+    "playing": False,
+    "video_choice": None
+}
+
+# Ladowanie modeli
 model = load_model('model3.h5')
 print("Model loaded successfully:", model is not None)
 
+json_file_path = 'modules/foodIdent_module/classes.json'
+with open(json_file_path, 'r') as json_file:
+    data = json.load(json_file)
+class_names = data.get('class_names', [])
+
+# Ladowanie modulow
 json_file_path = 'modules/foodIdent_module/classes.json'
 with open(json_file_path, 'r') as json_file:
     data = json.load(json_file)
@@ -1335,6 +1354,7 @@ def edit_user():
         return jsonify({"error": str(error)})
 
 
+# Obsluga chatbota
 @app.route('/', methods=['GET', 'POST'])
 def index():
     # Pusty ciąg znaków dla odpowiedzi chatbota
@@ -1353,7 +1373,7 @@ def index():
     return response
 
 
-
+# Pobieranie odpowiedzi na podstawie zapytania
 @app.route('/get_response', methods=['POST'])
 def get_response():
     # Pobierz dane wejściowe użytkownika z JSON
@@ -1374,6 +1394,7 @@ def get_response():
     return jsonify({'error': 'Nieprawidłowe dane wejściowe'})
 
 
+# Generowanie kodu QR
 @app.route('/generate_qr_code', methods=['POST'])
 def generate_qr_code_route():
     # Wyodrębnij dane przesłane z formularza
@@ -1402,6 +1423,7 @@ def generate_qr_code_route():
     return redirect(url_for('index'))
 
 
+# Dekodowanie kodu QR
 @app.route('/decode_qr_code', methods=['POST'])
 def decode_qr_code_route():
     # Sprawdzenie, czy plik 'qr_code_image' istnieje 
@@ -1443,190 +1465,6 @@ def decode_qr_code_route():
         return redirect(request.url)
 
 
-# Inicjalizuj zmienną camera_thread jako None.
-camera_thread = None
-
-
-@app.route('/start_food_identification', methods=['POST'])
-def start_food_identification_route():
-    # Tworzenie wątku kamery do identyfikacji jedzenia
-    camera_thread = threading.Thread(target=foodIdent)
-
-    camera_thread.start()
-    # Przekierowanie z powrotem do'index' po rozpoczęciu identyfikacji jedzenia
-    return redirect(url_for('index'))
-
-
-# Strumień wideo
-@app.route('/video_feed')
-def video_feed():
-    # Przesyłanie klatki wideo w formacie wieloczęściowym
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-#Odbieranie danych
-@app.route('/receive_data', methods=['POST'])
-def receive_data():
-    data = request.json
-    print("Received data:", data)# Wydrukuj otrzymane dane na konsoli w celach debugowania lub rejestracji.
-    # Zwraca odpowiedź pomyślnym odebraniu danych.
-    return jsonify({"status": "Dane odebrane pomyślnie"})
-    
-
-@app.route('/start_camera_monitoring', methods=['POST'])
-def start_camera_monitoring_route():
-    # Deklaruje 'camera_thread' jako zmienną globalną.
-    global camera_thread
-    # Sprawdza, czy 'camera_thread' nie istnieje lub nie jest uruchomiony.
-    if camera_thread is None or not camera_thread.is_alive():
-        # Tworzy nowy wątek 'camera_thread', który będzie wykonywał funkcję 'generate_frames'.
-        camera_thread = threading.Thread(target=generate_frames)
-        # Uruchamia nowo utworzony wątek kamery.
-        camera_thread.start()
-    # Wyodrębnia klucz 'dane' z danych JSON przesłanych w żądaniu.
-    data = request.json.get('dane')
-    print(data)
-
-    # Emituje dane do front-endu
-    socketio.emit('update_status', {'data': data})
-    # Używa Socket.IO do emitowania zdarzenia 'update_status' z wyodrębnionymi danymi do front-endu.
-
-    return {'status': 'Dane odebrane'}
-    # Zwraca odpowiedź JSON wskazującą, że dane zostały odebrane.
-
-
-
-@app.route('/display_video')
-def display_video():
-    # Renderuje szablon, który wyświetli wideo.
-    return render_template('display_video.html')
-
-
-@app.route('/upload_image', methods=['GET', 'POST'])
-def upload_predict():
-
-    # Uzyskanie połączenia z bazą danych
-    connection = db_connector.get_connection()
-    if not connection:
-        raise ConnectionError("Nie udało się nawiązać połączenia z bazą danych.")
-
-    cursor = connection.cursor(dictionary=True)
-    if not cursor:
-        raise Exception("Nie udało się utworzyć kursora dla bazy danych.")
-
-    # Sprawdzenie, czy użytkownik jest zalogowany
-    user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
-
-    if request.method == 'POST':
-        # Sprawdzenie, czy 'file' znajduje się w przesyłanych plikach
-        if 'file' not in request.files:
-            flash('Brak części pliku', 'error')
-            return redirect(request.url)
-        # Pobranie pliku 
-        file = request.files['file']
-
-        # Sprawdzenie, czy nie wybrano pliku
-        if file.filename == '':
-            flash('Nie wybrano pliku', 'error')
-            return redirect(request.url)
-
-        # Sprawdzenie, czy wybrany plik ma dozwolone rozszerzenie
-        if file and allowed_file(file.filename):
-            # Bezpieczne zapisanie przesłanego pliku do wyznaczonego folderu
-            filename = secure_filename(file.filename)
-            upload_folder = 'static/uploads/'
-            file_path = os.path.join(upload_folder, filename)
-            file.save(file_path)
-
-            # Dokonanie predykcji na podstawie przesłanego obrazu
-            pred_class = pred_and_plot(model, file_path, class_names, username)
-
-            # Wygenerowanie URL dla zapisanego obrazu
-            image_url = url_for('static', filename='uploads/' + filename)
-            # Renderowanie wyniku z predykcją i URL obrazu
-            return render_template('result.html', prediction=pred_class, image_file=image_url)
-        else:
-            # Wyświetlenie komunikatu o błędzie dla nieprawidłowego typu pliku i przekierowanie
-            flash('Nieprawidłowy typ pliku. Proszę przesłać plik obrazu.', 'error')
-            return redirect(request.url)
-
-    return render_template('index.html')
-
-
-# Inicjalizacja zmiennej 'camera_status' na "Not Started" (Nie Rozpoczęto).
-camera_status = "Not Started"
-
-
-@app.route('/stream_camera')
-def stream_camera():
-    username = session.get('username', 'Guest')
-    return Response(process_video(username), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-@app.route('/camera_control', methods=['GET'])
-def camera_control():
-    # Renderuje szablon 'camera_control.html'
-    return render_template('camera_control.html')
-
-
-@app.route('/start_camera', methods=['POST'])
-def start_camera_route():
-    # Pobierz nazwę użytkownika z sesji
-    username = session.get('username', None)
-
-    # Sprawdź, czy nazwa użytkownika została pobrana poprawnie
-    if username is None:
-        return jsonify({"error": "Username not found in session"}), 400
-
-    # Wywołaj funkcję pred_and_plot, przekazując nazwę użytkownika
-    start_camera(username)
-
-    return "Camera started."
-
-
-@app.route('/stop_camera', methods=['POST'])
-def stop_camera_route():
-    # Wywołuje funkcję 'stop_camera()' w celu zatrzymania kamery.
-    stop_camera()
-    requests.post('http://localhost:5000/api/update_food_list')
-    # Zwraca tekst informujący, że kamera została zatrzymana.
-    return "Camera stopped"
-
-
-
-@app.route('/check_camera_status')
-def check_camera_status():
-    # Zwraca stan kamery jako odpowiedź JSON
-    return jsonify({'status': camera_status})
-
-
-
-
-
-
-
-
-
-
-
-
-# NOWE ENDPOINTY
-
-#RESTART
-
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import cv2
-import os
-import json
-import tensorflow as tf
-import time
-import threading
-import numpy as np
-
-
-
-
-
-
-
 # Pobieranie nazwy użytkownika
 @app.route('/get_username', methods=['POST'])
 def get_username_route():
@@ -1642,50 +1480,14 @@ def get_username_route():
 
     return "Nazwa użytkownika przekazana."
 
+
 # Przesyłanie nazwy użytkownika
 def username_forward(username):
     clear_food_username(username)
     print(username)
 
 
-
-
-
-@app.route('/witaj')
-def hello():
-    return 'Hello, World!'
-
-from datetime import datetime
-
-# @app.route('/adison_molotow', methods=['POST'])
-# def get_frame():
-#     data = request.json
-#     if data is None or 'images' not in data:
-#         return jsonify({'error': 'No images provided'}), 400
-#
-#     images_data = data['images']
-#     responses = []
-#     for idx, image_data in enumerate(images_data):
-#         if image_data.startswith('data:image'):
-#             header, image_data = image_data.split(';base64,')
-#
-#         try:
-#             image_bytes = base64.b64decode(image_data)
-#             # Generowanie unikalnej nazwy pliku za pomocą timestamp
-#             timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-#             file_extension = header.split('/')[1].split(';')[0]  # np. "png" dla "image/png"
-#             image_filename = f'received_image_{timestamp}_{idx}.{file_extension}'
-#             with open(image_filename, 'wb') as f:
-#                 f.write(image_bytes)
-#             responses.append({'message': f'Image received successfully: {image_filename}'})
-#         except Exception as e:
-#             responses.append({'error': str(e)})
-#
-#     return jsonify(responses), 200
-
-
-
-#Resetowania listy zakupow
+# Resetowania listy zakupow
 @app.route('/reset_food_list', methods=['POST'])
 def reset_food_list():
     # Pobranie nazwy użytkownika z żądania
@@ -1705,25 +1507,7 @@ def reset_food_list():
         return jsonify({"error": "Failed to reset food list"}), 500
 
 
-
-import os
-import base64
-import tempfile
-from flask import Flask, request, jsonify
-
-
-
-# Uzyskaj ścieżkę do katalogu głównego, gdzie znajduje się mainAPI.py
-base_dir = os.path.dirname(os.path.abspath(__file__))
-temp_dir = os.path.join(base_dir, 'tmp')
-os.makedirs(temp_dir, exist_ok=True)
-
-
-
-import base64
-import tempfile
-from flask import jsonify, request, session
-#Analiza klatki
+# Analiza klatki z video
 @app.route('/adison_molotow', methods=['POST'])
 def get_frame():
     data = request.json
@@ -1757,108 +1541,7 @@ def get_frame():
     return jsonify(responses), 200
 
 
-
-#predykcja QR + AI image
-@app.route('/decode_qr_ai', methods=['GET', 'POST'])
-def upload_predic():
-    connection = db_connector.get_connection()
-    if not connection:
-        raise ConnectionError("Nie udało się nawiązać połączenia z bazą danych.")
-    cursor = connection.cursor(dictionary=True)
-    user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
-
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            flash('Brak części pliku', 'error')
-            return redirect(request.url)
-        file = request.files['file']
-        if file.filename == '':
-            flash('Nie wybrano pliku', 'error')
-            return redirect(request.url)
-
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            upload_folder = 'static/uploads/'
-            file_path = os.path.join(upload_folder, filename)
-            file.save(file_path)
-
-            # Próba odczytu kodu QR
-            decoded_data = decode_qr_code(file_path)
-            if decoded_data:
-                return render_template('result.html', message=f"Decoded QR Code Data: {decoded_data}")
-
-            # Dokonanie predykcji na podstawie przesłanego obrazu
-            pred_class = pred_and_plot(model, file_path, class_names, username)
-            image_url = url_for('static', filename='uploads/' + filename)
-            return render_template('result.html', prediction=pred_class, image_file=image_url)
-
-        else:
-            flash('Nieprawidłowy typ pliku. Proszę przesłać plik obrazu.', 'error')
-            return redirect(request.url)
-
-    return render_template('index.html')
-
-
-
-
-
-
-
-
-# @app.route('/upload_test', methods=['GET', 'POST'])
-# def upload_predictor():
-#     print("Endpoint called with method: ", request.method)
-#     # Uzyskanie połączenia z bazą danych
-#     connection = db_connector.get_connection()
-#     if not connection:
-#         raise ConnectionError("Nie udało się nawiązać połączenia z bazą danych.")
-#     cursor = connection.cursor(dictionary=True)
-#
-#     # Sprawdzenie, czy użytkownik jest zalogowany
-#     user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
-#
-#     if request.method == 'POST':
-#         print("Received a POST request")
-#         if 'file' not in request.files:
-#             flash('Brak części pliku', 'error')
-#             return redirect(request.url)
-#         file = request.files['file']
-#         if file.filename == '':
-#             flash('Nie wybrano pliku', 'error')
-#             return redirect(request.url)
-#
-#         if file and allowed_file(file.filename):
-#             filename = secure_filename(file.filename)
-#             upload_folder = 'static/uploads/'
-#             file_path = os.path.join(upload_folder, filename)
-#             file.save(file_path)
-#
-#             # Próba odczytu kodu QR
-#             decoded_data = decode_qr_code(file_path)
-#             if decoded_data:
-#                 return f"Decoded QR Code Data: {decoded_data}"
-#
-#             # Dokonanie predykcji na podstawie przesłanego obrazu
-#             model = load_model('model3.h5')
-#             class_names = ['list', 'of', 'class', 'names']  # Załaduj swoje rzeczywiste nazwy klas
-#             pred_class = pred_and_plot(model, file_path, class_names, username)
-#             if pred_class:
-#                 return f"Food identified: {pred_class}"
-#             else:
-#                 return "No food detected or QR code found."
-#
-#         else:
-#             return "Send a POST request with an image"
-#
-#     return "Send a POST request with an image"
-
-
-
-
-
-#Identyfikacja QR+AI
-from flask import jsonify
-
+# Identyfikacja ze zdjęcia QR+AI
 @app.route('/upload_test_AI_QR', methods=['GET', 'POST'])
 def upload_predictor():
     try:
@@ -1920,238 +1603,39 @@ def upload_predictor():
         return jsonify({"status": "error", "message": "An internal server error occurred."})
 
 
-
-
-
-
-#Odbieranie obrazu dla reklamy
-
-# @app.route('/advert_reciever', methods=['POST'])
-# def advert_reciever():
-#     # Sprawdzenie, czy dane są przekazywane w formacie JSON
-#     if not request.is_json:
-#         return jsonify({"error": "Invalid input format. Expected JSON"}), 400
-#
-#     data = request.get_json()
-#
-#     # Sprawdzenie, czy obraz jest w danych JSON
-#     if 'image' not in data:
-#         return jsonify({"error": "No image data provided"}), 400
-#
-#     image_data = data['image']
-#
-#     # Usunięcie prefiksu `data:image/png;base64,` jeśli istnieje
-#     if image_data.startswith('data:image'):
-#         image_data = image_data.split(',')[1]
-#
-#     try:
-#         # Dekodowanie danych base64
-#         image_bytes = base64.b64decode(image_data)
-#
-#         # Tworzenie pliku tymczasowego w katalogu tmp i zapisywanie obrazu jako JPG
-#         with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg', dir=temp_dir) as tmp:
-#             tmp.write(image_bytes)
-#             tmp_path = tmp.name
-#
-#         print(f"Temporary image file saved at: {tmp_path}")
-#
-#         # Odczytywanie zapisanego obrazu
-#         image = cv2.imread(tmp_path)
-#
-#         if image is None:
-#             print(f"Failed to load image from {tmp_path}")
-#             return jsonify({"error": "Failed to load image"}), 500
-#
-#         print(f"Image loaded successfully from {tmp_path}")
-#
-#         # Wykrywanie twarzy i oczu
-#         detected_faces, detected_eyes = detect_faces_and_eyes(image)
-#
-#         # Usuwanie pliku tymczasowego
-#         os.remove(tmp_path)
-#         print(f"Temporary image file {tmp_path} deleted")
-#
-#         # Przygotowanie odpowiedzi
-#         response = {
-#             "faces_detected": len(detected_faces),
-#             "eyes_detected": len(detected_eyes),
-#             "faces": detected_faces.tolist(),  # Konwersja do listy w celu serializacji JSON
-#             "eyes": detected_eyes.tolist()  # Konwersja do listy w celu serializacji JSON
-#         }
-#
-#         return jsonify(response), 200
-#
-#     except Exception as e:
-#         print(f"Exception: {e}")
-#         return jsonify({"error": str(e)}), 500
-
-
-# TO JEST DOBRE------
-# @app.route('/advert_reciever', methods=['POST'])
-# def advert_reciever():
-#     # Sprawdzenie, czy dane są przekazywane w formacie JSON
-#     if not request.is_json:
-#         return jsonify({"error": "Invalid input format. Expected JSON"}), 400
-#
-#     data = request.get_json()
-#
-#     # Sprawdzenie, czy obraz jest w danych JSON
-#     if 'image' not in data:
-#         return jsonify({"error": "No image data provided"}), 400
-#
-#     image_data = data['image']
-#
-#     # Usunięcie prefiksu `data:image/png;base64,` jeśli istnieje
-#     if image_data.startswith('data:image'):
-#         print("Found prefix, removing it.")
-#         image_data = image_data.split(',')[1]
-#
-#     try:
-#         # Dekodowanie danych base64
-#         print("Decoding base64 image data.")
-#         image_bytes = base64.b64decode(image_data)
-#
-#         # Tworzenie pliku tymczasowego w katalogu tmp i zapisywanie obrazu jako JPG
-#         with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg', dir=temp_dir) as tmp:
-#             tmp.write(image_bytes)
-#             tmp_path = tmp.name
-#
-#         print(f"Temporary image file saved at: {tmp_path}")
-#
-#         # Odczytywanie zapisanego obrazu
-#         image = cv2.imread(tmp_path)
-#
-#         if image is None:
-#             print(f"Failed to load image from {tmp_path}")
-#             return jsonify({"error": "Failed to load image"}), 500
-#
-#         print(f"Image loaded successfully from {tmp_path}")
-#
-#         # Wykrywanie twarzy i oczu
-#         detected_faces, detected_eyes = detect_faces_and_eyes(image)
-#
-#         # Usuwanie pliku tymczasowego
-#         os.remove(tmp_path)
-#         print(f"Temporary image file {tmp_path} deleted")
-#
-#         # Przygotowanie odpowiedzi
-#         response = {
-#             "faces_detected": len(detected_faces),
-#             "eyes_detected": len(detected_eyes),
-#             "faces": detected_faces.tolist() if isinstance(detected_faces, np.ndarray) else detected_faces,  # Konwersja do listy w celu serializacji JSON
-#             "eyes": detected_eyes.tolist() if isinstance(detected_eyes, np.ndarray) else detected_eyes  # Konwersja do listy w celu serializacji JSON
-#         }
-#
-#         return jsonify(response), 200 # Zwraca detekcję twarzy i oczu
-#
-#     except Exception as e:
-#         print(f"Exception: {e}")
-#         return jsonify({"error": str(e)}), 500
-
-
-#Startowanie wideo, wyślij 1 jeśli kamera jest i 0 jeśli kamery nie ma.
-
-from flask import Flask, request, send_from_directory, jsonify
-
-# Ścieżka do katalogu z plikami wideo
-video_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'adverts')
-#
-# TO JEST DOBRE---
-# @app.route('/check_camera)', methods=['POST'])
-# def start_video():
-#     if not request.is_json:
-#         return jsonify({"error": "Invalid input format. Expected JSON"}), 400
-#
-#     data = request.get_json()
-#     video_choice = data.get('video_choice')
-#
-#     if video_choice is None or video_choice not in [0, 1]:
-#         return jsonify({"error": "Invalid video choice. Expected 0 or 1"}), 400
-#
-#     video_file = 'videoplayback.mp4' if video_choice == 1 else 'videoplaybackalt.mp4'
-#
-#     try:
-#         return send_from_directory(video_dir, video_file, as_attachment=False)
-#     except FileNotFoundError:
-#         return jsonify({"error": "File not found"}), 404
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Uzyskaj ścieżkę do katalogu głównego (gdzie znajduje się mainAPI.py)
-base_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Ścieżka do katalogu tmp
-tmp_dir = os.path.join(base_dir, 'tmp')
-
-# Ścieżka do katalogu z plikami wideo
-video_dir = os.path.join(base_dir, 'static', 'adverts')
-
-# Upewnij się, że katalog tmp istnieje
-os.makedirs(tmp_dir, exist_ok=True)
-
-video_state = {
-    "playing": False,
-    "video_choice": None
-}
-
+# Wybór typu reklamy
 @app.route('/advert_reciever', methods=['POST'])
 def advert_reciever():
     # Sprawdzenie, czy dane są przekazywane w formacie JSON
-
     if not request.is_json:
         return jsonify({"error": "Invalid input format. Expected JSON"}), 400
-
     data = request.get_json()
-
     # Sprawdzenie, czy obraz jest w danych JSON
     if 'image' not in data:
         return jsonify({"error": "No image data provided"}), 400
-
     image_data = data['image']
-
 
     # Usunięcie prefiksu `data:image/png;base64,` jeśli istnieje
     if image_data.startswith('data:image'):
 
         image_data = image_data.split(',')[1]
-
     try:
         # Dekodowanie danych base64
-
         image_bytes = base64.b64decode(image_data)
-
         # Tworzenie pliku tymczasowego w katalogu tmp i zapisywanie obrazu jako JPG
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg', dir=tmp_dir) as tmp:
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg', dir=temp_dir) as tmp:
             tmp.write(image_bytes)
             tmp_path = tmp.name
-
-
         # Odczytywanie zapisanego obrazu
         image = cv2.imread(tmp_path)
-
         if image is None:
-
             return jsonify({"error": "Failed to load image"}), 500
-
-
 
         # Wykrywanie twarzy i oczu
         detected_faces, detected_eyes = detect_faces_and_eyes(image)
 
         # Usuwanie pliku tymczasowego
         os.remove(tmp_path)
-
 
         # Aktualizacja stanu wideo, jeśli jest wybrany videoplayback.mp4
         if video_state["video_choice"] == 1:
@@ -2175,6 +1659,7 @@ def advert_reciever():
         return jsonify({"error": str(e)}), 500
 
 
+# Startowanie video
 @app.route('/start_video', methods=['POST'])
 def start_video():
     if not request.is_json:
@@ -2196,6 +1681,8 @@ def start_video():
     except FileNotFoundError:
         return jsonify({"error": "File not found"}), 404
 
+
+# Pomocnicza do lokalizacji video
 @app.route('/video/<filename>', methods=['GET'])
 def serve_video(filename):
     try:
@@ -2203,7 +1690,7 @@ def serve_video(filename):
     except FileNotFoundError:
         return jsonify({"error": "File not found"}), 404
 
-
+# Do sterowania video
 @app.route('/control_video', methods=['POST'])
 def control_video():
     if not request.is_json:
@@ -2220,310 +1707,6 @@ def control_video():
     return jsonify({"message": f"Video is now {action}ed", "video_playing": video_state["playing"]}), 200
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# @app.route('/adison_molotow', methods=['POST'])
-# def get_frame():
-#     data = request.json
-#     if data is None or 'images' not in data:
-#         return jsonify({'error': 'No images provided'}), 400
-#
-#     images_data = data['images']
-#     responses = []
-#     for idx, image_data in enumerate(images_data):
-#         if image_data.startswith('data:image'):
-#             header, image_data = image_data.split(';base64,')
-#
-#         try:
-#             image_bytes = base64.b64decode(image_data)
-#             # Użycie tempfile do stworzenia tymczasowego pliku
-#             file_extension = header.split('/')[1].split(';')[0]  # np. "png" dla "image/png"
-#             with tempfile.NamedTemporaryFile(delete=True, suffix='.' + file_extension, dir=temp_dir) as tmp:
-#                 tmp.write(image_bytes)
-#                 tmp_path = tmp.name  # Zapisz ścieżkę do pliku tymczasowego
-#
-#             responses.append({'message': f'Image received successfully, saved at {tmp_path}'})
-#         except Exception as e:
-#             responses.append({'error': str(e)})
-#
-#     return jsonify(responses), 200
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# @app.route('/adison_molotow', methods=['POST'])
-# def get_frame():
-#     data = request.json
-#     if data is None or 'images' not in data:
-#         return jsonify({'error': 'No images provided'}), 400
-#
-#     images_data = data['images']
-#     username = data.get('username', 'default_user')  # Przyjmij nazwę użytkownika lub ustaw domyślną
-#     responses = []
-#
-#     food_list_path = os.path.join('path_to_food_list_directory', f'{username}_food_list.json')
-#     try:
-#         with open(food_list_path, 'r') as file:
-#             food_list = json.load(file)
-#     except FileNotFoundError:
-#         food_list = []
-#
-#     for idx, image_data in enumerate(images_data):
-#         if image_data.startswith('data:image'):
-#             header, image_data = image_data.split(';base64,')
-#             file_extension = header.split('/')[1].split(';')[0]  # np. "png" dla "image/png"
-#
-#         try:
-#             image_bytes = base64.b64decode(image_data)
-#             with tempfile.NamedTemporaryFile(delete=False, suffix='.' + file_extension, dir=temp_dir) as tmp:
-#                 tmp.write(image_bytes)
-#                 tmp_path = tmp.name  # Zapisz ścieżkę do pliku tymczasowego
-#
-#             img = load_and_prep_image(tmp_path)
-#             food_list = pred_and_plot(models, img, class_names, food_list, username)
-#
-#             responses.append({'message': f'Image received and processed successfully, saved at {tmp_path}', 'predictions': food_list})
-#             os.unlink(tmp_path)  # Usuń tymczasowy plik po przetwarzaniu
-#         except Exception as e:
-#             responses.append({'error': str(e)})
-#             if 'tmp_path' in locals():
-#                 os.unlink(tmp_path)  # Upewnij się, że tymczasowy plik jest usunięty w przypadku błędu
-#
-#     return jsonify(responses), 200
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# @app.route('/adison_molotow', methods=['POST'])
-# def get_frame():
-#     data = request.json
-#     if data is None or 'images' not in data:
-#         return jsonify({'error': 'No images provided'}), 400
-#
-#     images_data = data['images']
-#     responses = []
-#     username = data.get('username', 'default_user')  # Przyjmij nazwę użytkownika lub ustaw domyślną
-#     for idx, image_data in enumerate(images_data):
-#         if image_data.startswith('data:image'):
-#             header, image_data = image_data.split(';base64,')
-#
-#         try:
-#             image_bytes = base64.b64decode(image_data)
-#             # Użycie tempfile do stworzenia tymczasowego pliku
-#             file_extension = header.split('/')[1].split(';')[0]  # np. "png" dla "image/png"
-#             with tempfile.NamedTemporaryFile(delete=False, suffix='.' + file_extension, dir='path_to_temp_directory') as tmp:
-#                 tmp.write(image_bytes)
-#                 tmp_path = tmp.name  # Zapisz ścieżkę do pliku tymczasowego
-#
-#             # Załaduj i przygotuj obraz, następnie przeprowadź predykcję
-#             img = load_and_prep_image(tmp_path)
-#             food_list = pred_and_plot(models, img, class_names, [], username)  # Tutaj można przekazać odpowiednią listę jedzenia
-#
-#             responses.append({'message': f'Image received and processed successfully, saved at {tmp_path}', 'predictions': food_list})
-#             os.unlink(tmp_path)  # Usuń tymczasowy plik po przetwarzaniu
-#         except Exception as e:
-#             responses.append({'error': str(e)})
-#             if 'tmp_path' in locals():
-#                 os.unlink(tmp_path)  # Upewnij się, że tymczasowy plik jest usunięty w przypadku błędu
-#
-#     return jsonify(responses), 200
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# @app.route('/adison_molotow', methods=['POST'])
-# def get_frame():
-#     data = request.json
-#     if data is None or 'images' not in data:
-#         return jsonify({'error': 'No images provided'}), 400
-#
-#     images_data = data['images']
-#     responses = []
-#     for idx, image_data in enumerate(images_data):
-#         if image_data.startswith('data:image'):
-#             header, image_data = image_data.split(';base64,')
-#
-#         try:
-#             image_bytes = base64.b64decode(image_data)
-#             # Użycie tempfile do stworzenia tymczasowego pliku
-#             file_extension = header.split('/')[1].split(';')[0]  # np. "png" dla "image/png"
-#             with tempfile.NamedTemporaryFile(delete=True, suffix='.' + file_extension, dir='path_to_temp_directory') as tmp:
-#                 tmp.write(image_bytes)
-#                 tmp_path = tmp.name  # Zapisz ścieżkę do pliku tymczasowego
-#
-#             responses.append({'message': f'Image received successfully, saved at {tmp_path}'})
-#         except Exception as e:
-#             responses.append({'error': str(e)})
-#
-#     return jsonify(responses), 200
-
-
-
-
-
-
-#DZIAŁĄ KOPIA
-#
-# @app.route('/adison_molotow', methods=['POST'])
-# def get_frame():
-#     data = request.json
-#     if data is None or 'images' not in data:
-#         return jsonify({'error': 'No images provided'}), 400
-#
-#     images_data = data['images']
-#     responses = []
-#     for idx, image_data in enumerate(images_data):
-#         if image_data.startswith('data:image'):
-#             header, image_data = image_data.split(';base64,')
-#
-#         try:
-#             image_bytes = base64.b64decode(image_data)
-#             # Użycie tempfile do stworzenia tymczasowego pliku
-#             file_extension = header.split('/')[1].split(';')[0]  # np. "png" dla "image/png"
-#             with tempfile.NamedTemporaryFile(delete=True, suffix='.' + file_extension, dir=temp_dir) as tmp:
-#                 tmp.write(image_bytes)
-#                 tmp_path = tmp.name  # Zapisz ścieżkę do pliku tymczasowego
-#
-#             responses.append({'message': f'Image received successfully, saved at {tmp_path}'})
-#         except Exception as e:
-#             responses.append({'error': str(e)})
-#
-#     return jsonify(responses), 200
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Strona wylogowania
 @app.route('/logout')
 def logout():
@@ -2532,6 +1715,7 @@ def logout():
     return redirect('/login')
 
 
+# Ladowanie wstepne modeli do video
 if __name__ == '__main__':
     preload()
     app.run()
