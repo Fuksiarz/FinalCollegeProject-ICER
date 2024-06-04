@@ -149,7 +149,7 @@ function AddProduct() {
 
                             {/* przycisk decydujący o tym czy identyfikować zdjęcie */}
                             <div className="sendButtonForFoodIdentyfication" onClick={() => {
-                                sendImageToFlask(setProduct,imageIdentyfication, setImageForIdentyficationURL)
+                                sendImageToFlask(setProduct,imageIdentyfication, setImageForIdentyficationURL,user)
                             }}>
                                 <h2>
                                     identyfikuj
@@ -293,13 +293,14 @@ function AddProduct() {
 
                                             </div>
                                         </div>
-                                        <div>
+                                        <div >
+                                            <div className="addPhotoFromDirIconDiv">
                                         {/* ikona, która po naciśnięciu pokazuje opcje identyfikacji  */}
                                         <Icon className="addPhotoFromDirIcon" icon="ph:qr-code" onClick={handleCameraClick}/>
                                         <Icon className="addPhotoFromDirIcon" icon="icon-park-twotone:camera-one"
 
                                               onClick={handleCameraClick}/>
-
+                                            </div>
                                         <span> <h5>jedzenie</h5> </span>
                                         </div>
                                     </label>
