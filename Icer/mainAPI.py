@@ -1857,58 +1857,67 @@ def upload_predic():
 
 
 #Identyfikacja QR+AI
+from flask import jsonify
+
 @app.route('/upload_test_AI_QR', methods=['GET', 'POST'])
 def upload_predictor():
-    print("Endpoint called with method: ", request.method)  # Logowanie metody żądania
+    try:
+        print("Endpoint called with method: ", request.method)  # Logowanie metody żądania
 
-    connection = db_connector.get_connection()
-    if not connection:
-        raise ConnectionError("Nie udało się nawiązać połączenia z bazą danych.")
-    cursor = connection.cursor(dictionary=True)
+        connection = db_connector.get_connection()
+        if not connection:
+            raise ConnectionError("Nie udało się nawiązać połączenia z bazą danych.")
+        cursor = connection.cursor(dictionary=True)
 
-    if request.method == 'POST':
-        print("Received a POST request")
+        if request.method == 'POST':
+            print("Received a POST request")
 
-        if 'file' not in request.files:
-            flash('Brak części pliku', 'error')
-            print("No file part in request")
-            return jsonify({"status": "error", "message": "No file part provided"})
+            if 'file' not in request.files or 'username' not in request.form:
+                flash('Brak części pliku lub nazwy użytkownika', 'error')
+                print("No file part or username in request")
+                return jsonify({"status": "error", "message": "No file part or username provided"})
 
-        file = request.files['file']
-        if file.filename == '':
-            flash('Nie wybrano pliku', 'error')
-            print("No file selected")
-            return jsonify({"status": "error", "message": "No file selected"})
+            file = request.files['file']
+            username = request.form['username']
 
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            upload_folder = 'static/uploads/'
-            file_path = os.path.join(upload_folder, filename)
-            file.save(file_path)
-            print("File saved to: ", file_path)  # Logowanie ścieżki pliku
+            if file.filename == '':
+                flash('Nie wybrano pliku', 'error')
+                print("No file selected")
+                return jsonify({"status": "error", "message": "No file selected"})
 
-            # Próba odczytu kodu QR
-            decoded_data = decode_qr_code(file_path)
-            if decoded_data and decoded_data != "QR code not detected":
-                print("QR Code decoded: ", decoded_data)
-                return jsonify({"status": "success", "type": "qr", "data": decoded_data})
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                upload_folder = 'static/uploads/'
+                file_path = os.path.join(upload_folder, filename)
+                file.save(file_path)
+                print("File saved to: ", file_path)  # Logowanie ścieżki pliku
 
-            print("No QR Code detected, proceeding with food prediction.")
+                # Próba odczytu kodu QR
+                decoded_data = decode_qr_code(file_path)
+                if decoded_data and decoded_data != "QR code not detected":
+                    print("QR Code decoded: ", decoded_data)
+                    return jsonify({"status": "success", "type": "qr", "data": decoded_data})
 
-            # Dokonanie predykcji na podstawie przesłanego obrazu
-            pred_class = pred_and_plot(model, file_path, class_names, "username")  # Użyj rzeczywistej zmiennej username
-            if pred_class:
-                print("Food identified: ", pred_class)
-                return jsonify({"status": "success", "type": "food", "data": pred_class})
+                print("No QR Code detected, proceeding with food prediction.")
+
+                # Dokonanie predykcji na podstawie przesłanego obrazu
+                pred_class = pred_and_plot(model, file_path, class_names, username)
+                if pred_class:
+                    print("Food identified: ", pred_class)
+                    return jsonify({"status": "success", "type": "food", "data": pred_class})
+                else:
+                    print("No food detected.")
+                    return jsonify({"status": "error", "message": "No food detected or QR code found."})
             else:
-                print("No food detected.")
-                return jsonify({"status": "error", "message": "No food detected or QR code found."})
-        else:
-            print("Invalid file type.")
-            return jsonify({"status": "error", "message": "Invalid file type. Please upload an image file."})
+                print("Invalid file type.")
+                return jsonify({"status": "error", "message": "Invalid file type. Please upload an image file."})
 
-    print("Handled as non-POST request")
-    return jsonify({"status": "error", "message": "Send a POST request with an image"})
+        print("Handled as non-POST request")
+        return jsonify({"status": "error", "message": "Send a POST request with an image"})
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return jsonify({"status": "error", "message": "An internal server error occurred."})
 
 
 
