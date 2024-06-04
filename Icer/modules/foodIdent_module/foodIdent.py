@@ -60,6 +60,7 @@ def pred_and_plot(model, filename, class_names, username):
 
 
 # Kopia czysczenia listy
+
 def clear_food_username(username):
     base_dir = Path(app.config['FOOD_LIST_DIR'])
     file_path = base_dir / f'{username}_food_list.json'
@@ -73,7 +74,6 @@ def clear_food_username(username):
         print(f"Error while handling the file: {e}")
 
     return username
-
 
 # Wczytanie wcześniej wytrenowanego modelu
 def load_model(model_path):
