@@ -43,7 +43,7 @@ def pred_and_plot(model, filename, class_names, username):
     # Pobranie katalogu
     current_dir = os.path.dirname(__file__)
     project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
-    save_dir = os.path.join(project_root, 'static', 'scanned')
+    save_dir = os.path.join(project_root, 'users_lists')
     os.makedirs(save_dir, exist_ok=True)  # Utworzenie katalogu, jeśli nie istnieje
 
     # wygenerowanie pliku z użyciem nazwy użytkownika
@@ -55,6 +55,34 @@ def pred_and_plot(model, filename, class_names, username):
         json.dump(prediction_result, json_file, indent=4)
 
     return pred_class
+
+
+
+
+from pathlib import Path
+from flask import current_app as app
+def clear_food_username(username):
+    base_dir = Path(app.config['FOOD_LIST_DIR'])
+    file_path = base_dir / f'{username}_food_list.json'
+    try:
+        # Upewnij się, że katalog istnieje
+        base_dir.mkdir(parents=True, exist_ok=True)
+
+        with open(file_path, 'w') as file:
+            file.write('[]')  # Pusta lista JSON
+    except Exception as e:
+        print(f"Error while handling the file: {e}")
+
+    return username
+
+
+
+
+
+
+
+
+
 
 
 # Wczytanie wcześniej wytrenowanego modelu
