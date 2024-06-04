@@ -13,6 +13,8 @@ export function Advert({ adIsOn, setAdIsOn }) {
     const stopRecordingRef = useRef(null); // Ref do przechowywania funkcji stopRecording
     const [eyes, setEyes] = useState(0);
     const advertRef = useRef(null);
+    const [isCameraStopped, setIsCameraStopped] = useState(false);
+
 
     useEffect(() => {
         console.log(`Aktualna wartość eyes: ${eyes}`);
@@ -42,25 +44,34 @@ export function Advert({ adIsOn, setAdIsOn }) {
                     });
             };
             fetchVideoFeed();
-        
+
     }, [adIsOn, gotCamera,isRecording]);
 
     const handleVideoEnd = () => {
+        console.log('Reklama się zakończyła, zatrzymywanie nagrywania...');
         setIsRecording(false);
         setAdIsOn(false);
         setVideoFeedUrl(null);
-        if (stopRecordingRef.current) {
+        if (stopRecordingRef.current && !isCameraStopped) {
             stopRecordingRef.current(); // Wywołanie stopRecording
+            console.log('Nagrywanie zatrzymane przez stopRecordingRef');
+        } else {
+            console.log('stopRecordingRef jest null lub kamera już zatrzymana');
         }
     };
 
     useEffect(() => {
         if (adIsOn && isRecording) {
-            const stopRecording = cameraControlForAdvert(videoRef, canvasRef, isRecording, setIsRecording, setAdIsOn, setGotCamera,eyes,setEyes);
+            const stopRecording = cameraControlForAdvert(videoRef, canvasRef, isRecording, setIsRecording, setAdIsOn, setGotCamera,eyes,setEyes,isCameraStopped, setIsCameraStopped);
             stopRecordingRef.current = stopRecording; // Przypisanie funkcji stopRecording do ref
 
             return () => {
-                stopRecording();
+                if (stopRecording && !isCameraStopped) {
+                    stopRecording();
+                    console.log('Kamera zatrzymana podczas unmount');
+                } else {
+                    console.log('stopRecording jest null lub kamera już zatrzymana podczas unmount');
+                }
                 setGotCamera('');
             };
         }

@@ -238,7 +238,11 @@
     z-index: 100; /* aby znajdowało się na wierzchu */
     overflow: hidden; /* zapobiegnij przewijaniu */
 }
-
+.addPhotoFromDirIconDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 /* obraz wideo z api */
 .rightCameraOptionView {
     position: absolute;
@@ -299,24 +303,6 @@
         max-width: 90%;;
         font-size: 4vw;
         padding:1vh 0.5vw 1vh 0.5vw;
-    }
-
-}
-/*dla ekranów z ekranem dotykowym*/
-@media (pointer: coarse){
-
-    .barcodeIcon, .qrIcon, .addPhotoFromDirIcon,.addPhotoByCameraIcon {
-        width: 10vw;
-        height: 10vh;
-    }
-
-}
-/*dla ekranów o maksymalnej wysokości 800px*/
-@media only screen and (max-height: 800px) {
-
-    .barcodeIcon, .qrIcon, .addPhotoFromDirIcon,.addPhotoByCameraIcon {
-        width: 7vw;
-        height: 7vh;
     }
 
 }
