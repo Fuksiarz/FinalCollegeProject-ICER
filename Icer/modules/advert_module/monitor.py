@@ -1,19 +1,4 @@
 import cv2
-import numpy as np
-import winsound
-import time
-import requests
-
-
-def print_and_send(data):
-    # Funkcja do printowania danych i wysyłania ich za pomocą API
-    print(data)
-    api_endpoint = "http://192.168.0.130:5000/start_camera_monitoring"
-    try:
-        response = requests.post(api_endpoint, json={'dane': data})
-        response.raise_for_status()
-    except requests.RequestException as e:
-        print(f"Błąd wysyłania danych: {e}")
 
 # Funkcja do wykrywania twarzy i oczu na obrazie
 def detect_faces_and_eyes(image):
@@ -30,84 +15,5 @@ def detect_faces_and_eyes(image):
 
     return detected_faces, detected_eyes
 
-# Funkcja do odtwarzania ostrzeżenia dźwiękowego
-def play_audio_warning():
-    # Odtwarzanie dźwięku 'beep'
-    winsound.Beep(440, 500)
-
-# Funkcja do wyświetlania obrazka ostrzeżenia
-def display_warning_image(image):
-    # Wyświetlenie obrazka ostrzeżenia z tytułem 'ACHTUNG' i wymuszenie interakcji użytkownika
-    cv2.imshow('ACHTUNG', image)
-    cv2.waitKey(-1)
-    cv2.destroyWindow('ACHTUNG')
-
-# Funkcja do rozpoczęcia wyświetlania reklamy
-def generate_frames():
-    global camera_status
-    from mainAPI import socketio
-    video_ended = False
-
-    # Próba zainicjowania kamery
-    cap1 = cv2.VideoCapture(0)  # Kamera internetowa
-
-    # Sprawdzenie dostępności kamery
-    if cap1.isOpened():
-        cap2 = cv2.VideoCapture('modules/advert_module/videoplayback.mp4')  # Domyślny plik wideo
-    else:
-        cap2 = cv2.VideoCapture('modules/advert_module/videoplaybackalt.mp4')  # Alternatywny plik wideo przy braku wykrytej kamery
-
-    img2 = cv2.imread('modules/advert_module/image.jpg') 
-    beep = 0
-
-    # Pobranie liczby klatek na sekundę z pliku wideo
-    fps = cap2.get(cv2.CAP_PROP_FPS)
-    if fps < 1:  # Ustawienie wartośći domyślnej, jeśli nie idzie wykryć klatek
-        fps = 30  # Przyjęcie standardowej liczby klatek na sekundę
-
-    frame_duration = 1.0 / fps  # Obliczenie długości trwania klatki
-
-    while True:
-        ret1, frame = cap2.read()
-        if not ret1:
-            video_ended = True  # Koniec pliku wideo lub błąd
-
-        if cap1.isOpened():
-            ret, img = cap1.read()
-            if not ret:
-                continue  # Pominięcie, jeśli klatka z kamery internetowej nie jest gotowa
-
-            # Wykrywanie twarzy i oczu
-            detected_faces, detected_eyes = detect_faces_and_eyes(img)
-
-            if len(detected_eyes) == 0 and len(detected_faces) == 0:
-                if beep == 5:
-                    play_audio_warning()
-                    beep = 0
-                else:
-                    beep += 1
-            else:
-                beep = 0
-
-            # Sprawdzenie, czy plik wideo został zakończony
-        if video_ended:
-            camera_status = 'finished'
-            socketio.emit('update_status', {'new_value': camera_status})
-            print_and_send(camera_status)
-            break  # Wyjście z pętli po wysłaniu sygnału zakończenia
-
-        # Konwersja obrazu na format JPEG
-        ret, buffer = cv2.imencode('.jpg', frame)
-        if not ret:
-            continue  # Pominięcie, jeśli nie uda się zakodować klatki
-
-        frame_bytes = buffer.tobytes()
-        time.sleep(frame_duration)
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
-    # Zwolnienie
-    if cap1.isOpened():
-        cap1.release()
-    cap2.release()
    
 

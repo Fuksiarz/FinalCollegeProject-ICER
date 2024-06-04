@@ -1,8 +1,5 @@
 import os
 import qrcode
-import json
-from PIL import Image
-
 
 # Wygeneruj kod QR na podstawie danych i zapisz go
 def generate_qr_code(data, output_folder):

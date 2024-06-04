@@ -1,9 +1,10 @@
 import os
 import json
 import tensorflow as tf
-import matplotlib.pyplot as plt
 import numpy as np
-from modules.database_connector import DatabaseConnector
+from pathlib import Path
+from flask import current_app as app
+
 
 def load_and_prep_image(filename, img_shape=224):
     # Funkcja do wczytywania i przygotowywania obrazu
@@ -22,6 +23,7 @@ def load_and_prep_image(filename, img_shape=224):
     return img
 
 
+# Predykcja dla zdjecia + testowanie dla pewnosci
 def pred_and_plot(model, filename, class_names, username):
     # Funkcja do przewidywania
     # Wczytanie i przygotowanie obrazu
@@ -57,10 +59,7 @@ def pred_and_plot(model, filename, class_names, username):
     return pred_class
 
 
-
-
-from pathlib import Path
-from flask import current_app as app
+# Kopia czysczenia listy
 def clear_food_username(username):
     base_dir = Path(app.config['FOOD_LIST_DIR'])
     file_path = base_dir / f'{username}_food_list.json'
@@ -74,15 +73,6 @@ def clear_food_username(username):
         print(f"Error while handling the file: {e}")
 
     return username
-
-
-
-
-
-
-
-
-
 
 
 # Wczytanie wcześniej wytrenowanego modelu
