@@ -976,6 +976,9 @@ def update_preferences():
         if not validate_size(data['wielkosc_lodowki']) or not validate_size(data['wielkosc_strony_produktu']):
             return jsonify({"error": "Nieprawidłowe wartości wielkości."}), 400
 
+        connection = db_connector.get_connection()
+        cursor = connection.cursor(dictionary=True)
+
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
 
