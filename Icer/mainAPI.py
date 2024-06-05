@@ -393,8 +393,6 @@ def add_product():
         if image_data:
             handle_image_upload(db_connector, image_data, user_id, product_id)
 
-        # Uruchomienie funkcji run_daily_procedure po dodaniu produktu
-
         connection.commit()
         cursor.close()
 
@@ -624,9 +622,6 @@ def get_notifications():
         db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
         db_connector.connect()
 
-        scheduler = BackgroundScheduler()
-        scheduler.add_job(run_daily_procedure, 'interval', seconds=60)
-        scheduler.start()
 
         connection = db_connector.get_connection()
         if not connection:
@@ -969,12 +964,6 @@ def delete_all_notification():
 @app.route('/api/update_preferences', methods=['POST'])
 def update_preferences():
     try:
-        # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
-
-        # Łączenie z bazą danych
-        db_connector.connect()
-
         # Pobieranie danych z żądania
         data = request.json
 
@@ -987,14 +976,14 @@ def update_preferences():
         if not validate_size(data['wielkosc_lodowki']) or not validate_size(data['wielkosc_strony_produktu']):
             return jsonify({"error": "Nieprawidłowe wartości wielkości."}), 400
 
-        connection = db_connector.get_connection()
-        cursor = connection.cursor(dictionary=True)
-
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
 
         if response:
             return response, status_code
+
+        connection = db_connector.get_connection()
+        cursor = connection.cursor()
 
         # Sprawdzenie, czy istnieje wpis w tabeli preferencje_uzytkownikow
         check_preferences_query = """
@@ -1007,21 +996,25 @@ def update_preferences():
             # Aktualizacja preferencji użytkownika
             update_preferences_query = """
                 UPDATE preferencje_uzytkownikow
-                SET wielkosc_lodowki = %s, wielkosc_strony_produktu = %s, widocznosc_informacji_o_produkcie = %s
+                SET wielkosc_lodowki = %s, wielkosc_strony_produktu = %s, 
+                    widocznosc_informacji_o_produkcie = %s, uzytkownik_premium = %s
                 WHERE UserID = %s
             """
             cursor.execute(update_preferences_query, (
-            data['wielkosc_lodowki'], data['wielkosc_strony_produktu'], data['widocznosc_informacji_o_produkcie'],
-            user_id))
+                data['wielkosc_lodowki'], data['wielkosc_strony_produktu'],
+                data['widocznosc_informacji_o_produkcie'], data.get('uzytkownik_premium', False),
+                user_id))
         else:
             # Tworzenie nowego wpisu w tabeli preferencje_uzytkownikow
             insert_preferences_query = """
-                INSERT INTO preferencje_uzytkownikow (UserID, wielkosc_lodowki, wielkosc_strony_produktu, widocznosc_informacji_o_produkcie)
-                VALUES (%s, %s, %s, %s)
+                INSERT INTO preferencje_uzytkownikow 
+                (UserID, wielkosc_lodowki, wielkosc_strony_produktu, 
+                 widocznosc_informacji_o_produkcie, uzytkownik_premium)
+                VALUES (%s, %s, %s, %s, %s)
             """
             cursor.execute(insert_preferences_query, (
-            user_id, data['wielkosc_lodowki'], data['wielkosc_strony_produktu'],
-            data['widocznosc_informacji_o_produkcie']))
+                user_id, data['wielkosc_lodowki'], data['wielkosc_strony_produktu'],
+                data['widocznosc_informacji_o_produkcie'], data.get('uzytkownik_premium', False)))
 
         connection.commit()
         cursor.close()
@@ -1033,23 +1026,16 @@ def update_preferences():
 
 
 # Endpoint do pobierania preferencji użytkownika
-@app.route('/api/get_user_preferences', methods=['GET'])
 def get_user_preferences():
     try:
-        # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
-
-        # Łączenie z bazą danych
-        db_connector.connect()
-
-        connection = db_connector.get_connection()
-        cursor = connection.cursor(dictionary=True)
-
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
 
         if response:
             return response, status_code
+
+        connection = db_connector.get_connection()
+        cursor = connection.cursor(dictionary=True)
 
         # Sprawdzenie, czy istnieje wpis w tabeli preferencje_uzytkownikow
         check_preferences_query = """
@@ -1070,7 +1056,9 @@ def get_user_preferences():
 
         # Pobieranie preferencji użytkownika
         get_preferences_query = """
-            SELECT wielkosc_lodowki, wielkosc_strony_produktu, widocznosc_informacji_o_produkcie, lokalizacja_zdj, podstawowe_profilowe
+            SELECT wielkosc_lodowki, wielkosc_strony_produktu, 
+                   widocznosc_informacji_o_produkcie, lokalizacja_zdj, 
+                   podstawowe_profilowe, uzytkownik_premium
             FROM preferencje_uzytkownikow
             WHERE UserID = %s
         """
@@ -1200,50 +1188,47 @@ def update_food_list():
 
 
 @app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         data = request.get_json()
-        username = data['username']
-        password = data['password']
-        # Sprawdzanie, czy użytkownik istnieje w bazie danych
+        username = data.get('username')
+        password = data.get('password')
+
+        if not username or not password:
+            return jsonify({"message": "Brak nazwy użytkownika lub hasła"}), 400
+
         if check_user(username, password):
-            # Utworzenie sesji dla zalogowanego użytkownika
             session['username'] = username
-            session_id = str(uuid.uuid4())  # Generowanie unikalnego ID sesji
-            session['session_id'] = session_id  # Przechowywanie ID sesji
-            return jsonify({"message": "Login successful", "session_id": session_id})
+            session_id = str(uuid.uuid4())
+            session['session_id'] = session_id
+            return jsonify({"message": "Logowanie udane", "session_id": session_id})
         else:
-            return jsonify({"message": "Invalid credentials"}), 401
+            return jsonify({"message": "Nieprawidłowa nazwa użytkownika lub hasło"}), 401
     else:
-        return jsonify({"message": "Method not allowed"}), 405
+        return jsonify({"message": "Metoda niedozwolona"}), 405
 
 
 ## funkcje wykorzystywane do rejestracji
 def user_exists(username):
     query = "SELECT * FROM Users WHERE username = %s"
     values = (username,)
-    cursor = db_connector.get_connection().cursor()
-    cursor.execute(query, values)
-    result = cursor.fetchone()
-    cursor.close()
-
+    with db_connector.get_connection().cursor() as cursor:
+        cursor.execute(query, values)
+        result = cursor.fetchone()
     return True if result else False
-
 
 def save_user(username, hashed_pw):
     try:
         query = "INSERT INTO Users (username, password) VALUES (%s, %s)"
         values = (username, hashed_pw.decode('utf-8'))
-        cursor = db_connector.get_connection().cursor()
-        cursor.execute(query, values)
-        db_connector.get_connection().commit()
+        with db_connector.get_connection().cursor() as cursor:
+            cursor.execute(query, values)
+            db_connector.get_connection().commit()
         return True
     except Exception as error:
         print("Error during registration:", error)
         return False
-    finally:
-        cursor.close()
-
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -1251,18 +1236,18 @@ def register():
     username = data['username']
     password = data['password']
 
-    # Sprawdzenie, czy użytkownik już istnieje
+    if not username or not password:
+        return jsonify({"message": "Username or password is missing"}), 400
+
     if user_exists(username):
         return jsonify({"message": "User already exists"}), 400
 
-    # Szyfrowanie hasła
     hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-    # Zapisanie użytkownika w bazie danych
     if save_user(username, hashed_pw):
         return jsonify({"message": "Registration successful"})
     else:
-        return jsonify({"message": "Registration failed"}), 500
+        return jsonify({"message": "Error during registration"}), 500
 
 
 def check_user(username, password):
