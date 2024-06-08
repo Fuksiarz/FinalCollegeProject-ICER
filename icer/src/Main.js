@@ -94,6 +94,7 @@ function Main({chatIsMinimized,setChatIsMinimized}) {
                             <Route path="/Chatbot" element={<ChatContainer chatIsMinimized={chatIsMinimized} setChatIsMinimized={setChatIsMinimized} />} />
                             <Route path="/Advert" element={<Advert/>}/>
                             <Route path="/GenerateQR" element={<GenerateQR/>}/>
+                            <Route path="/nowy" />
 
 
                         </Routes>

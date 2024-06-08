@@ -168,50 +168,56 @@
 
 
 {/*  podgląd obrazu identyfikacji */}
-.imageForIdentyficationURLDiv{
-    position:fixed;
-    height:50vh;
-    width:50vw;
-    top:25%;
-    left:25%;
+.imageForIdentyficationURLDiv {
+    position: fixed;
+    height: auto;
+    width: auto;
+    max-width: 80vw; /* Add this line for maximum width */
+    max-height: 80vh; /* Add this line for maximum height */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 100; /* ma być na wierzchu */
-    justify-content: center;
-
-
-}
-{/* wewnętrzny kotener podglądu obrazu identyfikacji */}
-.imageForIdentyficationURLDivRelative{
-
-    position: relative;
     display: flex;
-    height:100%;
-    width:100%;
-    flex-direction: column;
-    justify-content: center;
-    justify-items: center;
-    align-items: center; /* Add this line */
-}
-{/* obrazek podglądu identyfikacji */}
-.scannedFoodImage{
-    border-radius: 10%;
-    position:relative;
-    display: flex;
-    width:100%;
-    height:100%;
-}
-
-{/* przycisk decydujący o tym czy identyfikować zdjęcie */}
-.sendButtonForFoodIdentyfication{
-    position: relative;
-    display: flex;
-    width:100%;
+    flex-direction: column; /* Add this line */
     justify-content: center;
     align-items: center;
+}
+
+{/* wewnętrzny kotener podglądu obrazu identyfikacji */}
+.imageForIdentyficationURLDivRelative {
+    position: relative;
+    display: flex;
+    flex-direction: column; /* Add this line */
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+{/* obrazek podglądu identyfikacji */}
+.scannedFoodImage {
+    max-width: 100%; /* Ensure the image doesn't overflow */
+    max-height: 70vh; /* Ensure the image doesn't overflow and leave space for the button */
+    object-fit: contain; /* Make sure the image scales properly */
+    object-position: center; /* Center the image */
+}
+
+
+{/* przycisk decydujący o tym czy identyfikować zdjęcie */}
+.sendButtonForFoodIdentyfication {
+    margin-top: 1vh; /* Add this line for spacing */
+    width: 100%; /* Full width of the image container */
+    display: flex; /* Add this line */
+    justify-content: center; /* Add this line */
+    align-items: center; /* Add this line */
     text-align: center;
     z-index: 101;
-    margin: auto;
-    background-color:green;
+    background-color: green;
     border-radius: 10px;
+}
+.sendButtonForFoodIdentyfication h2 {
+    width: 100%; /* Match the width of the image */
+    text-align: center; /* Center the text */
 }
 {/* kontener, który posiada opcje identyfikacji po zdjęciu oraz kontener, który identyfikuje po filmie*/}
 .leftCameraOption, .rightCameraOption{
