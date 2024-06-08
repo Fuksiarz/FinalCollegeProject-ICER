@@ -11,6 +11,18 @@ export function Advert({ adIsOn, setAdIsOn }) {
     const [isRecording, setIsRecording] = useState(true);
     const [gotCamera, setGotCamera] = useState('');
     const stopRecordingRef = useRef(null); // Ref do przechowywania funkcji stopRecording
+    const [eyes, setEyes] = useState(0);
+    const advertRef = useRef(null);
+
+    useEffect(() => {
+        console.log(`Aktualna wartość eyes: ${eyes}`);
+        // Jeśli eyes równa się 0, zatrzymaj nagrywanie i zmień stan aplikacji
+        if (eyes === 0 && advertRef.current) {
+            advertRef.current.pause();
+        }else if (eyes !== 0 && advertRef.current){
+            advertRef.current.play();
+        }
+    }, [eyes]);
 
     useEffect(() => {
 
@@ -19,8 +31,11 @@ export function Advert({ adIsOn, setAdIsOn }) {
                     headers: { 'Content-Type': 'application/json' }
                 })
                     .then((response) => {
+
                         const videoUrl = `${API_URL}${response.data.video_url}`;
                         setVideoFeedUrl(videoUrl);
+
+
                     })
                     .catch((error) => {
                         console.error(`Error starting camera monitoring: ${error}`);
@@ -41,8 +56,9 @@ export function Advert({ adIsOn, setAdIsOn }) {
 
     useEffect(() => {
         if (adIsOn && isRecording) {
-            const stopRecording = cameraControlForAdvert(videoRef, canvasRef, isRecording, setIsRecording, setAdIsOn, setGotCamera);
+            const stopRecording = cameraControlForAdvert(videoRef, canvasRef, isRecording, setIsRecording, setAdIsOn, setGotCamera,eyes,setEyes);
             stopRecordingRef.current = stopRecording; // Przypisanie funkcji stopRecording do ref
+
             return () => {
                 stopRecording();
                 setGotCamera('');
@@ -52,11 +68,18 @@ export function Advert({ adIsOn, setAdIsOn }) {
 
     return (
         <div className="advertContainer">
+            {gotCamera !== 0 &&
+            <div className={`eyesDetectedDiv ${eyes !== 0 ? 'eyesDetected' : 'eyesNotDetected'}`}>
+                {eyes !== 0 ? <h5>Oczy wykryte</h5> : <h5>Oczy niewykryte</h5>}
+            </div>
+
+            }
             <video className="invisibleTargetsForCamera" ref={videoRef} autoPlay muted></video>
             <canvas className="invisibleTargetsForCamera" ref={canvasRef} style={{ display: "none" }}></canvas>
             {adIsOn && videoFeedUrl && (
-                <video className="advertImage" src={videoFeedUrl} autoPlay muted onEnded={handleVideoEnd} alt="Video Feed" />
+                <video className="advertImage" ref= {advertRef} src={videoFeedUrl}  autoPlay={gotCamera !== ('' || 1)} muted onEnded={handleVideoEnd} alt="Video Feed" />
             )}
+            <button id="focusButton" style={{ display: "none" }}>Hidden Button for Focus</button>
         </div>
     );
 }

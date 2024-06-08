@@ -71,7 +71,6 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
 @app.route('/api/add_to_product', methods=['POST'])
 def add_to_product():
     # Tworzenie instancji klasy DatabaseConnector
@@ -371,9 +370,6 @@ def add_product():
         """
         cursor.execute(add_icer_query, (user_id, product_id, data['ilosc'], data['data_waznosci']))
 
-        # Wywołanie procedury UpdateSwiezosc dla nowo dodanego produktu
-        cursor.callproc('UpdateSwiezosc', (cursor.lastrowid,))
-
         # Wywołanie funkcji do obsługi przesyłania zdjęcia tylko jeśli dostępne są dane zdjęcia
         if image_data:
             handle_image_upload(db_connector, image_data, user_id, product_id)
@@ -635,7 +631,7 @@ def get_notifications():
 
         query = """
             SELECT Icer.id, Icer.UserID, Icer.produktID, Icer.ilosc, 
-            Icer.data_waznosci, Icer.swiezosc, Icer.default_photo,
+            Icer.data_waznosci, Icer.trzecia_wartosc, Icer.default_photo,
             Icer.powiadomienie,
             IF(Icer.default_photo = 1, Photos.lokalizacja, UserPhotos.lokalizacja) AS zdjecie_lokalizacja,
             Produkty.nazwa, Produkty.cena, Produkty.kalorie,
@@ -713,13 +709,13 @@ def get_products_with_red_flag():
         user_id = user_result['id']
         query = """
             SELECT Icer.id, Icer.UserID, Icer.produktID, Icer.ilosc, 
-                   Icer.data_waznosci, Icer.swiezosc,
+                   Icer.data_waznosci, Icer.trzecia_wartosc,
                    Produkty.nazwa, Produkty.cena, Produkty.kalorie,
                    Produkty.tluszcze, Produkty.weglowodany, Produkty.bialko,
                    Produkty.kategoria
             FROM Icer
             INNER JOIN Produkty ON Icer.produktID = Produkty.id
-            WHERE Icer.UserID = %s AND Icer.swiezosc >= 1
+            WHERE Icer.UserID = %s AND Icer.trzecia_wartosc >= 1
         """
         cursor.execute(query, (user_id,))
         results = cursor.fetchall()
@@ -770,7 +766,7 @@ def get_icer():
         # Modyfikacja zapytania SQL, aby pokazywać wszystkie informacje o produkcie
         query = """
             SELECT DISTINCT Icer.id, Icer.UserID, Icer.produktID, Icer.ilosc, 
-                   Icer.data_waznosci, Icer.swiezosc, Icer.default_photo,
+                   Icer.data_waznosci, Icer.trzecia_wartosc, Icer.default_photo,
                    IF(Icer.default_photo = 1, Photos.lokalizacja, UserPhotos.lokalizacja) AS zdjecie_lokalizacja,
                    Produkty.nazwa, Produkty.cena, Produkty.kalorie,
                    Produkty.tluszcze, Produkty.weglowodany, Produkty.bialko,
@@ -1104,7 +1100,7 @@ def update_food_list():
         # Pobierz nazwę użytkownika z sesji lub z argumentów
         username = session.get('username', 'root')  # Domyślnie root, do testow, pozniej bd trzeba to wywalic
         project_path = os.path.dirname(os.path.abspath(__file__))
-        user_food_list_path = os.path.join('./users_lists', f'{username}_food_list.json')
+        user_food_list_path = os.path.join(project_path, 'static', 'scanned', f'{username}_food_list.json')
 
         # Tworzenie instancji klasy DatabaseConnector
         db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
@@ -1689,11 +1685,49 @@ temp_dir = os.path.join(base_dir, 'tmp')
 os.makedirs(temp_dir, exist_ok=True)
 
 
-
+# Usunać z danych data:image/png;base64,
 import base64
 import tempfile
 from flask import jsonify, request, session
 #Analiza klatki
+#Z data:image etc
+# @app.route('/adison_molotow', methods=['POST'])
+# def get_frame():
+#     data = request.json
+#     if data is None or 'images' not in data or 'username' not in data:
+#         return jsonify({'error': 'No images or username provided'}), 400
+#
+#     images_data = data['images']
+#     username = data['username']  # Pobieranie nazwy użytkownika z żądania
+#     responses = []
+#     for idx, image_data in enumerate(images_data):
+#         if image_data.startswith('data:image'):
+#             header, image_data = image_data.split(';base64,')
+#
+#         try:
+#             image_bytes = base64.b64decode(image_data)
+#             # Użycie tempfile do stworzenia tymczasowego pliku
+#             file_extension = header.split('/')[1]  # np. "png" dla "image/png"
+#             with tempfile.NamedTemporaryFile(delete=False, suffix='.' + file_extension, dir=temp_dir) as tmp:
+#                 tmp.write(image_bytes)
+#                 tmp_path = tmp.name  # Zapisz ścieżkę do pliku tymczasowego
+#
+#             # Wywołanie funkcji do przewidywania i aktualizacji listy jedzenia
+#             predict_and_update_food_list(tmp_path, username)
+#
+#             # Opcjonalnie usunąć plik tymczasowy po użyciu, jeśli nie jest już potrzebny
+#             os.remove(tmp_path)
+#
+#             responses.append({'message': f'Image received and processed successfully, saved at {tmp_path}'})
+#         except Exception as e:
+#             responses.append({'error': str(e)})
+#             if 'tmp_path' in locals():
+#                 os.remove(tmp_path)  # Usunięcie pliku, jeśli wystąpi błąd
+#
+#     return jsonify(responses), 200
+
+
+#BEZ
 @app.route('/adison_molotow', methods=['POST'])
 def get_frame():
     data = request.json
@@ -1703,7 +1737,6 @@ def get_frame():
     images_data = data['images']
     username = data['username']  # Pobieranie nazwy użytkownika z żądania
     responses = []
-    print(data)
     for idx, image_data in enumerate(images_data):
         try:
             image_bytes = base64.b64decode(image_data)
@@ -1725,6 +1758,18 @@ def get_frame():
                 os.remove(tmp_path)  # Usunięcie pliku, jeśli wystąpi błąd
 
     return jsonify(responses), 200
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1826,59 +1871,70 @@ def upload_predic():
 
 
 
-#Identyfikacja QR+AI
+from flask import jsonify
+
 @app.route('/upload_test_AI_QR', methods=['GET', 'POST'])
 def upload_predictor():
-    print("Endpoint called with method: ", request.method)  # Logowanie metody żądania
+    try:
+        print("Endpoint called with method: ", request.method)  # Logowanie metody żądania
 
-    connection = db_connector.get_connection()
-    if not connection:
-        raise ConnectionError("Nie udało się nawiązać połączenia z bazą danych.")
-    cursor = connection.cursor(dictionary=True)
+        connection = db_connector.get_connection()
+        if not connection:
+            raise ConnectionError("Nie udało się nawiązać połączenia z bazą danych.")
+        cursor = connection.cursor(dictionary=True)
 
-    if request.method == 'POST':
-        print("Received a POST request")
+        if request.method == 'POST':
+            print("Received a POST request")
 
-        if 'file' not in request.files:
-            flash('Brak części pliku', 'error')
-            print("No file part in request")
-            return jsonify({"status": "error", "message": "No file part provided"})
+            if 'file' not in request.files or 'username' not in request.form:
+                flash('Brak części pliku lub nazwy użytkownika', 'error')
+                print("No file part or username in request")
+                return jsonify({"status": "error", "message": "No file part or username provided"})
 
-        file = request.files['file']
-        if file.filename == '':
-            flash('Nie wybrano pliku', 'error')
-            print("No file selected")
-            return jsonify({"status": "error", "message": "No file selected"})
+            file = request.files['file']
+            username = request.form['username']
 
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            upload_folder = 'static/uploads/'
-            file_path = os.path.join(upload_folder, filename)
-            file.save(file_path)
-            print("File saved to: ", file_path)  # Logowanie ścieżki pliku
+            if file.filename == '':
+                flash('Nie wybrano pliku', 'error')
+                print("No file selected")
+                return jsonify({"status": "error", "message": "No file selected"})
 
-            # Próba odczytu kodu QR
-            decoded_data = decode_qr_code(file_path)
-            if decoded_data and decoded_data != "QR code not detected":
-                print("QR Code decoded: ", decoded_data)
-                return jsonify({"status": "success", "type": "qr", "data": decoded_data})
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                upload_folder = 'static/uploads/'
+                file_path = os.path.join(upload_folder, filename)
+                file.save(file_path)
+                print("File saved to: ", file_path)  # Logowanie ścieżki pliku
 
-            print("No QR Code detected, proceeding with food prediction.")
+                # Próba odczytu kodu QR
+                decoded_data = decode_qr_code(file_path)
+                if decoded_data and decoded_data != "QR code not detected":
+                    print("QR Code decoded: ", decoded_data)
+                    return jsonify({"status": "success", "type": "qr", "data": decoded_data})
 
-            # Dokonanie predykcji na podstawie przesłanego obrazu
-            pred_class = pred_and_plot(model, file_path, class_names, "username")  # Użyj rzeczywistej zmiennej username
-            if pred_class:
-                print("Food identified: ", pred_class)
-                return jsonify({"status": "success", "type": "food", "data": pred_class})
+                print("No QR Code detected, proceeding with food prediction.")
+
+                # Dokonanie predykcji na podstawie przesłanego obrazu
+                pred_class = pred_and_plot(model, file_path, class_names, username)
+                if pred_class:
+                    print("Food identified: ", pred_class)
+                    return jsonify({"status": "success", "type": "food", "data": pred_class})
+                else:
+                    print("No food detected.")
+                    return jsonify({"status": "error", "message": "No food detected or QR code found."})
             else:
-                print("No food detected.")
-                return jsonify({"status": "error", "message": "No food detected or QR code found."})
-        else:
-            print("Invalid file type.")
-            return jsonify({"status": "error", "message": "Invalid file type. Please upload an image file."})
+                print("Invalid file type.")
+                return jsonify({"status": "error", "message": "Invalid file type. Please upload an image file."})
 
-    print("Handled as non-POST request")
-    return jsonify({"status": "error", "message": "Send a POST request with an image"})
+        print("Handled as non-POST request")
+        return jsonify({"status": "error", "message": "Send a POST request with an image"})
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return jsonify({"status": "error", "message": "An internal server error occurred."})
+
+
+
 
 
 
@@ -2069,7 +2125,6 @@ video_state = {
 @app.route('/advert_reciever', methods=['POST'])
 def advert_reciever():
     # Sprawdzenie, czy dane są przekazywane w formacie JSON
-
     if not request.is_json:
         return jsonify({"error": "Invalid input format. Expected JSON"}), 400
 
@@ -2081,15 +2136,9 @@ def advert_reciever():
 
     image_data = data['image']
 
-
-    # Usunięcie prefiksu `data:image/png;base64,` jeśli istnieje
-    if image_data.startswith('data:image'):
-
-        image_data = image_data.split(',')[1]
-
     try:
         # Dekodowanie danych base64
-
+        print("Decoding base64 image data.")
         image_bytes = base64.b64decode(image_data)
 
         # Tworzenie pliku tymczasowego w katalogu tmp i zapisywanie obrazu jako JPG
@@ -2097,23 +2146,23 @@ def advert_reciever():
             tmp.write(image_bytes)
             tmp_path = tmp.name
 
-        print('jest')
+        print(f"Temporary image file saved at: {tmp_path}")
 
         # Odczytywanie zapisanego obrazu
         image = cv2.imread(tmp_path)
 
         if image is None:
-
+            print(f"Failed to load image from {tmp_path}")
             return jsonify({"error": "Failed to load image"}), 500
 
-
+        print(f"Image loaded successfully from {tmp_path}")
 
         # Wykrywanie twarzy i oczu
         detected_faces, detected_eyes = detect_faces_and_eyes(image)
 
         # Usuwanie pliku tymczasowego
         os.remove(tmp_path)
-
+        print(f"Temporary image file {tmp_path} deleted")
 
         # Aktualizacja stanu wideo, jeśli jest wybrany videoplayback.mp4
         if video_state["video_choice"] == 1:
@@ -2135,6 +2184,30 @@ def advert_reciever():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+    except Exception as e:
+        print(f"Exception: {e}")
+        return jsonify({"error": str(e)}), 500
+
+# @app.route('/start_video', methods=['POST'])
+# def start_video():
+#     if not request.is_json:
+#         return jsonify({"error": "Invalid input format. Expected JSON"}), 400
+#
+#     data = request.get_json()
+#     video_choice = data.get('video_choice')
+#
+#     if video_choice is None or video_choice not in [0, 1]:
+#         return jsonify({"error": "Invalid video choice. Expected 0 or 1"}), 400
+#
+#     video_file = 'videoplayback.mp4' if video_choice == 1 else 'videoplaybackalt.mp4'
+#
+#     try:
+#         video_state["video_choice"] = video_choice
+#         video_state["playing"] = True
+#         return send_from_directory(video_dir, video_file, as_attachment=False)
+#     except FileNotFoundError:
+#         return jsonify({"error": "File not found"}), 404
 
 
 @app.route('/start_video', methods=['POST'])
@@ -2165,7 +2238,6 @@ def serve_video(filename):
     except FileNotFoundError:
         return jsonify({"error": "File not found"}), 404
 
-
 @app.route('/control_video', methods=['POST'])
 def control_video():
     if not request.is_json:
@@ -2180,14 +2252,6 @@ def control_video():
     video_state["playing"] = (action == 'play')
 
     return jsonify({"message": f"Video is now {action}ed", "video_playing": video_state["playing"]}), 200
-
-
-
-
-
-
-
-
 
 
 

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { API_URL } from "../../settings/config";
 import { sendFrameToFlaskForAdvert } from "./sendFrameToFlaskForAdvert";
 
-export const cameraControlForAdvert = (videoRef, canvasRef, isRecording, setIsRecording, setAdIsOn, setGotCamera) => {
+export const cameraControlForAdvert = (videoRef, canvasRef, isRecording, setIsRecording, setAdIsOn, setGotCamera,eyes, setEyes) => {
     const frameRate = 100;
     const interval = 20000 / frameRate;
 
@@ -70,7 +70,7 @@ export const cameraControlForAdvert = (videoRef, canvasRef, isRecording, setIsRe
 
                             const frameBase64 = canvas.toDataURL("image/jpeg").split(",")[1];
 
-                            const analysisResult = await sendFrameToFlaskForAdvert(frameBase64);
+                            const analysisResult = await sendFrameToFlaskForAdvert(frameBase64,eyes,setEyes);
 
                             if (analysisResult && analysisResult.length > 0) {
                                 const firstResponse = analysisResult[0];
