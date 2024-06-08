@@ -72,24 +72,6 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def run_daily_procedure():
-    local_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
-    local_connector.connect()   
-    cursor = local_connector.connection.cursor(dictionary=True)
-    try:
-        # Wywołanie PROCEDURE UpdateTrzeciaWartosc
-        cursor.callproc('UpdateSwiezosc', (None,))
-        # Wywołanie PROCEDURE Updatenotification
-        cursor.callproc('UpdatePowiadomienia')
-        cursor.close()
-        local_connector.get_connection().commit()
-    except Exception as error:
-        local_connector.get_connection().rollback()
-        raise error
-    finally:
-        local_connector.get_connection().close()
-
-
 @app.route('/api/add_to_product', methods=['POST'])
 def add_to_product():
     # Tworzenie instancji klasy DatabaseConnector
