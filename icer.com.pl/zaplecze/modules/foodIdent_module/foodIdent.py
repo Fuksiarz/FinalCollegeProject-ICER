@@ -44,7 +44,7 @@ def pred_and_plot(model, filename, class_names, username):
 
     # Pobranie katalogu
     current_dir = os.path.dirname(__file__)
-    project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
+    project_root = os.path.abspath(os.path.join(current_dir, '../../../public_html/'))
     save_dir = os.path.join(project_root, 'users_lists')
     os.makedirs(save_dir, exist_ok=True)  # Utworzenie katalogu, jeśli nie istnieje
 

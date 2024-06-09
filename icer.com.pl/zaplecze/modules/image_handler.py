@@ -20,7 +20,7 @@ def handle_image_upload(db_connector, image_data_base64, user_id, product_id):
         image_name = f"{int(time.time())}.jpg"
 
         # Nowa lokalizacja folderu, gdzie mają być zapisane obrazy
-        images_folder = os.path.join("src/data/userPhotos")
+        images_folder = os.path.join("../public_html/src/data/userPhotos")
 
         # Tworzenie ścieżki do zapisu obrazu
         image_path = os.path.join(images_folder, image_name)
@@ -67,7 +67,7 @@ def change_user_profile(db_connector, user_id, image_data_base64):
         image_name = f"{int(time.time())}.jpg"
 
         # Nowa lokalizacja folderu, gdzie mają być zapisane obrazy
-        images_folder = os.path.join("public/data/userProfilePicture")
+        images_folder = os.path.join("../public_html/public/data/userProfilePicture")
 
         # Tworzenie ścieżki do zapisu obrazu
         image_path = os.path.join(images_folder, image_name)

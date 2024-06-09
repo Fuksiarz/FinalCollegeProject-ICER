@@ -1,26 +1,24 @@
-import {useEffect} from "react";
+import { useEffect, useState } from 'react';
 
-//hook, który zwraca zdjęcie użytkownika
-//przyjmuje obraz, ustawienie obrazu, lokalizację zdjęcia, infomrację czy jest podstawowe zdjęcie
-export const AccountPictureGetter = (image, setImage, defaultProfile, profilePicture) => {
-
+export const useAccountPictureGetter = (defaultProfile, profilePicture) => {
+    const [image, setImage] = useState('');
 
     useEffect(() => {
-
-        //jeśli jest podstawowe profilowe to ustaw je jako image.
-        if (defaultProfile===1) {
+        if (defaultProfile === 1) {
             setImage(`${process.env.PUBLIC_URL}/data/userProfilePicture/face.jpg`);
-        //w przeciwnym wypadku i jeśli jest profilePicture to ustaw je na image.
         } else if (profilePicture) {
-
-
-            setImage(`${process.env.PUBLIC_URL}/data/userProfilePicture/${profilePicture}`);
-
-        }else{
+            import(`../../../data/userProfilePicture/${profilePicture}`)
+                .then((image) => {
+                    setImage(image.default);
+                })
+                .catch((error) => {
+                    console.error(`Error loading image: ${error}`);
+                    setImage(`${process.env.PUBLIC_URL}/data/userProfilePicture/face.jpg`);
+                });
+        } else {
             setImage(`${process.env.PUBLIC_URL}/data/userProfilePicture/face.jpg`);
         }
+    }, [defaultProfile, profilePicture]);
 
-    }, [image,defaultProfile, profilePicture]);// odśwież po zmianie jakiejś z tych wartości
-    //zwróć obrazek
-    return (image)
-}
+    return image;
+};

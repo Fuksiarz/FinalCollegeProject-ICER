@@ -1,13 +1,16 @@
 import json
+import logging
 import os
 import uuid  # potrzebne do generowania unikalnych ID sesji
 
 import base64
 import tempfile
-
+from dotenv import load_dotenv
+from urllib.parse import urlparse
 import cv2
 from flask import session, jsonify, request
 
+from logging.handlers import RotatingFileHandler
 import numpy as np
 
 import bcrypt
@@ -31,13 +34,31 @@ from modules.scan_module.decoder import decode_qr_code
 from modules.scan_module.gen import generate_qr_code
 from modules.value_manager import ProductManager
 
+load_dotenv()
+
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 socketio = SocketIO(app, cors_allowed_origins="*")
-app.config['BARCODE_FOLDER'] = os.path.join(app.static_folder, 'barcodes')
-app.config['QR_CODE_FOLDER'] = os.path.join(app.static_folder, 'qrcodes')
-app.config['FOOD_LIST_DIR'] = './users_lists'
-app.config['SECRET_KEY'] = 'key'  # Zamienic na silne hasło
+app.config['BARCODE_FOLDER'] = os.path.join('../public_html/static/', 'barcodes')
+app.config['QR_CODE_FOLDER'] = os.path.join('../public_html/static/', 'qrcodes')
+app.config['FOOD_LIST_DIR'] = '../public_html/users_lists'
+
+# Pobierz informacje o połączeniu z bazy danych z zmiennej środowiskowej
+database_url = os.getenv('DATABASE_URL')
+# Ustawienia logowania
+log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs', 'application.log')
+os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
+logging.basicConfig(level=logging.DEBUG, handlers=[
+    logging.FileHandler(log_file_path),
+    logging.StreamHandler()
+])
+# Rozdziel URL na poszczególne komponenty
+url = urlparse(database_url)
+db_host = url.hostname
+db_user = url.username
+db_password = url.password
+db_name = url.path[1:]
 
 # Uzyskaj ścieżkę do katalogu głównego (gdzie znajduje się mainAPI.py)
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -1104,7 +1125,7 @@ def get_user_preferences():
         if preferences:
             # Zwracanie preferencji wraz ze ścieżką do zdjęcia profilowego
             if preferences['podstawowe_profilowe'] == 1:
-                profile_photo_path = os.path.join("public/data/userProfilePicture", "face.jpg")
+                profile_photo_path = os.path.join("../public_html/public/data/userProfilePicture", "face.jpg")
             else:
                 profile_photo_path = preferences['lokalizacja_zdj']
 
@@ -1150,7 +1171,7 @@ def update_food_list():
         # Pobierz nazwę użytkownika z sesji lub z argumentów
         username = session.get('username', 'root')  # Domyślnie root, do testow, pozniej bd trzeba to wywalic
         project_path = os.path.dirname(os.path.abspath(__file__))
-        user_food_list_path = os.path.join('./users_lists', f'{username}_food_list.json')
+        user_food_list_path = os.path.join('../public_html/users_lists', f'{username}_food_list.json')
 
         # Tworzenie instancji klasy DatabaseConnector
         db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
