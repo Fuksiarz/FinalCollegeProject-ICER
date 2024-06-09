@@ -1,0 +1,31 @@
+
+.chatbotIconMinimizedDiv{
+    position:fixed;
+    bottom: 0;
+    left: 0;
+    width:6vw;
+    height:6vh;
+}
+.chatbotIconMinimized{
+    height:100%;
+    width:100%;
+}
+
+
+
+/*dla ekranów o maxymalnej szerokości 1000px*/
+@media (max-width: 1000px) {
+
+    .chatbotIconMinimizedDiv {
+        width:7vw;
+        height:7vh;
+    }
+}
+/*dla ekranów o maxymalnej szerokości 600px*/
+@media (max-width: 600px) {
+
+    .chatbotIconMinimizedDiv {
+        width:8vw;
+        height:8vh;
+    }
+}
