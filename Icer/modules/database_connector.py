@@ -2,12 +2,19 @@ import mysql.connector
 from flask import session, jsonify
 
 class DatabaseConnector:
-    def __init__(self, host, user, password, database):
+    def __init__(self, host="localhost", user="root", password="root", database="Sklep"):
         self.host = host
         self.user = user
         self.password = password
         self.database = database
         self.connection = None
+
+    def __enter__(self):
+        self.connect()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.disconnect()
 
     def connect(self):
         try:

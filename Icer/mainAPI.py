@@ -47,7 +47,7 @@ os.makedirs(temp_dir, exist_ok=True)
 # Ścieżka do katalogu z plikami wideo
 video_dir = os.path.join(base_dir, 'static', 'adverts')
 
-#Startowanie wideo, wyślij 1 jeśli kamera jest i 0 jeśli kamery nie ma.
+# Startowanie wideo, wyślij 1 jeśli kamera jest i 0 jeśli kamery nie ma.
 
 # Upewnij się, że katalog tmp istnieje
 os.makedirs(temp_dir, exist_ok=True)
@@ -75,25 +75,17 @@ class_names = data.get('class_names', [])
 
 app.secret_key = 'secret_key'  # Klucz sesji
 
-# Tworzenie instancji klasy DatabaseConnector
-db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
-
-# Łączenie z bazą danych
-db_connector.connect()
-
-# Tworzenie instancji ProductManager
-product_manager = ProductManager(db_connector)
-
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 @app.route('/api/add_to_product', methods=['POST'])
 def add_to_product():
     # Tworzenie instancji klasy DatabaseConnector
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -157,9 +149,8 @@ def add_to_product():
 
 @app.route('/api/reset_product_quantity', methods=['POST'])
 def reset_product_quantity():
-
     # Tworzenie instancji klasy DatabaseConnector
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -222,7 +213,7 @@ def reset_product_quantity():
 
 @app.route('/api/subtract_product', methods=['POST'])
 def subtract_product():
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -286,7 +277,7 @@ def subtract_product():
 def remove_product_for_user():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
 
         # Łączenie z bazą danych
         db_connector.connect()
@@ -340,7 +331,7 @@ def remove_product_for_user():
 def add_product():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
 
         # Łączenie z bazą danych
         db_connector.connect()
@@ -408,7 +399,7 @@ def add_product():
 @app.route('/api/edit_product/<int:product_id>', methods=['PUT'])
 def edit_product(product_id):
     # Tworzenie instancji klasy DatabaseConnector
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -456,7 +447,7 @@ def edit_product(product_id):
 @app.route('/api/shoppingList', methods=['POST', 'GET'])
 def get_icer_shopping():
     # Tworzenie instancji klasy DatabaseConnector
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -531,7 +522,7 @@ def get_icer_shopping():
 def edit_shopping_cart():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
 
         # Łączenie z bazą danych
         db_connector.connect()
@@ -573,7 +564,8 @@ def edit_shopping_cart():
             if product_id is None:
                 # Sprawdzenie, czy dostarczono wymagane dane (nazwa, cena, ilość)
                 if 'nazwa' not in data or 'cena' not in data or 'ilosc' not in data:
-                    return jsonify({"error": "Product ID not provided, and missing required data (nazwa, cena, ilosc)"}), 400
+                    return jsonify(
+                        {"error": "Product ID not provided, and missing required data (nazwa, cena, ilosc)"}), 400
                 product_id = product_manager.dodaj_produkt(data['nazwa'], data['cena'])
 
                 # Dodanie nowego produktu do koszyka
@@ -622,9 +614,8 @@ def edit_shopping_cart():
 @app.route('/api/Icer/get_notifications', methods=['POST'])
 def get_notifications():
     try:
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
         db_connector.connect()
-
 
         connection = db_connector.get_connection()
         if not connection:
@@ -692,7 +683,7 @@ def get_notifications():
 @app.route('/api/productsRedFlag', methods=['POST', 'GET'])
 def get_products_with_red_flag():
     # Tworzenie instancji klasy DatabaseConnector
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -765,7 +756,7 @@ def get_products_with_red_flag():
 @app.route('/api/Icer', methods=['POST'])
 def get_icer():
     # Tworzenie instancji klasy DatabaseConnector
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -838,7 +829,7 @@ def get_icer():
 def delete_notification():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
         # Łączenie z bazą danych
         db_connector.connect()
 
@@ -851,7 +842,7 @@ def delete_notification():
         if 'username' not in session:
             raise PermissionError("User not logged in")
 
-        #pobieranie wartości nazwy użytkownika oraz sprawdzenie czy użytkownik istnieje
+        # pobieranie wartości nazwy użytkownika oraz sprawdzenie czy użytkownik istnieje
         username = session['username']
         connection = db_connector.get_connection()
         cursor = connection.cursor(dictionary=True)
@@ -863,7 +854,7 @@ def delete_notification():
             raise LookupError("User not found")
 
         user_id = user_result['id']
-        #sprawdza wartosc przeslana przez front notification i zaleznie od tego zmienia wartosci notification
+        # sprawdza wartosc przeslana przez front notification i zaleznie od tego zmienia wartosci notification
         notification_id = data.get('notificationId')
         notification_value = data.get('notificationValue')
 
@@ -900,7 +891,7 @@ def delete_notification():
 def delete_all_notification():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
         # Łączenie z bazą danych
         db_connector.connect()
 
@@ -925,7 +916,7 @@ def delete_all_notification():
         user_id = user_result['id']
 
         notification_value = data.get('notificationValue')
-        
+
         # Usunięcie wszystkich powiadomień danego użytkownika
         if notification_value == 0:
             # Aktualizacja tylko tych powiadomień, które mają wartość 1
@@ -968,7 +959,7 @@ def delete_all_notification():
 def update_preferences():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
 
         # Łączenie z bazą danych
         db_connector.connect()
@@ -1039,7 +1030,7 @@ def update_preferences():
 def get_user_preferences():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
 
         # Łączenie z bazą danych
         db_connector.connect()
@@ -1105,7 +1096,7 @@ def get_user_preferences():
 def change_user_photo():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
 
         # Łączenie z bazą danych
         db_connector.connect()
@@ -1130,12 +1121,12 @@ def change_user_photo():
 def update_food_list():
     try:
         # Pobierz nazwę użytkownika z sesji lub z argumentów
-        username = session.get('username', 'root')  # Domyślnie root, do testow, pozniej bd trzeba to wywalic
+        username = session.get('username')
         project_path = os.path.dirname(os.path.abspath(__file__))
         user_food_list_path = os.path.join(project_path, 'static', 'scanned', f'{username}_food_list.json')
 
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
         # Łączenie z bazą danych
         db_connector.connect()
 
@@ -1224,57 +1215,87 @@ def login():
         return jsonify({"message": "Metoda niedozwolona"}), 405
 
 
-## funkcje wykorzystywane do rejestracji
 def user_exists(username):
     query = "SELECT * FROM Users WHERE username = %s"
     values = (username,)
-    with db_connector.get_connection().cursor() as cursor:
-        cursor.execute(query, values)
-        result = cursor.fetchone()
-    return True if result else False
 
-def save_user(username, hashed_pw):
-    try:
-        query = "INSERT INTO Users (username, password) VALUES (%s, %s)"
-        values = (username, hashed_pw.decode('utf-8'))
-        with db_connector.get_connection().cursor() as cursor:
+    with DatabaseConnector() as db_connector:
+        connection = db_connector.get_connection()
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(query, values)
+                result = cursor.fetchone()
+            return True if result else False
+        except Exception as error:
+            print("Error during user existence check:", error)
+            return False
+
+
+def save_user(username, password):
+    # Zaszyfruj hasło użytkownika
+    hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    # Zdefiniuj zapytanie SQL do wstawienia użytkownika do bazy danych
+    query = "INSERT INTO Users (username, password) VALUES (%s, %s)"
+    values = (username, hashed_pw)
+
+    # Utwórz instancję DatabaseConnector i użyj jej jako kontekstowy menedżer
+    with DatabaseConnector() as db_connector:
+        connection = db_connector.get_connection()
+        cursor = None
+        try:
+            # Uzyskaj kursor do wykonywania zapytań SQL
+            cursor = connection.cursor()
+            # Wykonaj zapytanie wstawienia użytkownika do bazy danych
             cursor.execute(query, values)
-            db_connector.get_connection().commit()
-        return True
-    except Exception as error:
-        print("Error during registration:", error)
-        return False
-    finally:
-        cursor.close()
+            # Zatwierdź zmiany w bazie danych
+            connection.commit()
+            return True
+        except Exception as error:
+            # Obsłuż błędy podczas rejestracji użytkownika
+            print("Błąd podczas rejestracji użytkownika:", error)
+            if connection:
+                # Cofnij transakcję w przypadku błędu
+                connection.rollback()
+            return False
+        finally:
+            # Upewnij się, że kursor jest zawsze zamykany
+            if cursor:
+                cursor.close()
 
 
 @app.route('/register', methods=['POST'])
 def register():
+    # Pobierz dane JSON z żądania
     data = request.get_json()
-    username = data['username']
-    password = data['password']
+    username = data.get('username')
+    password = data.get('password')
 
+    # Sprawdź, czy podane dane są poprawne
     if not username or not password:
-        return jsonify({"message": "Username or password is missing"}), 400
+        return jsonify({"message": "Nazwa użytkownika lub hasło są wymagane"}), 400
 
+    # Sprawdź, czy użytkownik już istnieje w bazie danych
     if user_exists(username):
-        return jsonify({"message": "User already exists"}), 400
+        return jsonify({"message": "Użytkownik już istnieje"}), 400
 
-    # Szyfrowanie hasła
-    hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-
-    # Zapisanie użytkownika w bazie danych
-    if save_user(username, hashed_pw):
-        return jsonify({"message": "Registration successful"})
+    # Zapisz użytkownika do bazy danych
+    if save_user(username, password):
+        return jsonify({"message": "Rejestracja udana"})
     else:
-        return jsonify({"message": "Error during registration"}), 500
+        return jsonify({"message": "Błąd podczas rejestracji"}), 500
 
 
 def check_user(username, password):
+    db_connector = DatabaseConnector()
+    db_connector.connect()  # Nawiązanie połączenia
+
+    connection = db_connector.get_connection()
+    cursor = connection.cursor()
+
     try:
         query = "SELECT password FROM Users WHERE username = %s"
         values = (username,)
-        cursor = db_connector.get_connection().cursor()
+
         cursor.execute(query, values)
         result = cursor.fetchone()
 
@@ -1283,13 +1304,17 @@ def check_user(username, password):
             if bcrypt.checkpw(password.encode('utf-8'), db_password):
                 session['username'] = username
                 return True
+
         return False
 
     except Exception as error:
         print("Error during user authentication:", error)
         return False
     finally:
-        cursor.close()
+        if cursor:
+            cursor.close()
+        if db_connector:
+            db_connector.disconnect()
 
 
 @app.route('/api/edit_user', methods=['POST'])
@@ -1302,6 +1327,8 @@ def edit_user():
         data = request.json
         new_password = data.get('new_password')
         new_username = data.get('new_username')
+        db_connector = DatabaseConnector()
+        db_connector.connect()  # Nawiązanie połączenia
 
         cursor = db_connector.get_connection().cursor()
 
@@ -1342,7 +1369,7 @@ def edit_user():
 def index():
     # Pusty ciąg znaków dla odpowiedzi chatbota
     bot_response = ""
-    
+
     if request.method == 'POST':
         # Pobierz dane wejściowe użytkownika z formularza
         user_input = request.form['user_input']
@@ -1424,7 +1451,7 @@ def decode_qr_code_route():
 
     # Sprawdzenie, czy wybrany plik ma dozwolone rozszerzenie
     if file and allowed_file(file.filename):
-         # Bezpieczne zapisanie przesłanego pliku do folderu
+        # Bezpieczne zapisanie przesłanego pliku do folderu
         filename = secure_filename(file.filename)
         file_path = os.path.join(app.config['QR_CODE_FOLDER'], filename)
         file.save(file_path)
@@ -1529,6 +1556,8 @@ def get_frame():
 def upload_predictor():
     try:
         print("Endpoint called with method: ", request.method)  # Logowanie metody żądania
+        db_connector = DatabaseConnector()
+        db_connector.connect()  # Nawiązanie połączenia
 
         connection = db_connector.get_connection()
         if not connection:
@@ -1600,7 +1629,6 @@ def advert_reciever():
 
     # Usunięcie prefiksu `data:image/png;base64,` jeśli istnieje
     if image_data.startswith('data:image'):
-
         image_data = image_data.split(',')[1]
     try:
         # Dekodowanie danych base64
@@ -1672,6 +1700,7 @@ def serve_video(filename):
         return send_from_directory(video_dir, filename, as_attachment=False)
     except FileNotFoundError:
         return jsonify({"error": "File not found"}), 404
+
 
 # Do sterowania video
 @app.route('/control_video', methods=['POST'])
