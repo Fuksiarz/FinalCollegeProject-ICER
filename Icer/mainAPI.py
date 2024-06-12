@@ -1378,32 +1378,53 @@ def get_response():
 
 
 # Generowanie kodu QR
-@app.route('/generate_qr_code', methods=['POST'])
+from flask import request, jsonify, flash, url_for
+import os
+import base64
+
 def generate_qr_code_route():
-    # Wyodrębnij dane przesłane z formularza
-    data = {
-        "name": request.form['name'],
-        "price": request.form['price'],
-        "kcal": request.form['kcal'],
-        "fat": request.form['fat'],
-        "carbs": request.form['carbs'],
-        "protein": request.form['protein'],
-        "category": request.form['category'],
-        "amount": request.form['amount'],
-        "date": request.form['date']
-    }
+    try:
+        # Wyodrębnij dane przesłane z formularza
+        data = {
+            "name": request.form['name'],
+            "price": request.form['price'],
+            "kcal": request.form['kcal'],
+            "fat": request.form['fat'],
+            "carbs": request.form['carbs'],
+            "protein": request.form['protein'],
+            "category": request.form['category'],
+            "amount": request.form['amount'],
+            "date": request.form['date']
+        }
 
-    # Wygeneruj kod QR
-    qr_code_image_filename = generate_qr_code(data, app.config['QR_CODE_FOLDER'])
+        # Wygeneruj kod QR
+        qr_code_image_filename = generate_qr_code(data, app.config['QR_CODE_FOLDER'])
 
-    # Pobierz URL wygenerowanego obrazu kodu QR w folderze 'static'
-    qr_code_image_url = url_for('static', filename='qrcodes/' + qr_code_image_filename)
+        # Pobierz URL wygenerowanego obrazu kodu QR w folderze 'static'
+        qr_code_image_url = url_for('static', filename='qrcodes/' + qr_code_image_filename)
 
-    # Wyświetl komunikat o sukcesie
-    flash("Kod QR wygenerowany pomyślnie!")
+        # Zakoduj obraz kodu QR w base64
+        qr_code_image_path = os.path.join(app.config['QR_CODE_FOLDER'], qr_code_image_filename)
+        with open(qr_code_image_path, "rb") as image_file:
+            encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
 
-    # Redirect
-    return redirect(url_for('index'))
+        # Wyświetl komunikat o sukcesie
+        flash("Kod QR wygenerowany pomyślnie!")
+
+        # Zwróć odpowiedź JSON z adresem URL kodu QR i zakodowanym obrazem w base64
+        response = {
+            'status': 'success',
+            'qr_code_image_url': qr_code_image_url,
+            'qr_code_image_base64': encoded_image
+        }
+        return jsonify(response), 200
+    except Exception as e:
+        # Obsłuż błędy i zwróć odpowiedź JSON z komunikatem błędu
+        response = {
+            'status': 'error',
+            'message': str(e)
+        }
+        return jsonify(response), 500
 
 
 # Dekodowanie kodu QR
