@@ -1,11 +1,8 @@
-
 DELIMITER //
 
 -- Tworzenie procedury CreateAllTablesAndProcedures
 CREATE PROCEDURE CreateAllTables()
 BEGIN
-    -- Wyłączenie bezpiecznego trybu aktualizacji SQL
-    SET SQL_SAFE_UPDATES = 0;
 
     -- Tworzenie tabeli Users
     CREATE TABLE IF NOT EXISTS Users (
@@ -14,12 +11,14 @@ BEGIN
         password VARCHAR(255) NOT NULL
     );
 
-     -- Wstawianie rekordu do tabeli Users
-    INSERT IGNORE INTO Users (username, password)
-    VALUES ('root', '$2b$12$8JnOBy0M5Edogzihz79MsOUzPQVLlWtYBnf3X9KQSaQx825MqFbsu');
+	INSERT IGNORE INTO Users (username, password)
+	VALUES 
+		('root', '$2b$12$8JnOBy0M5Edogzihz79MsOUzPQVLlWtYBnf3X9KQSaQx825MqFbsu'),
+		('user1', '$2b$12$8JnOBy0M5Edogzihz79MsOUzPQVLlWtYBnf3X9KQSaQx825MqFbsu'),
+		('user2', '$2b$12$8JnOBy0M5Edogzihz79MsOUzPQVLlWtYBnf3X9KQSaQx825MqFbsu');
 
   -- Tworzenie tabeli Produkty
-    CREATE TABLE IF NOT EXISTS Produkty (
+	CREATE TABLE IF NOT EXISTS Produkty (
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         nazwa VARCHAR(100) NULL,
         cena DECIMAL(8,2) NULL,
@@ -32,7 +31,7 @@ BEGIN
     );
 
     -- Dodanie produktów
-    INSERT INTO Produkty (nazwa, cena, kalorie, tluszcze, weglowodany, bialko, kategoria, podstawowy)
+	INSERT INTO Produkty (nazwa, cena, kalorie, tluszcze, weglowodany, bialko, kategoria, podstawowy)
     VALUES
         ('ciasto_czekoladowe', 10.99, 500, 25.0, 60.0, 5.0, 'deser', 1),
         ('donut', 3.99, 350, 20.0, 40.0, 4.0, 'deser', 1),
@@ -48,10 +47,10 @@ BEGIN
         ('szarlotka', 7.99, 450, 20.0, 60.0, 5.0, 'deser', 1),
         ('tiramisu', 8.99, 550, 25.0, 40.0, 10.0, 'deser', 1),
         ('zeberka', 14.99, 700, 40.0, 30.0, 50.0, 'danie główne', 1);
-
+    
 
     -- Tworzenie tabeli Icer
-    CREATE TABLE IF NOT EXISTS Icer (
+	CREATE TABLE IF NOT EXISTS Icer (
         id INT AUTO_INCREMENT PRIMARY KEY,
         UserID INT,
         produktID INT,
@@ -65,9 +64,35 @@ BEGIN
         FOREIGN KEY (UserID) REFERENCES Users (id),
         FOREIGN KEY (produktID) REFERENCES Produkty (id)
     );
+    
+			-- Wstawianie danych do tabeli Icer dla UserID 1
+	INSERT INTO Icer (UserID, produktID, ilosc, swiezosc, data_waznosci, data_otwarcia, data_dodania, default_photo, powiadomienie) VALUES
+		(1, 1, 10, 4, '2024-12-31', '2024-06-01', NOW(), 1, 0),
+		(1, 2, 6, 2, '2024-10-01', '2024-06-11', NOW(), 1, 0),
+		(1, 3, 4, 0, '2024-09-20', '2024-06-12', NOW(), 0, 1),  -- data ważności do września
+		(1, 4, 7, 1, '2024-09-10', '2024-06-10', NOW(), 1, 1),  -- data ważności do września
+		(1, 5, 9, 3, '2024-09-30', '2024-06-13', NOW(), 1, 0),  -- data ważności do września
+		(1, 6, 12, 2, '2024-11-15', '2024-06-14', NOW(), 0, 1),
+		(1, 7, 8, 3, '2024-11-20', '2024-06-10', NOW(), 0, 1);
+
+		-- Wstawianie danych do tabeli Icer dla UserID 2
+	INSERT INTO Icer (UserID, produktID, ilosc, swiezosc, data_waznosci, data_otwarcia, data_dodania, default_photo, powiadomienie) VALUES
+		(2, 1, 5, 3, '2024-11-30', '2024-05-20', NOW(), 0, 1),
+		(2, 2, 10, 2, '2024-10-15', '2024-06-01', NOW(), 1, 0),
+		(2, 3, 8, 1, '2024-09-25', '2024-06-05', NOW(), 1, 1),  -- data ważności do września
+		(2, 4, 3, 0, '2024-08-15', '2024-06-10', NOW(), 0, 0);
+
+		-- Wstawianie danych do tabeli Icer dla UserID 3
+	INSERT INTO Icer (UserID, produktID, ilosc, swiezosc, data_waznosci, data_otwarcia, data_dodania, default_photo, powiadomienie) VALUES
+		(3, 5, 20, 4, '2024-12-05', '2024-06-05', NOW(), 1, 1),
+		(3, 6, 15, 3, '2024-11-10', '2024-06-12', NOW(), 0, 1),
+		(3, 7, 10, 2, '2024-09-20', '2024-06-15', NOW(), 1, 0);  -- data ważności do września
+    
+    
+    
 
     -- Tworzenie tabeli Photos
-    CREATE TABLE IF NOT EXISTS Photos (
+	CREATE TABLE IF NOT EXISTS Photos (
         id INT PRIMARY KEY AUTO_INCREMENT,
         produktID INT,
         lokalizacja VARCHAR(255),
@@ -91,10 +116,10 @@ BEGIN
         ((SELECT id FROM Produkty WHERE nazwa = 'szarlotka'), 'szarlotka.jpg'),
         ((SELECT id FROM Produkty WHERE nazwa = 'tiramisu'), 'tiramisu.jpg'),
         ((SELECT id FROM Produkty WHERE nazwa = 'zeberka'), 'zeberka.jpg');
-
+    
 
     -- Tworzenie tabeli UserPhotos
-    CREATE TABLE IF NOT EXISTS UserPhotos (
+	CREATE TABLE IF NOT EXISTS UserPhotos (
       id INT PRIMARY KEY AUTO_INCREMENT,
       produktID INT,
       userID INT,
@@ -117,13 +142,24 @@ BEGIN
 );
 
     -- Tworzenie tabeli Shopping
-    CREATE TABLE IF NOT EXISTS Shopping(
+	CREATE TABLE IF NOT EXISTS Shopping(
     id INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT,
     produktID INT,
     in_cart TINYINT(0) DEFAULT 0,
     ilosc INT
     );
+    
+	-- Wstawienie przykładowych danych do tabeli Shopping
+	INSERT INTO Shopping (UserID, produktID, in_cart, ilosc) VALUES
+	(1, 1, 1, 2),
+	(2, 2, 0, 1),
+	(1, 3, 1, 5),
+	(3, 4, 1, 3),
+	(2, 5, 0, 4),
+	(3, 6, 1, 2),
+	(1, 7, 0, 1);
+		
 END //
 
 
@@ -192,22 +228,15 @@ BEGIN
 END //
 
 
+DELIMITER //
+
 CREATE PROCEDURE UpdatePowiadomienia()
 BEGIN
-    -- Sprawdzenie daty ostatniego wykonania procedury
-    DECLARE last_exec_date DATE;
-    SELECT last_execution_date INTO last_exec_date FROM last_execution_date;
-
-    -- Jeśli procedura nie została wykonana dzisiaj, to wykonaj procedurę aktualizacji powiadomień
-    IF last_exec_date != CURDATE() THEN
-        -- Ustawienie powiadomienia na 1, gdy swiezosc jest mniejsza lub równa 2 oraz ilość produktu wynosi 0
-        UPDATE Icer
-        SET powiadomienie = 1
-        WHERE swiezosc <= 2 OR ilosc = 0;
-
-        -- Ustawienie daty ostatniego wykonania procedury na dzisiaj
-        REPLACE INTO last_execution_date VALUES (CURDATE());
-    END IF;
+    -- Ustawienie powiadomienia na 1, gdy swiezosc jest mniejsza lub równa 2 lub ilość produktu wynosi 0
+    UPDATE Icer
+    SET powiadomienie = 1
+    WHERE (swiezosc <= 2 OR ilosc = 0)
+    LIMIT 1000;  -- Ustawienie LIMIT, aby wyłączyć tryb bezpieczny
 END //
 
 DELIMITER ;
@@ -218,7 +247,7 @@ CREATE EVENT IF NOT EXISTS daily_notification_event
 ON SCHEDULE EVERY 1 DAY
 DO
 BEGIN
-    CALL Updatenotification();
+    CALL UpdatePowiadomienia();
     CALL UpdateSwiezosc();
 END //
 
@@ -227,3 +256,5 @@ DELIMITER ;
 
 
 CALL CreateAllTables();
+CALL UpdateSwiezosc(NULL);
+CALL UpdatePowiadomienia();
