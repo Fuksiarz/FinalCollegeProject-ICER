@@ -1438,8 +1438,8 @@ def generate_qr_code_route():
         # Zwróć odpowiedź JSON z adresem URL kodu QR i zakodowanym obrazem w base64
         response = {
             'status': 'success',
-            'qr_code_image_url': qr_code_image_url,
-            'qr_code_image_base64': qr_code_image_filename
+            'qr_code_image_url': qr_code_image_filename,
+            'qr_code_image_base64': encoded_image
         }
         return jsonify(response), 200
     except Exception as e:
