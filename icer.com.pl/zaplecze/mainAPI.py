@@ -1,16 +1,13 @@
 import json
-import logging
 import os
 import uuid  # potrzebne do generowania unikalnych ID sesji
 
 import base64
 import tempfile
-from dotenv import load_dotenv
-from urllib.parse import urlparse
+
 import cv2
 from flask import session, jsonify, request
 
-from logging.handlers import RotatingFileHandler
 import numpy as np
 
 import bcrypt
@@ -34,31 +31,13 @@ from modules.scan_module.decoder import decode_qr_code
 from modules.scan_module.gen import generate_qr_code
 from modules.value_manager import ProductManager
 
-load_dotenv()
-
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+CORS(app, supports_credentials=True)
 socketio = SocketIO(app, cors_allowed_origins="*")
-app.config['BARCODE_FOLDER'] = os.path.join('../public_html/static/', 'barcodes')
-app.config['QR_CODE_FOLDER'] = os.path.join('../public_html/static/', 'qrcodes')
-app.config['FOOD_LIST_DIR'] = '../public_html/users_lists'
-
-# Pobierz informacje o połączeniu z bazy danych z zmiennej środowiskowej
-database_url = os.getenv('DATABASE_URL')
-# Ustawienia logowania
-log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs', 'application.log')
-os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
-logging.basicConfig(level=logging.DEBUG, handlers=[
-    logging.FileHandler(log_file_path),
-    logging.StreamHandler()
-])
-# Rozdziel URL na poszczególne komponenty
-url = urlparse(database_url)
-db_host = url.hostname
-db_user = url.username
-db_password = url.password
-db_name = url.path[1:]
+app.config['BARCODE_FOLDER'] = os.path.join(app.static_folder, 'barcodes')
+app.config['QR_CODE_FOLDER'] = os.path.join(app.static_folder, 'qrcodes')
+app.config['FOOD_LIST_DIR'] = './users_lists'
+app.config['SECRET_KEY'] = 'key'  # Zamienic na silne hasło
 
 # Uzyskaj ścieżkę do katalogu głównego (gdzie znajduje się mainAPI.py)
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -68,7 +47,7 @@ os.makedirs(temp_dir, exist_ok=True)
 # Ścieżka do katalogu z plikami wideo
 video_dir = os.path.join(base_dir, 'static', 'adverts')
 
-#Startowanie wideo, wyślij 1 jeśli kamera jest i 0 jeśli kamery nie ma.
+# Startowanie wideo, wyślij 1 jeśli kamera jest i 0 jeśli kamery nie ma.
 
 # Upewnij się, że katalog tmp istnieje
 os.makedirs(temp_dir, exist_ok=True)
@@ -96,15 +75,6 @@ class_names = data.get('class_names', [])
 
 app.secret_key = 'secret_key'  # Klucz sesji
 
-# Tworzenie instancji klasy DatabaseConnector
-db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
-
-# Łączenie z bazą danych
-db_connector.connect()
-
-# Tworzenie instancji ProductManager
-product_manager = ProductManager(db_connector)
-
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 
@@ -112,28 +82,10 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def run_daily_procedure():
-    local_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
-    local_connector.connect()   
-    cursor = local_connector.connection.cursor(dictionary=True)
-    try:
-        # Wywołanie PROCEDURE UpdateTrzeciaWartosc
-        cursor.callproc('UpdateSwiezosc', (None,))
-        # Wywołanie PROCEDURE Updatenotification
-        cursor.callproc('UpdatePowiadomienia')
-        cursor.close()
-        local_connector.get_connection().commit()
-    except Exception as error:
-        local_connector.get_connection().rollback()
-        raise error
-    finally:
-        local_connector.get_connection().close()
-
-
 @app.route('/api/add_to_product', methods=['POST'])
 def add_to_product():
     # Tworzenie instancji klasy DatabaseConnector
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -197,9 +149,8 @@ def add_to_product():
 
 @app.route('/api/reset_product_quantity', methods=['POST'])
 def reset_product_quantity():
-
     # Tworzenie instancji klasy DatabaseConnector
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -262,7 +213,7 @@ def reset_product_quantity():
 
 @app.route('/api/subtract_product', methods=['POST'])
 def subtract_product():
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -326,7 +277,7 @@ def subtract_product():
 def remove_product_for_user():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
 
         # Łączenie z bazą danych
         db_connector.connect()
@@ -380,7 +331,7 @@ def remove_product_for_user():
 def add_product():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
 
         # Łączenie z bazą danych
         db_connector.connect()
@@ -422,9 +373,9 @@ def add_product():
             if product_id is None:
                 return jsonify({"error": "Failed to add product to Produkty table."})
 
-        # Dodanie daty dodania do tabeli 'icer'
+        # Dodanie daty dodania do tabeli 'Icer'
         add_icer_query = """
-            INSERT INTO icer (UserID, produktID, ilosc, data_waznosci, data_dodania)
+            INSERT INTO Icer (UserID, produktID, ilosc, data_waznosci, data_dodania)
             VALUES (%s, %s, %s, %s, NOW())
         """
         cursor.execute(add_icer_query, (user_id, product_id, data['ilosc'], data['data_waznosci']))
@@ -435,8 +386,6 @@ def add_product():
         # Wywołanie funkcji do obsługi przesyłania zdjęcia tylko jeśli dostępne są dane zdjęcia
         if image_data:
             handle_image_upload(db_connector, image_data, user_id, product_id)
-
-        # Uruchomienie funkcji run_daily_procedure po dodaniu produktu
 
         connection.commit()
         cursor.close()
@@ -450,7 +399,7 @@ def add_product():
 @app.route('/api/edit_product/<int:product_id>', methods=['PUT'])
 def edit_product(product_id):
     # Tworzenie instancji klasy DatabaseConnector
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -498,7 +447,7 @@ def edit_product(product_id):
 @app.route('/api/shoppingList', methods=['POST', 'GET'])
 def get_icer_shopping():
     # Tworzenie instancji klasy DatabaseConnector
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -537,14 +486,14 @@ def get_icer_shopping():
         # Modyfikacja zapytania SQL, aby pokazywać wszystkie informacje o produkcie
         user_id = user_result['id']
         query = """
-            SELECT icer.id, icer.UserID, icer.produktID, Shopping.ilosc,
+            SELECT Icer.id, Icer.UserID, Icer.produktID, Shopping.ilosc,
                    Produkty.nazwa, Produkty.cena, Produkty.kalorie,
                    Produkty.tluszcze, Produkty.weglowodany,
                    Produkty.bialko,Produkty.kategoria
-            FROM icer
-            INNER JOIN Produkty ON icer.produktID = Produkty.id
-            LEFT JOIN Shopping ON icer.produktID = Shopping.produktID
-            WHERE icer.UserID = %s AND Shopping.in_cart = 1;
+            FROM Icer
+            INNER JOIN Produkty ON Icer.produktID = Produkty.id
+            LEFT JOIN Shopping ON Icer.produktID = Shopping.produktID
+            WHERE Icer.UserID = %s AND Shopping.in_cart = 1;
         """
         cursor.execute(query, (user_id,))
         results = cursor.fetchall()
@@ -573,7 +522,7 @@ def get_icer_shopping():
 def edit_shopping_cart():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
 
         # Łączenie z bazą danych
         db_connector.connect()
@@ -615,7 +564,8 @@ def edit_shopping_cart():
             if product_id is None:
                 # Sprawdzenie, czy dostarczono wymagane dane (nazwa, cena, ilość)
                 if 'nazwa' not in data or 'cena' not in data or 'ilosc' not in data:
-                    return jsonify({"error": "Product ID not provided, and missing required data (nazwa, cena, ilosc)"}), 400
+                    return jsonify(
+                        {"error": "Product ID not provided, and missing required data (nazwa, cena, ilosc)"}), 400
                 product_id = product_manager.dodaj_produkt(data['nazwa'], data['cena'])
 
                 # Dodanie nowego produktu do koszyka
@@ -624,7 +574,7 @@ def edit_shopping_cart():
                     cursor.execute(insert_query, (user_id, product_id, 1, data["ilosc"]))
 
                     add_icer_query = """
-                        INSERT INTO icer (UserID, produktID, ilosc, data_dodania)
+                        INSERT INTO Icer (UserID, produktID, ilosc, data_dodania)
                         VALUES (%s, %s, %s, NOW())
                     """
                     cursor.execute(add_icer_query, (user_id, product_id, 0))
@@ -664,12 +614,8 @@ def edit_shopping_cart():
 @app.route('/api/Icer/get_notifications', methods=['POST'])
 def get_notifications():
     try:
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
         db_connector.connect()
-
-        scheduler = BackgroundScheduler()
-        scheduler.add_job(run_daily_procedure, 'interval', seconds=60)
-        scheduler.start()
 
         connection = db_connector.get_connection()
         if not connection:
@@ -697,18 +643,18 @@ def get_notifications():
         user_id = user_result['id']
 
         query = """
-            SELECT icer.id, icer.UserID, icer.produktID, icer.ilosc, 
-            icer.data_waznosci, icer.swiezosc, icer.default_photo,
-            icer.powiadomienie,
-            IF(icer.default_photo = 1, Photos.lokalizacja, UserPhotos.lokalizacja) AS zdjecie_lokalizacja,
+            SELECT Icer.id, Icer.UserID, Icer.produktID, Icer.ilosc, 
+            Icer.data_waznosci, Icer.swiezosc, Icer.default_photo,
+            Icer.powiadomienie,
+            IF(Icer.default_photo = 1, Photos.lokalizacja, UserPhotos.lokalizacja) AS zdjecie_lokalizacja,
             Produkty.nazwa, Produkty.cena, Produkty.kalorie,
             Produkty.tluszcze, Produkty.weglowodany, Produkty.bialko,
             Produkty.kategoria
-            FROM icer
-            INNER JOIN Produkty ON icer.produktID = Produkty.id
-            LEFT JOIN Photos ON icer.produktID = Photos.produktID
-            LEFT JOIN UserPhotos ON icer.produktID = UserPhotos.produktID AND UserPhotos.userID = %s
-            WHERE icer.UserID = %s AND icer.powiadomienie <= 1 
+            FROM Icer
+            INNER JOIN Produkty ON Icer.produktID = Produkty.id
+            LEFT JOIN Photos ON Icer.produktID = Photos.produktID
+            LEFT JOIN UserPhotos ON Icer.produktID = UserPhotos.produktID AND UserPhotos.userID = %s
+            WHERE Icer.UserID = %s AND Icer.powiadomienie <= 1 
         """
         cursor.execute(query, (user_id, user_id))
         results = cursor.fetchall()
@@ -737,7 +683,7 @@ def get_notifications():
 @app.route('/api/productsRedFlag', methods=['POST', 'GET'])
 def get_products_with_red_flag():
     # Tworzenie instancji klasy DatabaseConnector
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -775,14 +721,14 @@ def get_products_with_red_flag():
         # Modyfikacja zapytania SQL, aby pokazywać tylko te produkty z flagą 1
         user_id = user_result['id']
         query = """
-            SELECT icer.id, icer.UserID, icer.produktID, icer.ilosc, 
-                   icer.data_waznosci, icer.swiezosc,
+            SELECT Icer.id, Icer.UserID, Icer.produktID, Icer.ilosc, 
+                   Icer.data_waznosci, Icer.swiezosc,
                    Produkty.nazwa, Produkty.cena, Produkty.kalorie,
                    Produkty.tluszcze, Produkty.weglowodany, Produkty.bialko,
                    Produkty.kategoria
-            FROM icer
-            INNER JOIN Produkty ON icer.produktID = Produkty.id
-            WHERE icer.UserID = %s AND icer.swiezosc >= 1
+            FROM Icer
+            INNER JOIN Produkty ON Icer.produktID = Produkty.id
+            WHERE Icer.UserID = %s AND Icer.swiezosc >= 1
         """
         cursor.execute(query, (user_id,))
         results = cursor.fetchall()
@@ -810,7 +756,7 @@ def get_products_with_red_flag():
 @app.route('/api/Icer', methods=['POST'])
 def get_icer():
     # Tworzenie instancji klasy DatabaseConnector
-    db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+    db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
@@ -832,19 +778,19 @@ def get_icer():
 
         # Modyfikacja zapytania SQL, aby pokazywać wszystkie informacje o produkcie
         query = """
-            SELECT DISTINCT icer.id, icer.UserID, icer.produktID, icer.ilosc, 
-                   icer.data_waznosci, icer.swiezosc, icer.default_photo,
-                   IF(icer.default_photo = 1, Photos.lokalizacja, UserPhotos.lokalizacja) AS zdjecie_lokalizacja,
+            SELECT DISTINCT Icer.id, Icer.UserID, Icer.produktID, Icer.ilosc, 
+                   Icer.data_waznosci, Icer.swiezosc, Icer.default_photo,
+                   IF(Icer.default_photo = 1, Photos.lokalizacja, UserPhotos.lokalizacja) AS zdjecie_lokalizacja,
                    Produkty.nazwa, Produkty.cena, Produkty.kalorie,
                    Produkty.tluszcze, Produkty.weglowodany, Produkty.bialko,
                    Produkty.kategoria,
-                   icer.data_dodania
-            FROM icer
-            INNER JOIN Produkty ON icer.produktID = Produkty.id
-            LEFT JOIN Photos ON icer.produktID = Photos.produktID
-            LEFT JOIN UserPhotos ON icer.produktID = UserPhotos.produktID AND UserPhotos.userID = %s
-            WHERE icer.UserID = %s
-            ORDER BY icer.data_dodania ASC
+                   Icer.data_dodania
+            FROM Icer
+            INNER JOIN Produkty ON Icer.produktID = Produkty.id
+            LEFT JOIN Photos ON Icer.produktID = Photos.produktID
+            LEFT JOIN UserPhotos ON Icer.produktID = UserPhotos.produktID AND UserPhotos.userID = %s
+            WHERE Icer.UserID = %s
+            ORDER BY Icer.data_dodania ASC
         """
         cursor.execute(query, (user_id, user_id))
         results = cursor.fetchall()
@@ -883,7 +829,7 @@ def get_icer():
 def delete_notification():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
         # Łączenie z bazą danych
         db_connector.connect()
 
@@ -896,7 +842,7 @@ def delete_notification():
         if 'username' not in session:
             raise PermissionError("User not logged in")
 
-        #pobieranie wartości nazwy użytkownika oraz sprawdzenie czy użytkownik istnieje
+        # pobieranie wartości nazwy użytkownika oraz sprawdzenie czy użytkownik istnieje
         username = session['username']
         connection = db_connector.get_connection()
         cursor = connection.cursor(dictionary=True)
@@ -908,13 +854,13 @@ def delete_notification():
             raise LookupError("User not found")
 
         user_id = user_result['id']
-        #sprawdza wartosc przeslana przez front notification i zaleznie od tego zmienia wartosci notification
+        # sprawdza wartosc przeslana przez front notification i zaleznie od tego zmienia wartosci notification
         notification_id = data.get('notificationId')
         notification_value = data.get('notificationValue')
 
         if notification_value in [0, 1, None] and notification_id is not None:
             # Usunięcie lub aktualizacja powiadomienia o konkretnym ID danego użytkownika
-            update_notification_query = "UPDATE icer SET powiadomienie = %s WHERE id = %s AND UserID = %s"
+            update_notification_query = "UPDATE Icer SET powiadomienie = %s WHERE id = %s AND UserID = %s"
             cursor.execute(update_notification_query, (notification_value, notification_id, user_id))
             connection.commit()
             return jsonify({"message": f"Notification with ID {notification_id} updated successfully"})
@@ -945,7 +891,7 @@ def delete_notification():
 def delete_all_notification():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
         # Łączenie z bazą danych
         db_connector.connect()
 
@@ -970,18 +916,18 @@ def delete_all_notification():
         user_id = user_result['id']
 
         notification_value = data.get('notificationValue')
-        
+
         # Usunięcie wszystkich powiadomień danego użytkownika
         if notification_value == 0:
             # Aktualizacja tylko tych powiadomień, które mają wartość 1
-            update_notifications_query = "UPDATE icer SET powiadomienie = %s WHERE powiadomienie = 1 AND UserID = %s"
+            update_notifications_query = "UPDATE Icer SET powiadomienie = %s WHERE powiadomienie = 1 AND UserID = %s"
             cursor.execute(update_notifications_query, (notification_value, user_id))
             connection.commit()
             return jsonify({"message": "All user notifications updated successfully"})
 
         elif notification_value in [0, 1, None]:
             # Aktualizacja wszystkich powiadomień danego użytkownika
-            update_all_notifications_query = "UPDATE icer SET powiadomienie = %s WHERE UserID = %s"
+            update_all_notifications_query = "UPDATE Icer SET powiadomienie = %s WHERE UserID = %s"
             cursor.execute(update_all_notifications_query, (notification_value, user_id))
             connection.commit()
             return jsonify({"message": "All user notifications updated successfully"})
@@ -1013,7 +959,7 @@ def delete_all_notification():
 def update_preferences():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
 
         # Łączenie z bazą danych
         db_connector.connect()
@@ -1050,21 +996,25 @@ def update_preferences():
             # Aktualizacja preferencji użytkownika
             update_preferences_query = """
                 UPDATE preferencje_uzytkownikow
-                SET wielkosc_lodowki = %s, wielkosc_strony_produktu = %s, widocznosc_informacji_o_produkcie = %s
+                SET wielkosc_lodowki = %s, wielkosc_strony_produktu = %s, 
+                    widocznosc_informacji_o_produkcie = %s, uzytkownik_premium = %s
                 WHERE UserID = %s
             """
             cursor.execute(update_preferences_query, (
-            data['wielkosc_lodowki'], data['wielkosc_strony_produktu'], data['widocznosc_informacji_o_produkcie'],
-            user_id))
+                data['wielkosc_lodowki'], data['wielkosc_strony_produktu'],
+                data['widocznosc_informacji_o_produkcie'], data.get('uzytkownik_premium', False),
+                user_id))
         else:
             # Tworzenie nowego wpisu w tabeli preferencje_uzytkownikow
             insert_preferences_query = """
-                INSERT INTO preferencje_uzytkownikow (UserID, wielkosc_lodowki, wielkosc_strony_produktu, widocznosc_informacji_o_produkcie)
-                VALUES (%s, %s, %s, %s)
+                INSERT INTO preferencje_uzytkownikow 
+                (UserID, wielkosc_lodowki, wielkosc_strony_produktu, 
+                 widocznosc_informacji_o_produkcie, uzytkownik_premium)
+                VALUES (%s, %s, %s, %s, %s)
             """
             cursor.execute(insert_preferences_query, (
-            user_id, data['wielkosc_lodowki'], data['wielkosc_strony_produktu'],
-            data['widocznosc_informacji_o_produkcie']))
+                user_id, data['wielkosc_lodowki'], data['wielkosc_strony_produktu'],
+                data['widocznosc_informacji_o_produkcie'], data.get('uzytkownik_premium', False)))
 
         connection.commit()
         cursor.close()
@@ -1080,7 +1030,7 @@ def update_preferences():
 def get_user_preferences():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
 
         # Łączenie z bazą danych
         db_connector.connect()
@@ -1113,7 +1063,9 @@ def get_user_preferences():
 
         # Pobieranie preferencji użytkownika
         get_preferences_query = """
-            SELECT wielkosc_lodowki, wielkosc_strony_produktu, widocznosc_informacji_o_produkcie, lokalizacja_zdj, podstawowe_profilowe
+            SELECT wielkosc_lodowki, wielkosc_strony_produktu, 
+                   widocznosc_informacji_o_produkcie, lokalizacja_zdj, 
+                   podstawowe_profilowe, uzytkownik_premium
             FROM preferencje_uzytkownikow
             WHERE UserID = %s
         """
@@ -1125,7 +1077,7 @@ def get_user_preferences():
         if preferences:
             # Zwracanie preferencji wraz ze ścieżką do zdjęcia profilowego
             if preferences['podstawowe_profilowe'] == 1:
-                profile_photo_path = os.path.join("../public_html/public/data/userProfilePicture", "face.jpg")
+                profile_photo_path = os.path.join("public/data/userProfilePicture", "face.jpg")
             else:
                 profile_photo_path = preferences['lokalizacja_zdj']
 
@@ -1144,7 +1096,7 @@ def get_user_preferences():
 def change_user_photo():
     try:
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
 
         # Łączenie z bazą danych
         db_connector.connect()
@@ -1169,12 +1121,12 @@ def change_user_photo():
 def update_food_list():
     try:
         # Pobierz nazwę użytkownika z sesji lub z argumentów
-        username = session.get('username', 'root')  # Domyślnie root, do testow, pozniej bd trzeba to wywalic
+        username = session.get('username')
         project_path = os.path.dirname(os.path.abspath(__file__))
-        user_food_list_path = os.path.join('../public_html/users_lists', f'{username}_food_list.json')
+        user_food_list_path = os.path.join(project_path, 'static', 'scanned', f'{username}_food_list.json')
 
         # Tworzenie instancji klasy DatabaseConnector
-        db_connector = DatabaseConnector("localhost", "root", "root", "Sklep")
+        db_connector = DatabaseConnector()
         # Łączenie z bazą danych
         db_connector.connect()
 
@@ -1246,73 +1198,104 @@ def update_food_list():
 def login():
     if request.method == 'POST':
         data = request.get_json()
-        username = data['username']
-        password = data['password']
-        # Sprawdzanie, czy użytkownik istnieje w bazie danych
+        username = data.get('username')
+        password = data.get('password')
+
+        if not username or not password:
+            return jsonify({"message": "Brak nazwy użytkownika lub hasła"}), 400
+
         if check_user(username, password):
-            # Utworzenie sesji dla zalogowanego użytkownika
             session['username'] = username
-            session_id = str(uuid.uuid4())  # Generowanie unikalnego ID sesji
-            session['session_id'] = session_id  # Przechowywanie ID sesji
-            return jsonify({"message": "Login successful", "session_id": session_id})
+            session_id = str(uuid.uuid4())
+            session['session_id'] = session_id
+            return jsonify({"message": "Logowanie udane", "session_id": session_id})
         else:
-            return jsonify({"message": "Invalid credentials"}), 401
+            return jsonify({"message": "Nieprawidłowa nazwa użytkownika lub hasło"}), 401
     else:
-        return jsonify({"message": "Method not allowed"}), 405
+        return jsonify({"message": "Metoda niedozwolona"}), 405
 
 
-## funkcje wykorzystywane do rejestracji
 def user_exists(username):
     query = "SELECT * FROM Users WHERE username = %s"
     values = (username,)
-    cursor = db_connector.get_connection().cursor()
-    cursor.execute(query, values)
-    result = cursor.fetchone()
-    cursor.close()
 
-    return True if result else False
+    with DatabaseConnector() as db_connector:
+        connection = db_connector.get_connection()
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(query, values)
+                result = cursor.fetchone()
+            return True if result else False
+        except Exception as error:
+            print("Error during user existence check:", error)
+            return False
 
 
-def save_user(username, hashed_pw):
-    try:
-        query = "INSERT INTO Users (username, password) VALUES (%s, %s)"
-        values = (username, hashed_pw.decode('utf-8'))
-        cursor = db_connector.get_connection().cursor()
-        cursor.execute(query, values)
-        db_connector.get_connection().commit()
-        return True
-    except Exception as error:
-        print("Error during registration:", error)
-        return False
-    finally:
-        cursor.close()
+def save_user(username, password):
+    # Zaszyfruj hasło użytkownika
+    hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    # Zdefiniuj zapytanie SQL do wstawienia użytkownika do bazy danych
+    query = "INSERT INTO Users (username, password) VALUES (%s, %s)"
+    values = (username, hashed_pw)
+
+    # Utwórz instancję DatabaseConnector i użyj jej jako kontekstowy menedżer
+    with DatabaseConnector() as db_connector:
+        connection = db_connector.get_connection()
+        cursor = None
+        try:
+            # Uzyskaj kursor do wykonywania zapytań SQL
+            cursor = connection.cursor()
+            # Wykonaj zapytanie wstawienia użytkownika do bazy danych
+            cursor.execute(query, values)
+            # Zatwierdź zmiany w bazie danych
+            connection.commit()
+            return True
+        except Exception as error:
+            # Obsłuż błędy podczas rejestracji użytkownika
+            print("Błąd podczas rejestracji użytkownika:", error)
+            if connection:
+                # Cofnij transakcję w przypadku błędu
+                connection.rollback()
+            return False
+        finally:
+            # Upewnij się, że kursor jest zawsze zamykany
+            if cursor:
+                cursor.close()
 
 
 @app.route('/register', methods=['POST'])
 def register():
+    # Pobierz dane JSON z żądania
     data = request.get_json()
-    username = data['username']
-    password = data['password']
+    username = data.get('username')
+    password = data.get('password')
 
-    # Sprawdzenie, czy użytkownik już istnieje
+    # Sprawdź, czy podane dane są poprawne
+    if not username or not password:
+        return jsonify({"message": "Nazwa użytkownika lub hasło są wymagane"}), 400
+
+    # Sprawdź, czy użytkownik już istnieje w bazie danych
     if user_exists(username):
-        return jsonify({"message": "User already exists"}), 400
+        return jsonify({"message": "Użytkownik już istnieje"}), 400
 
-    # Szyfrowanie hasła
-    hashed_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-
-    # Zapisanie użytkownika w bazie danych
-    if save_user(username, hashed_pw):
-        return jsonify({"message": "Registration successful"})
+    # Zapisz użytkownika do bazy danych
+    if save_user(username, password):
+        return jsonify({"message": "Rejestracja udana"})
     else:
-        return jsonify({"message": "Registration failed"}), 500
+        return jsonify({"message": "Błąd podczas rejestracji"}), 500
 
 
 def check_user(username, password):
+    db_connector = DatabaseConnector()
+    db_connector.connect()  # Nawiązanie połączenia
+
+    connection = db_connector.get_connection()
+    cursor = connection.cursor()
+
     try:
         query = "SELECT password FROM Users WHERE username = %s"
         values = (username,)
-        cursor = db_connector.get_connection().cursor()
+
         cursor.execute(query, values)
         result = cursor.fetchone()
 
@@ -1321,13 +1304,17 @@ def check_user(username, password):
             if bcrypt.checkpw(password.encode('utf-8'), db_password):
                 session['username'] = username
                 return True
+
         return False
 
     except Exception as error:
         print("Error during user authentication:", error)
         return False
     finally:
-        cursor.close()
+        if cursor:
+            cursor.close()
+        if db_connector:
+            db_connector.disconnect()
 
 
 @app.route('/api/edit_user', methods=['POST'])
@@ -1340,6 +1327,8 @@ def edit_user():
         data = request.json
         new_password = data.get('new_password')
         new_username = data.get('new_username')
+        db_connector = DatabaseConnector()
+        db_connector.connect()  # Nawiązanie połączenia
 
         cursor = db_connector.get_connection().cursor()
 
@@ -1380,7 +1369,7 @@ def edit_user():
 def index():
     # Pusty ciąg znaków dla odpowiedzi chatbota
     bot_response = ""
-    
+
     if request.method == 'POST':
         # Pobierz dane wejściowe użytkownika z formularza
         user_input = request.form['user_input']
@@ -1462,7 +1451,7 @@ def decode_qr_code_route():
 
     # Sprawdzenie, czy wybrany plik ma dozwolone rozszerzenie
     if file and allowed_file(file.filename):
-         # Bezpieczne zapisanie przesłanego pliku do folderu
+        # Bezpieczne zapisanie przesłanego pliku do folderu
         filename = secure_filename(file.filename)
         file_path = os.path.join(app.config['QR_CODE_FOLDER'], filename)
         file.save(file_path)
@@ -1567,6 +1556,8 @@ def get_frame():
 def upload_predictor():
     try:
         print("Endpoint called with method: ", request.method)  # Logowanie metody żądania
+        db_connector = DatabaseConnector()
+        db_connector.connect()  # Nawiązanie połączenia
 
         connection = db_connector.get_connection()
         if not connection:
@@ -1638,7 +1629,6 @@ def advert_reciever():
 
     # Usunięcie prefiksu `data:image/png;base64,` jeśli istnieje
     if image_data.startswith('data:image'):
-
         image_data = image_data.split(',')[1]
     try:
         # Dekodowanie danych base64
@@ -1710,6 +1700,7 @@ def serve_video(filename):
         return send_from_directory(video_dir, filename, as_attachment=False)
     except FileNotFoundError:
         return jsonify({"error": "File not found"}), 404
+
 
 # Do sterowania video
 @app.route('/control_video', methods=['POST'])
