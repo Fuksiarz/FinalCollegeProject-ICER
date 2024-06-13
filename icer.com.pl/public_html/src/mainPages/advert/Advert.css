@@ -7,6 +7,7 @@
     width:100vw;
 
 }
+/*kontener koło, który posiada informacje czy użytkownik patrzy w ekran*/
 .eyesDetectedDiv {
     position: absolute;
     top: 10px;

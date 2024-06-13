@@ -2,13 +2,13 @@ import axios from 'axios';
 import {API_URL} from "../../settings/config";
 
 
-// Updated function to send the correct payload
+// Funkcja, która wysyła ramkę (część filmu) do serwera w ramach analizy obrazu do identyfikacji żywności
 export const sendFrameToFlaskFoodId = async (frameBase64, user) => {
 
     try {
         const response = await axios.post(`${API_URL}/adison_molotow`, {
-            images: [frameBase64],
-            username:user.username,
+            images: [frameBase64], //wysyłam ramkę
+            username:user.username, //nazwę użytkownika w ramach autoryzacji
             // Encapsulate frameBase64 into an 'images' array
         }, {
             headers: {
@@ -16,8 +16,8 @@ export const sendFrameToFlaskFoodId = async (frameBase64, user) => {
             },
         });
         console.log(response.data)
-        return response.data; // Assuming `response.data` contains the response from the Flask server
-    } catch (error) {
+        return response.data; // zwracane dane
+    } catch (error) { //w ramach błędów wyświetl w konsoli:
         console.error("Error sending frame to Flask server:", error);
         return null;
     }

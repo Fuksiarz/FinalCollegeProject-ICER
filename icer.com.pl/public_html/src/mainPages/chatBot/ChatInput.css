@@ -94,7 +94,7 @@
     }
 }
 
-/*dla ekranów o maxymalnej szerokości 1000px*/
+/*dla ekranów o maxymalnej szerokości 450px*/
 @media (max-width: 450px) {
 
     .chatInput {
@@ -115,8 +115,8 @@
     }
 
     .minimize-buttonIcon {
-        width: 120%;                    /* Fill the minimize button */
-        height: 120%;                   /* Fill the minimize button */
+        width: 120%;
+        height: 120%;
     }
 
     .chatOpenIcon{

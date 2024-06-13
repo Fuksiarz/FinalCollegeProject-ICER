@@ -7,9 +7,7 @@ import '../item/ProductItem.css'
 import {useProductsData} from "../API/useProductsData";
 import {useProductActions} from "../API/useProductActions";
 import ProductManager from "../productList/ProductManager";
-
 import {useNotificationsData} from "../../notifications/useNotificationsData";
-import {Link} from "react-router-dom";
 
 
 //funkcja odpowiedzialna za wyświetlanie komponentu lodówki - pierwszego po zalogowaniu

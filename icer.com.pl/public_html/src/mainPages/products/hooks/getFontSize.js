@@ -1,3 +1,4 @@
+//Zwraca wielkość czcionki
 export const getFontSize=(mediumProductsCountSetting, minDimension, widthDimension)=>{
     switch (mediumProductsCountSetting) {
         case 0:

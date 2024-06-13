@@ -1,53 +1,55 @@
 import './App.css';
-import React, {useContext, useState,useEffect} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "./mainPages/account/auth-context";
 import Main from "./Main";
-import LoginForm from "./mainPages/account/LoginForm";
-import RegisterForm from "./mainPages/account/RegisterForm";
 import Login from "./mainPages/account/Login";
 import {BrowserRouter as Router} from 'react-router-dom';
-import axios from 'axios';
 import {ToastContainer} from "react-toastify";
 import {SettingsProvider} from "./mainPages/settings/SettingsContext";
 import {Advert} from "./mainPages/advert/Advert";
 import ChatContainer from "./mainPages/chatBot/ChatContainer";
 
 function App() {
-    const { user } = useContext(AuthContext);
-    // Initial state set to true to show the ad when the user logs in
+    const {user} = useContext(AuthContext);
+    // Zmienna określająca czy włączyć kontener z reklamą
     const [adIsOn, setAdIsOn] = useState();
-    //zmienna określająca czy chat został zminimalizowany
+    //zmienna określająca czy chat został zminimalizowany z początkową wartością ustawioną na 1
     const [chatIsMinimized, setChatIsMinimized] = useState(1);
 
     useEffect(() => {
         if (user) {
-            setAdIsOn(true); // Reset adIsOn to true when user logs in
+            setAdIsOn(true); // Ustaw zmienną adIsOn na true kiedy zaloguje się użytkownik
         }
-        console.log(chatIsMinimized)
-    }, [user]);
+
+    }, [user]);//odświeżanie kiedy zmieni się wartość 'user'
 
     return (
+        //Kontekst z ustawieniami, zamykamy całą aplikację w kontekście co pozawala na dostęp do ustawień z kazdego
+        // jej miejsca
+
         <SettingsProvider>
+            {/*Komponent Router z biblioteki react-router-dom do tworzenia struktury połączeń w aplikacji*/}
             <Router>
+                {/*Komponent z powiadomieniami*/}
                 <ToastContainer/>
-                 {/*Show Advert if user is logged in and adIsOn is true*/}
-                {/*{user ?  <><Main chatIsMinimized={chatIsMinimized} setChatIsMinimized = {setChatIsMinimized} />*/}
+                {/*Logika wyświetlania aplikacji, jak jest użytkownik to:*/}
+                {user ?
+                    /* jeśli adIsOn jest true to wyswietl reklamę, przekazuję parametry */
+                    (adIsOn ? <Advert adIsOn={adIsOn} setAdIsOn={setAdIsOn}/>
+                            :
+                            <>
+                                {/* jeśli adIsOn jest false to wyswietl Main czyli funkcję odpowiadjącą
+                                 za wyświetlanie głównej części aplikacji*/}
+                                <Main chatIsMinimized={chatIsMinimized} setChatIsMinimized={setChatIsMinimized}/>
 
-                {/*{chatIsMinimized === 3 && <ChatContainer chatIsMinimized={chatIsMinimized} setChatIsMinimized={setChatIsMinimized} /> }</>*/}
-
-                {/*    : <Login />}*/}
-
-                {user ? (adIsOn ? <Advert adIsOn= {adIsOn} setAdIsOn={setAdIsOn} />
-                 :
-                 <>
-                 <Main chatIsMinimized={chatIsMinimized} setChatIsMinimized = {setChatIsMinimized} />
-
-                {chatIsMinimized === 3 && <ChatContainer chatIsMinimized={chatIsMinimized} setChatIsMinimized={setChatIsMinimized} /> }
-                </>
-                )
-                :
-                 <Login />
-                 }
+                                {/* kiedy chatIsMinimized posiada wartość 3 to pokaż chat w formie ikony */}
+                                {chatIsMinimized === 3 && <ChatContainer chatIsMinimized={chatIsMinimized}
+                                                                         setChatIsMinimized={setChatIsMinimized}/>}
+                            </>
+                    )
+                    :
+                    <Login/>
+                }
 
 
             </Router>

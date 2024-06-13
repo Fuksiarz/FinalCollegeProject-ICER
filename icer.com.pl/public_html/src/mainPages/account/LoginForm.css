@@ -80,52 +80,7 @@
 .loginButton:hover {
     background-color: #7fb0d5; /* zmiana koloru po najechaniu */
 }
-/* kontener z innymi możliwościami logowania */
-.loginTypes {
-    display: flex;
 
-    margin-top: 4vh;
-    margin-bottom: 5vh;
-    padding: 3rem 0.5rem 0.5rem;
-    width: 80%;
-    justify-content: space-between; /* Rozdziela elementy równomiernie wzdłuż linii */
-}
-
-.loginGoogle, .loginFacebook {
-    flex: 1; /* Każdy element będzie miał tę samą ilość miejsca */
-    display: flex;
-    height: 50%;
-    width: 50%;
-    margin: auto;
-    justify-content: center; /* Wyśrodkowuje zawartość elementu wzdłuż linii */
-    align-items: center; /* Wyśrodkowuje zawartość elementu wzdłuż krzyżowej osi */
-    text-align: center; /* Wyśrodkowuje tekst */
-    padding: 0.5rem;
-    border: 2px solid transparent;
-    transition: border-color 0.3s ease;
-
-}
-
-.loginGoogle:hover, .loginFacebook:hover {
-    background-color: #deeffc; /* Akcent po najechaniu myszą */
-    transform: scale(1.1); /* Powiększa element o 10% */
-    transition: transform 0.3s ease;
-
-}
-
-.googleLogo {
-
-    width: 80%;
-    height: 80%;
-
-}
-
-.facebookLogo {
-
-    width: 80%;
-    height: 80%;
-
-}
 
 .username input::placeholder {
     text-align: center;

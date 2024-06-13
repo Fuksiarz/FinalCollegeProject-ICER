@@ -58,11 +58,11 @@ function EditAccount(props) {
             });
             //jeśli dostaje odpowiedź
             if (response.data)
-                //powiadomienie
                 changeUserPhoto();
+                //powiadomienie
                 toast.success('dane zostały zaktualizowane');
                 setRefresh(prev => !prev);
-            if (storedUser && formData.username.length>0) { // Użyłem storedUser.username zamiast storedUser.nazwa
+            if (storedUser && formData.username.length>0) {
                 // Aktualizacja nazwy użytkownika w obiekcie
                 storedUser.username = formData.username;
 
@@ -81,8 +81,8 @@ function EditAccount(props) {
         }
 
         localStorage.getItem('user');
-        setRefresh(prev => !prev)
-        navigate('/Konto')
+        setRefresh(prev => !prev) // odśwież
+        navigate('/Konto') //przekieruj do podstrony /Konto
 
     };
     const changeUserPhoto = () => {

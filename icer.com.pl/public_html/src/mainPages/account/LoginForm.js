@@ -49,16 +49,6 @@ function LoginForm({ onLogin , onSwitchToRegister  }) {
                     Zarejestruj się
                 </button>
 
-                {/*<div className="loginTypes">*/}
-                {/*    <button className="loginGoogle">*/}
-                {/*        <img src={google} alt="googleLogo" className="googleLogo"/>*/}
-                {/*    </button>*/}
-
-                {/*    <button className="loginFacebook">*/}
-                {/*        <img src={facebook} alt="facebookLogo" className="facebookLogo"/>*/}
-
-                {/*    </button>*/}
-                {/*</div>*/}
             </div>
 
         </form>

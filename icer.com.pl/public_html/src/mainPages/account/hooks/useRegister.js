@@ -1,20 +1,21 @@
 import axios from 'axios';
 import { API_URL } from "../../settings/config";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 const useRegister = () => {
+    // Funkcja obsługująca rejestrację
     const handlePostRegister = async (data) => {
         try {
-            toast.success(`Zarejestrowano!`);
-            await axios.post(`${API_URL}/register`, data);
+            toast.success(`Zarejestrowano!`); // Wyświetlenie powiadomienia o pomyślnej rejestracji
+            await axios.post(`${API_URL}/register`, data); // Wysłanie żądania POST do API w celu rejestracji użytkownika
 
             // Możesz również dodać automatyczne logowanie po udanej rejestracji lub komunikat o sukcesie
         } catch (error) {
-            console.error('Error during POST register', error);
+            console.error('Error during POST register', error); // Obsługa błędu podczas rejestracji
         }
     };
 
-    return handlePostRegister;
+    return handlePostRegister; // Zwrócenie funkcji obsługującej rejestrację
 };
 
 export default useRegister;

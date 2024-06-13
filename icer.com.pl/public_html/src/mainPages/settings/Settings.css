@@ -50,7 +50,7 @@
 }
 
 .settings-sectionHeader--fridge {
-    font-size: 15px; /* Example size for 'fridge' */
+    font-size: 15px;
 }
 .settings-sectionHeader--products {
     font-size: calc((1vh + 1vw/2))
@@ -77,7 +77,7 @@
     width:100%;
     flex-wrap:wrap;
     justify-content: center;
-    gap: 10px; /* Adjust the gap between options */
+    gap: 10px; /* odległość od siebie poszczególnych opcji */
 }
 
 .custom-radio-button {
@@ -87,9 +87,9 @@
     justify-content: center;
     align-items: center;
     padding:calc((1vh + 1vw)/2);
-    border: 2px solid grey; /* Default border */
+    border: 2px solid grey; /* podstawowa obramówka */
     cursor: pointer;
-    user-select: none; /* Prevents text selection */
+    user-select: none;
 }
 .custom-radio-button--products{
     position:relative;
@@ -100,13 +100,13 @@
     justify-content: center;
     align-items: center;
     padding:calc((1vh + 1vw)/2);
-    border: 2px solid grey; /* Default border */
+    border: 2px solid grey;
     cursor: pointer;
-    user-select: none; /* Prevents text selection */
+    user-select: none;
 }
 .custom-radio-button.selected, .custom-radio-button--products.selected{
-    border-color: blue; /* Color of the border when selected */
-    box-shadow: 0 0 5px blue; /* Optional: Adds a shadow for a selected button */
+    border-color: blue; /* kolor obramowania kiedy wybrany */
+    box-shadow: 0 0 5px blue; /* dodanie cienia kiedy wybrany */
 }
 .saveDivSettings{
     display:flex;

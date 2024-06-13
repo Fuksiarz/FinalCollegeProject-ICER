@@ -6,7 +6,7 @@ export const handleImageChange = (e, setImage, setProduct, setImagePreview) => {
         setImage(file);
         setImagePreview(URL.createObjectURL(file));
 
-        // Conversion of image to Base64
+        // konwersja obrazu do Base64
         const reader = new FileReader();
         reader.onloadend = () => {
             setProduct(prevState => ({ ...prevState, imageData: reader.result }));

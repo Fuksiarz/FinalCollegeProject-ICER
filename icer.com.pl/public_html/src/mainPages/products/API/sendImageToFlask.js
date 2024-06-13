@@ -1,7 +1,6 @@
 import axios from "axios";
 import {API_URL} from "../../settings/config";
 import {toast} from "react-toastify";
-import {type} from "@testing-library/user-event/dist/type";
 
 // Funkcja do normalizacji nazw pól na małe litery
 const normalizeDataKeys = (data) => {

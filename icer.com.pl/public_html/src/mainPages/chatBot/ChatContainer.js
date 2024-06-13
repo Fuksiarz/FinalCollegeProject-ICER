@@ -16,12 +16,14 @@ function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
         const savedMessages = localStorage.getItem('chatMessages');
         return savedMessages ? JSON.parse(savedMessages) : [];
     });
+    //funkcja do zapisywania historii do locallStorage
     const saveMessagesToLocalStorage = (messages) => {
         localStorage.setItem('chatMessages', JSON.stringify(messages));
     };
+
     useEffect(() => {
-        saveMessagesToLocalStorage(messages);
-    }, [messages]);
+        saveMessagesToLocalStorage(messages);//zapisz historię
+    }, [messages]);//wykonaj przy zmianie wartości messages
 
 
     //funkcja wysyłająca wiadomość od uzytkownika i pobierająca odpowiedź
@@ -49,6 +51,7 @@ function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
         handleBotResponse(message);
     };
 
+    //funkcja do zmiany wartości chatIsMinimized, wykorzystywana do minimalizowania i przywracania chatu
     const handleToggleMinimize = (x) => {
         setChatIsMinimized(x);
         console.log(chatIsMinimized)

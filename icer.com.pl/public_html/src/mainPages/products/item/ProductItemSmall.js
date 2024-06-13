@@ -1,5 +1,4 @@
 import React from 'react';
-import { Icon } from "@iconify/react";
 
 //Funkcja przedstawiająca kontener na produkt w lodówce
 function ProductItemSmall() {

@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import './ProductItem.css';
-
 import {GetBorderStyle} from "./GetBorderStyle";
 import {mediumProductsCount, smallProductsCount} from "../../settings/config";
 import {useProductItem} from "../hooks/useProductItem";

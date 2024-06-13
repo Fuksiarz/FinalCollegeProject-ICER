@@ -10,7 +10,6 @@ import EditAccount from "./mainPages/account/EditAccount";
 import Products from "./mainPages/products/productList/Products";
 import AddProduct from "./mainPages/products/add/AddProduct";
 import Login from "./mainPages/account/Login";
-import Help from "./mainPages/Help";
 import ChatContainer from "./mainPages/chatBot/ChatContainer";
 import {AuthContext} from "./mainPages/account/auth-context";
 import {ShoppingCart} from "./mainPages/shoppingCart/ShoppingCart";
@@ -89,13 +88,11 @@ function Main({chatIsMinimized,setChatIsMinimized}) {
                             {/* tutaj przekazujemy do funkcji dodatkowy parametr wskazujący jakie wartości ma
                             posiadać strona - tu wskazujemy na drogę do pełnych ustawień */}
                             <Route path="/Ustawienia" element={<Settings where='settings'/>}/>
-                            <Route path="/Pomoc" element={<Help/>}/>
                             <Route path="/Zaloguj" element={<Login/>}/>
-                            <Route path="/Chatbot" element={<ChatContainer chatIsMinimized={chatIsMinimized} setChatIsMinimized={setChatIsMinimized} />} />
+                            <Route path="/Chatbot" element={<ChatContainer chatIsMinimized={chatIsMinimized}
+                                                                           setChatIsMinimized={setChatIsMinimized} />} />
                             <Route path="/Advert" element={<Advert/>}/>
                             <Route path="/GenerateQR" element={<GenerateQR/>}/>
-                            <Route path="/nowy" />
-
 
                         </Routes>
 

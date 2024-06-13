@@ -6,12 +6,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import {initializeProduct} from "../hooks/initializeProduct";
 import {submitProduct} from "../API/submitProduct";
 import {handleImageChange} from "../pictures/handleImageChange";
-import {handleQRChange} from "../QR/handleQRChange";
 import groceryBag from '../../../data/groceryBag.svg'
-import {handleQRCodeScan} from "../API/handleQRCodeScan";
 import {handleBackpackClick} from "../hooks/handleBackpackClick";
 import {chooseImageForIdentyfiaction} from "../hooks/chooseImageForIdentyfication";
-import {stopCamera} from "../API/stopCamera";
 import {updateFood} from "../API/updateFood";
 import {cameraControlFoodId} from "../API/cameraControlFoodId";
 import {sendImageToFlask} from "../API/sendImageToFlask";
@@ -38,12 +35,6 @@ function AddProduct() {
     // zmienna przechowująca produkt, który będzie wysyłany, przyjmuje podstawowe wartości
     const [product, setProduct] = useState(initializeProduct);
 
-    //zmienna, która posiada kod QR
-    const [qrImage, setQrImage] = useState('');
-
-    //podgląd kodu QR
-    const [qrImagePreview, setQrImagePreview] = useState('');
-
     //lista produktów pobierana po zakończeniu identyfikacji z kamery
     const [productBackpack, setProductBackpack] = useState([]);
 
@@ -64,7 +55,6 @@ function AddProduct() {
 
     const [imageIdentyficationInfo,setImageIdentyficationInfo] = useState([]);
     const [info, setInfo] = useState('');
-    const [stop, setStop] = useState(false);
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
 
@@ -105,12 +95,12 @@ function AddProduct() {
         setOneIdCameraOptions(!oneIdCameraOptions)
     }
 
-    const startCamera = () => {
+    const startCamera = () => {// włącz kamerę w celu identyfikacji żywności
         const stopRecordingFunc = cameraControlFoodId(videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo, user);
         setStopRecording(() => stopRecordingFunc);
         setStreamCamera(true);
     };
-    const stopCamera = () => {
+    const stopCamera = () => { //zatrzymaj kamerę i zaktualizuj kosz z zakupami
         updateFood(setProductBackpack, setStreamCamera);
         console.log("Attempting to stop the camera.");
         if (stopRecording) {
