@@ -14,7 +14,7 @@
 
     display: flex;
     flex-direction: column;
-    min-width: 40%;
+    min-width: 30%;
     border-radius: 20px;
     max-height: 90vh;
     padding:2vh 1vw 2vh 1vw;
@@ -149,12 +149,12 @@
 }
 {/* absolutny kontener z opcjami po naciśnięciu */}
 .cameraOptions {
-    /* ... existing styles ... */
+
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     bottom: 100%;
-    z-index: 10; /* Ensure it's above other elements */
+    z-index: 10;
 }
 
 {/* kontener z opcjami relatywny*/}
@@ -172,14 +172,14 @@
     position: fixed;
     height: auto;
     width: auto;
-    max-width: 80vw; /* Add this line for maximum width */
-    max-height: 80vh; /* Add this line for maximum height */
+    max-width: 80vw;
+    max-height: 80vh;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 100; /* ma być na wierzchu */
     display: flex;
-    flex-direction: column; /* Add this line */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -188,7 +188,7 @@
 .imageForIdentyficationURLDivRelative {
     position: relative;
     display: flex;
-    flex-direction: column; /* Add this line */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100%;
@@ -196,28 +196,28 @@
 }
 {/* obrazek podglądu identyfikacji */}
 .scannedFoodImage {
-    max-width: 100%; /* Ensure the image doesn't overflow */
-    max-height: 70vh; /* Ensure the image doesn't overflow and leave space for the button */
-    object-fit: contain; /* Make sure the image scales properly */
-    object-position: center; /* Center the image */
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain; /* upewnij się, że odpowiednio się skaluje */
+    object-position: center;
 }
 
 
 {/* przycisk decydujący o tym czy identyfikować zdjęcie */}
 .sendButtonForFoodIdentyfication {
-    margin-top: 1vh; /* Add this line for spacing */
-    width: 100%; /* Full width of the image container */
-    display: flex; /* Add this line */
-    justify-content: center; /* Add this line */
-    align-items: center; /* Add this line */
+    margin-top: 1vh; /* odstęp */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     z-index: 101;
     background-color: green;
     border-radius: 10px;
 }
 .sendButtonForFoodIdentyfication h2 {
-    width: 100%; /* Match the width of the image */
-    text-align: center; /* Center the text */
+    width: 100%;
+    text-align: center; /* wyśrodkuj tekst */
 }
 {/* kontener, który posiada opcje identyfikacji po zdjęciu oraz kontener, który identyfikuje po filmie*/}
 .leftCameraOption, .rightCameraOption{
@@ -263,15 +263,44 @@
     z-index: 1000;/* aby był widoczny */
     position:fixed;
     bottom: 2vh;
-    left:42.5%;
+    left: 50%;
+    transform: translateX(-50%); /* Centrowanie przycisku na środku ekranu */
+    display:flex;
     height:15vh;
-    width:15vw;
+    width:15vh;
+    justify-content: center;
+    align-items: center;
 }
 /* ikona przycisku zatrzymywania identyfikacji żywności*/
 .stopCameraButtonIcon{
     position:relative;
     height:100%;
     width:100%;
+}
+/* Przycisk zmiany kamery */
+.toggleCameraButton {
+    z-index: 1000; /* aby był widoczny */
+    position: fixed;
+    bottom: 2vh;
+    left: 70vw; /* Umieszczenie przycisku w odległości od środka */
+    transform: translateY(-25%); /* Wyrównanie na wysokości środka przycisku stop */
+    height: 10vh;
+    width: 10vh;
+    background-color: rgba(0, 0, 0, 0.5); /* półprzezroczyste tło */
+    border-radius: 50%; /* zaokrąglone krawędzie */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* Ikona przycisku zmiany kamery */
+.toggleCameraButtonIcon {
+    position:relative;
+    height:70%;
+    width:70%;
+    color: white;
+
 }
 
 /*opcje identyfikacji po najechaniu*/

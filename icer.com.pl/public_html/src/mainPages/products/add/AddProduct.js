@@ -52,6 +52,8 @@ function AddProduct() {
 
     //podlgąd wybranego obrazu do identyfikacji poprzez zdjęcie
     const [imageForIdentyficationURL, setImageForIdentyficationURL] = useState(null);
+    // Dodana zmienna stanu do przechowywania trybu kamery
+    const [cameraFacingMode, setCameraFacingMode] = useState('user');
 
     const [info, setInfo] = useState('');
     const videoRef = useRef(null);
@@ -95,7 +97,8 @@ function AddProduct() {
     }
 
     const startCamera = () => {// włącz kamerę w celu identyfikacji żywności
-        const stopRecordingFunc = cameraControlFoodId(videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo, user);
+        const stopRecordingFunc = cameraControlFoodId(videoRef, canvasRef, setStreamCamera, setProductBackpack,
+                                                        setInfo, user, cameraFacingMode);
         setStopRecording(() => stopRecordingFunc);
         setStreamCamera(true);
     };
@@ -112,7 +115,10 @@ function AddProduct() {
         }
     };
 
-
+    const toggleCamera = () => {
+        setCameraFacingMode((prevMode) => (prevMode === 'user' ? 'environment' : 'user'));
+        startCamera(); // Restart kamery z nowym trybem
+    };
 
 
     return (
@@ -127,6 +133,10 @@ function AddProduct() {
                     <div onClick={stopCamera} className="stopCameraButton"><Icon className="stopCameraButtonIcon"
                                                           icon="fluent-emoji-high-contrast:stop-button"
                                                           style={{color: '#f50000'}}/></div>
+                    <div onClick={toggleCamera} className="toggleCameraButton">
+                        <Icon className="toggleCameraButtonIcon"  icon="ion:camera-reverse-sharp"/>
+
+                    </div>
                 </div> :/* kiedy nie ma obrazu z kamery to wyświetl: */
                 <>
                     {/* kiedy jest podgląd obrazu identyfikacji to wyświetl kontener imageForIdentyficationURLDiv*/}

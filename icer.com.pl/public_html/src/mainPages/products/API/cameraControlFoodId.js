@@ -1,6 +1,6 @@
 import { sendFrameToFlaskFoodId } from "./sendFrameToFlaskFoodId";
 
-export const cameraControlFoodId = (videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo, user) => {
+export const cameraControlFoodId = (videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo, user,cameraFacingMode) => {
     let isRecording = true; // Flaga do kontrolowania stanu nagrywania
     const frameRate = 100; // Ustawienie liczby klatek na sekundę
     const interval = 20000 / frameRate; // Interwał między klatkami
@@ -42,7 +42,8 @@ export const cameraControlFoodId = (videoRef, canvasRef, setStreamCamera, setPro
             width: { ideal: 1080 },
             height: { ideal: 1080 },
             frameRate: frameRate,
-            advanced: [{ facingMode: "user", codec: "video/x-motion-jpeg" }],
+            advanced: [{ facingMode: cameraFacingMode // Zmień tryb zależnie od wartości zmiennej
+                , codec: "video/x-motion-jpeg" }],
         },
     };
 
@@ -76,9 +77,9 @@ export const cameraControlFoodId = (videoRef, canvasRef, setStreamCamera, setPro
                             if (analysisResult && analysisResult.length > 0) {
                                 const firstResponse = analysisResult[0];
                                 if (firstResponse.message) {
-                                    setInfo(`Otrzymano wiadomość: ${firstResponse.message}`); // Wyświetlenie wiadomości
+                                    //setInfo(`Otrzymano wiadomość: ${firstResponse.message}`); // Wyświetlenie wiadomości
                                 } else if (firstResponse.error) {
-                                    setInfo(`Wystąpił błąd: ${firstResponse.error}`); // Wyświetlenie błędu
+                                    //setInfo(`Wystąpił błąd: ${firstResponse.error}`); // Wyświetlenie błędu
                                 }
                             }
                         }

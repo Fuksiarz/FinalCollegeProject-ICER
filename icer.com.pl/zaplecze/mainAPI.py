@@ -34,9 +34,9 @@ from modules.value_manager import ProductManager
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 socketio = SocketIO(app, cors_allowed_origins="*")
-app.config['BARCODE_FOLDER'] = os.path.join(app.static_folder, 'barcodes')
-app.config['QR_CODE_FOLDER'] = os.path.join(app.static_folder, 'qrcodes')
-app.config['FOOD_LIST_DIR'] = './users_lists'
+app.config['BARCODE_FOLDER'] = os.path.join('static/', 'barcodes')
+app.config['QR_CODE_FOLDER'] = os.path.join('static/', 'qrcodes')
+app.config['FOOD_LIST_DIR'] = 'users_lists'
 app.config['SECRET_KEY'] = 'key'  # Zamienic na silne hasło
 
 # Uzyskaj ścieżkę do katalogu głównego (gdzie znajduje się mainAPI.py)
@@ -1123,7 +1123,7 @@ def update_food_list():
         # Pobierz nazwę użytkownika z sesji lub z argumentów
         username = session.get('username')
         project_path = os.path.dirname(os.path.abspath(__file__))
-        user_food_list_path = os.path.join(project_path, 'static', 'scanned', f'{username}_food_list.json')
+        user_food_list_path = os.path.join(project_path, 'users_lists', f'{username}_food_list.json')
 
         # Tworzenie instancji klasy DatabaseConnector
         db_connector = DatabaseConnector()
