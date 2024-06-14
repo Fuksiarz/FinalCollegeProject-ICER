@@ -28,18 +28,25 @@ export const sendImageToFlask = async (setProduct, file, setImageForIdentyficati
                 'Content-Type': 'multipart/form-data' // Wskazuje, że dane będą w formacie form-data
             }
         });
+        console.log('dostalem:' , response.data)
         if (response.data && response.data.type === 'qr') {
             const identified = normalizeDataKeys(response.data.data);
             toast.success('Rozpoznano kod!');
-            console.log(identified)
+            console.log('identified :', identified)
 
             const updatedProduct = {
-
-                ...identified,
-                data_waznosci: new Date().toISOString().split('T')[0] // Dodajemy datę ważności
+                nazwa: identified.nazwa || "",
+                cena: identified.cena || "",
+                kalorie: identified.kalorie || "",
+                tluszcze: identified.tłuszcze || "",
+                weglowodany: identified.węglowodany || "",
+                bialko: identified.białko || "",
+                kategoria: identified.kategoria || "",
+                ilosc: identified.ilość || "",
+                data_waznosci: identified.data || new Date().toISOString().split('T')[0] // Default to today if not provided
             };
             console.log(updatedProduct)
-            setProduct(identified);
+            setProduct(updatedProduct);
 
         } else {
             // Aktualizuje listę produktów

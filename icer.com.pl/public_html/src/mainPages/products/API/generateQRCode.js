@@ -12,10 +12,12 @@ export const generateQRCode = async (formData) => {
             },
 
         });
-        console.log(response.data);
+
         const data = response.data;
+        //przypisanie danych z API do zmiennych
         const qrCodeImageBase64= data.qr_code_image_base64;
-        const qrCodeName= data.qr_code_name;
+        //Jeśli nie jest podana nazwa to daj podstawową
+        const qrCodeName= data.qr_code_image_url || 'qr_code';
 
         // Wywołanie funkcji do zapisu obrazu
         saveImage(qrCodeImageBase64, qrCodeName);

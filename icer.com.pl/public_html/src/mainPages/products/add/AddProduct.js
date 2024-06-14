@@ -53,7 +53,6 @@ function AddProduct() {
     //podlgąd wybranego obrazu do identyfikacji poprzez zdjęcie
     const [imageForIdentyficationURL, setImageForIdentyficationURL] = useState(null);
 
-    const [imageIdentyficationInfo,setImageIdentyficationInfo] = useState([]);
     const [info, setInfo] = useState('');
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
