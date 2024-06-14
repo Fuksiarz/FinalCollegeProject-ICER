@@ -23,10 +23,17 @@ export const useLogin = () => {
                     sessionId: data.session_id
                 });
                 navigate('/'); // Przekierowanie użytkownika na stronę główną
-                toast.success(`Zalogowano!`); // Wyświetlenie powiadomienia o pomyślnym logowaniu
+                toast.success(response.data.message); // Wyświetlenie powiadomienia o pomyślnym logowaniu
             }
-        } catch (error) {
-            console.error('Error during POST login', error); // Obsługa błędu podczas logowania
+        } catch (error){
+            // Obsługa błędu podczas logowania
+            if (error.response && error.response.data && error.response.data.message) {
+                toast.error(error.response.data.message); // Wyświetlenie wiadomości o błędzie z odpowiedzi API
+            } else {
+                // Wyświetlenie ogólnej wiadomości o błędzie
+                toast.error('Wystąpił problem w trakcie logowania. Proszę spróbować ponownie.');
+            }
+            console.error(error.message); // Logowanie błędu do konsoli
         }
     };
 

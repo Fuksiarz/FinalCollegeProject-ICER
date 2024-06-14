@@ -21,6 +21,8 @@ export const SettingsProvider = ({ children }) => {
     //tablica z nazwami ustawień wielkości elelemntów na stronie produktów
     const productsSizeElementsArray = ['bardzo male', 'male', 'srednie', 'duze', 'bardzo duze']; // Przykładowa tablica
 
+    const [premiumUser, setPremiumUser] = useState(localStorage.getItem('premiumUser') === 'true'); // true lub false na podstawie localStorage
+
     //pobieranie użytkownika w celu autoryzacji
     const { user } = useContext(AuthContext);
     // wyodrębnienie sesji użytkownika do przesłania do api w ramach autoryzacji
@@ -40,13 +42,14 @@ export const SettingsProvider = ({ children }) => {
                 .then((response) => {
                     //przypisywanie wartości zwróconych z api do localstorage i
                     const { wielkosc_lodowki, wielkosc_strony_produktu, widocznosc_informacji_o_produkcie
-                    ,lokalizacja_zdj, podstawowe_profilowe} = response.data;
+                    ,lokalizacja_zdj, podstawowe_profilowe, uzytkownik_premium} = response.data;
                     updateSetting('fridgeSizeElements', wielkosc_lodowki);
                     updateSetting('productsSizeElements', wielkosc_strony_produktu);
                     updateSetting('infoProducts', widocznosc_informacji_o_produkcie);
                     updateSetting('photo', lokalizacja_zdj);
                     updateSetting('defaultPhoto', podstawowe_profilowe);
-
+                    updateSetting('premiumUser', uzytkownik_premium);
+                    console.log(response.data)
                 })
                 .catch((error) => {
                     console.error(`There was an error retrieving the data: ${error}`);
@@ -72,6 +75,10 @@ export const SettingsProvider = ({ children }) => {
             case 'defaultPhoto':
                 setDefaultProfile(value);
                 break;
+            case 'premiumUser':
+                setPremiumUser(value === true); // Zapewnienie, że wartość jest boolean
+                break;
+
             default:
 
         }
@@ -92,7 +99,8 @@ export const SettingsProvider = ({ children }) => {
             fridgeSizeElements, setFridgeSizeElements,
             productsSizeElements, setProductsSizeElements,
             infoProducts, setInfoProducts, getFridgeSizeIndex,
-            getProductsSizeIndex,profilePicture, defaultProfile, refresh,setRefresh
+            getProductsSizeIndex,profilePicture, defaultProfile, refresh,setRefresh,
+            premiumUser
         }}>
             {children}
         </SettingsContext.Provider>
