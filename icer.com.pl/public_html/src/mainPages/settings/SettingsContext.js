@@ -76,8 +76,10 @@ export const SettingsProvider = ({ children }) => {
                 setDefaultProfile(value);
                 break;
             case 'premiumUser':
-                setPremiumUser(value === true); // Zapewnienie, że wartość jest boolean
-                break;
+                const isPremium = value === 1 || value === '1';
+                setPremiumUser(isPremium);
+                localStorage.setItem(key, isPremium);
+                break; // Upewnij się, że nie ustawia tego jako '1' lub '0' w localStorage
 
             default:
 
@@ -100,7 +102,7 @@ export const SettingsProvider = ({ children }) => {
             productsSizeElements, setProductsSizeElements,
             infoProducts, setInfoProducts, getFridgeSizeIndex,
             getProductsSizeIndex,profilePicture, defaultProfile, refresh,setRefresh,
-            premiumUser
+            premiumUser, setPremiumUser
         }}>
             {children}
         </SettingsContext.Provider>

@@ -19,7 +19,7 @@ function EditAccount(props) {
 
     //pobieramy nazwę zdjęcia, informację czy jest zdjęcie podstawowe oraz zmienną, której zmiana to odświeżenie ustawień,
     //oraz możliwość zmiany tej wartości
-    const {profilePicture,defaultProfile,setRefresh} = useContext(SettingsContext);
+    const {profilePicture,defaultProfile,setRefresh, premiumUser} = useContext(SettingsContext);
 
     //obrazek
     const [image,setImage] = useState('');
@@ -105,7 +105,15 @@ function EditAccount(props) {
 
     return (
         <div className="accountContainer"> {/*kontener z informacjami o użytkowniku oraz z przyciskiem edycji konta*/}
-            <div className="accountInfo"> {/*kontener ze zdjęciem oraz informacjami o użytkowniku*/}
+            {/*kontener ze zdjęciem oraz informacjami o użytkowniku*/}
+            <div className={`accountInfo  ${premiumUser ? 'vip-border' : ''}`}>
+                {premiumUser && (
+                    <>
+
+                        <div className="side-border left-border"><h5 className='vipName'>VIP</h5></div>
+                        <div className="side-border right-border"><h5 className='vipName'>VIP</h5></div>
+                    </>
+                )}
                 <div className="accountPhoto"> {/*kontener ze zdjęciem użytkownika*/}
 
                     {imagePreview ? (/*Jeśli wybrane zostało zdjęcie do zmiany to pokaż jego podgląd zamiast zdjęcia użytkownika*/

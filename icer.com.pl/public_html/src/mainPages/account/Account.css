@@ -16,6 +16,155 @@
     height: 80%;
     margin: auto; /* margines automatyczny - ustawia po wszystkich stornach po równo względem osi */
 }
+/*obramówka dla użytkownika premium*/
+.vip-border {
+    position: relative;
+    padding: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    width: 50%;
+    height: 80%;
+    margin: auto;
+    border-radius: 5px;
+    border: 10px solid; /* dodanie obramowania */
+    animation: border-glow 10s infinite alternate; /* animacja zmiany koloru obramowania */
+}
+
+/* Animacja zmiany koloru obramowania */
+@keyframes border-glow {
+    0% {
+        border-color: #0f53d3;
+        box-shadow: 0 0 10px #0c77b9, 0 0 20px #0c77b9, 0 0 30px #0c77b9;
+    }
+    50% {
+        border-color: #bfe7ef;
+        box-shadow: 0 0 10px #bfe7ef, 0 0 20px #bfe7ef, 0 0 30px #bfe7ef;
+    }
+    100% {
+        border-color: #011891;
+        box-shadow: 0 0 10px #011891, 0 0 20px #011891, 0 0 30px #011891;
+    }
+}
+/* Stylowanie animowanego napisu VIP */
+.vip-border::before, .vip-border::after, .vip-border .left-border, .vip-border .right-border {
+    content: 'VIP';
+    position: absolute;
+    font-size: 3vw; /* Responsywny rozmiar czcionki */
+    font-weight: bold;
+    white-space: nowrap;
+    background: linear-gradient(120deg, #0734a4, #0c22b2, #0f1bbd);
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 10px rgba(190, 201, 253, 0.5), 0 0 20px rgba(187, 184, 184, 0.5), 0 0 30px rgba(0, 12, 79, 0.5);
+
+}
+/* Napisy VIP przesuwające się w górnej części */
+.vip-border::before {
+
+    top: 0;
+    left: 0;
+    width:20%;
+
+
+    animation: scroll-horizontal-top 40s linear infinite;
+
+}
+
+
+/* Napisy VIP przesuwające się w dolnej części */
+.vip-border::after {
+    bottom: 0;
+    left: 0;
+    width:20%;
+
+    animation: scroll-horizontal-bottom 40s linear infinite;
+
+}
+/* Napisy VIP przesuwające się w lewej części */
+.vip-border .left-border {
+    top: 0;
+    left: 0;
+
+    height: 20%;
+
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: scroll-vertical-left 40s linear infinite;
+
+
+}
+/* Napisy VIP przesuwające się w prawej części */
+.vip-border .right-border {
+    top: 0;
+    right: 0;
+
+    height: 20%;
+
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: scroll-vertical-right 40s linear infinite;
+
+
+}
+.vipName{
+    margin:0;
+}
+/* Animacja przesuwania napisu VIP w poziomie (góra) */
+@keyframes scroll-horizontal-top {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    25%,100% {
+        transform: translateX(500%);
+    }
+}
+/* Animacja przesuwania napisu VIP w poziomie (dół) */
+@keyframes scroll-horizontal-bottom {
+    0% {
+        transform: translateX(600%);
+    }
+    45% {
+        transform: translateX(600%);
+    }
+    75%,100% {
+        transform: translateX(-100%);
+    }
+}
+/* Animacja przesuwania napisu VIP w pionie (lewa) */
+@keyframes scroll-vertical-left {
+    0% {
+        transform: translateY(600%);
+    }
+    75% {
+        transform: translateY(600%);
+    }
+    100% {
+        transform: translateY(-100%);
+    }
+}
+/* Animacja przesuwania napisu VIP w pionie (prawa) */
+@keyframes scroll-vertical-right {
+    0% {
+        transform: translateY(-110%);
+    }
+    25% {
+        transform: translateY(-110%);
+    }
+    50%,100% {
+        transform: translateY(510%);
+    }
+}
+
+
 /*kontener ze zdjęciem użytkownika*/
 .accountPhotoImage {
     width: 10vw; /* szerkość elementu*/

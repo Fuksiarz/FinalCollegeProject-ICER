@@ -13,7 +13,8 @@ export function Settings({where}) {
     // wyodrębnienie sesji użytkownika do przesłania do api w ramach autoryzacji
     const sessionId = user ? user.sessionId : null;
     //pobieranie wartości ustawień z kontekstu ustawień
-    const { fridgeSizeElements, setFridgeSizeElements, productsSizeElements, setProductsSizeElements, infoProducts, setInfoProducts } = useContext(SettingsContext);
+    const { fridgeSizeElements, setFridgeSizeElements, productsSizeElements,
+        setProductsSizeElements, infoProducts, setInfoProducts, premiumUser, setPremiumUser  } = useContext(SettingsContext);
     //zmienna odpowiedzialna za odświeżanie
     const [refresh,setRefresh] = useState(false);
     //tablica z nazwami ustawień wielkości elelemntów na stronie lodówki
@@ -23,6 +24,10 @@ export function Settings({where}) {
     const handleOptionClick = (optionValue, setter) => {
 
         setter(optionValue);
+        setRefresh(!refresh);
+    };
+    const handleOptionClickPremium = () => {
+        setPremiumUser(!premiumUser);
         setRefresh(!refresh);
     };
     // Nazwy dla drugiej grupy opcji
@@ -47,11 +52,13 @@ export function Settings({where}) {
     }`;
 
     useEffect(() => {
+        console.log("premium: ", premiumUser)
         //przypisuje ustawienia do wartości wysyłanych do API
         const preferences = {
             wielkosc_lodowki: fridgeSizeElements,
             wielkosc_strony_produktu:productsSizeElements,
-            widocznosc_informacji_o_produkcie: infoProducts
+            widocznosc_informacji_o_produkcie: infoProducts,
+            uzytkownik_premium:premiumUser
         };
 
         axios.post(`${API_URL}/api/update_preferences`, { ...preferences, sessionId })
@@ -61,7 +68,7 @@ export function Settings({where}) {
             .catch((error) => {
                 console.error('Error updating preferences:', error);
             });
-    },[refresh,sessionId]);
+    },[refresh,user]);
 
     //hook do wybierania ustawień, podajemy pozycję w tablicy nazewnictwa
     const mapSizeToApiValue = (sizeIndex) => {
@@ -72,10 +79,7 @@ export function Settings({where}) {
 
 
     return (
-        <div className="settings-container"
-
-
-        >
+        <div className="settings-container">
 
             <div className={settingsDivClass}>
                 {where === 'settings' && <h1 className="settingsHeader">Ustawienia</h1>}
@@ -87,7 +91,8 @@ export function Settings({where}) {
                         {fridgeSizeElementsArray.map((label, index) => (
                             <div
                                 key={label}
-                                className={`${customRadioButtonClass} ${fridgeSizeElements === mapSizeToApiValue(index) ? 'selected' : ''}`}
+                                className={`${customRadioButtonClass} 
+                                ${fridgeSizeElements === mapSizeToApiValue(index) ? 'selected' : ''}`}
                                 //przy naciśnięciu ma się ustawiać wybrana opcja
                                 onClick={() => handleOptionClick(mapSizeToApiValue(index), setFridgeSizeElements)}
                             >
@@ -108,7 +113,8 @@ export function Settings({where}) {
                                 {productsSizeElementsArray.map((label,index) => (
                                     <div
                                         key={label}
-                                        className={`${customRadioButtonClass} ${productsSizeElements === mapSizeToApiValue(index) ? 'selected' : ''}`}
+                                        className={`${customRadioButtonClass} 
+                                        ${productsSizeElements === mapSizeToApiValue(index) ? 'selected' : ''}`}
                                         //przy naciśnięciu ma się ustawiać wybrana opcja
                                         onClick={() => handleOptionClick(mapSizeToApiValue(index), setProductsSizeElements)}
                                     >
@@ -137,7 +143,24 @@ export function Settings({where}) {
                                 ))}
                             </div>
                         </div>
-                    </>}
+                    </>
+                }
+                {(where === 'settings') &&<>
+                    <div className="settings-section">
+                        {premiumUser? <h2 className={sectionHeaderClass}>Już nie chcę premium!</h2> :
+                            <h2 className={sectionHeaderClass}>Zdobądź premium!</h2>}
+                        <div className="custom-radio-container">
+                            <div
+                                className={`${customRadioButtonClass} . 'selected'`}
+                                // Przy naciśnięciu ma się ustawiać wybrana opcja
+                                onClick={handleOptionClickPremium}
+                            >
+                                {premiumUser ? <label>odrzuć</label> : <label>odbierz</label>}
+                            </div>
+                        </div>
+                    </div>
+                </>
+                }
 
             </div>
         </div>

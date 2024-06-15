@@ -5,6 +5,7 @@
     width:100%;
     justify-content: center;
 
+
 }
 .settings-container label,.settings-container h5{
 
@@ -20,7 +21,8 @@
 
     width:50%;
     margin:auto;
-    padding:2vh 2vw 2vh 2vw;
+    padding:1.8vh 1.8vw; /* Dla pełnych ustawień zmniejsz padding */
+    font-size: 0.9em; /* Dla pełnych ustawień zmniejsz wielkość czcionki */
 }
 .settingsDiv--products{
 
