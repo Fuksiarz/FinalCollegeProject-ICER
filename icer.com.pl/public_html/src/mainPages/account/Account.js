@@ -17,7 +17,7 @@ export function Account() {
     //inicjacja obrazka
 
     useEffect(() => {
-    console.log(premiumUser)
+        console.log(premiumUser)
 
     },[refresh,profilePicture,defaultProfile,defaultProfile, premiumUser]);
 
@@ -26,7 +26,8 @@ export function Account() {
     return (
         /*kontener z informacjami o użytkowniku oraz z przyciskiem edycji konta*/
         <div className={`accountContainer`}>
-            <div className={`accountInfo  ${premiumUser ? 'vip-border' : ''}`}> {/*kontener ze zdjęciem oraz informacjami o użytkowniku*/}
+            {/*kontener ze zdjęciem oraz informacjami o użytkowniku*/}
+            <div className={`accountInfo  ${premiumUser ? 'vip-border' : ''}`}>
                 {premiumUser && (
                     <>
 
@@ -36,9 +37,8 @@ export function Account() {
                 )}
                 <div className="accountPhoto"> {/*kontener ze zdjęciem użytkownika*/}
                     <img src={profilePicture ?`${process.env.PUBLIC_URL}/data/userProfilePicture/${profilePicture}` :
-                        {/*zdjęcie użytkownika*/}
-                        `${process.env.PUBLIC_URL}/data/userProfilePicture/face.jpg`} className="accountPhotoImage"
-                         style={{}}/>
+                            `${process.env.PUBLIC_URL}/data/userProfilePicture/face.jpg`} className="accountPhotoImage"
+                         style={{}} alt='profilePicture'/>
 
                 </div>
                 <div className="accountName"> {/*kontener z informacjami o użytkowniku*/}
@@ -54,4 +54,3 @@ export function Account() {
         </div>
     );
 }
-

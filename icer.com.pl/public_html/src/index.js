@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {AuthProvider} from "./mainPages/account/auth-context";
 import axios from "axios";
+import {SettingsProvider} from "./mainPages/settings/SettingsContext";
 axios.defaults.withCredentials = true;
 
 //rejestracja serviceWorker - pozwala na PWA(Progressive Web Application)
@@ -23,7 +24,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>{/* jest narzędziem do wskazywania potencjalnych problemów w aplikacji*/}
       <AuthProvider>{/* Jest to komponent kontekstowy, który dostarcza logikę i stan uwierzytelniania dla pozostałych komponentów w drzewie*/}
-            <App /> {/* główny komponent aplikacji */}
+          <SettingsProvider>
+              <App /> {/* główny komponent aplikacji */}
+          </SettingsProvider>
       </AuthProvider>
   </React.StrictMode>
 );

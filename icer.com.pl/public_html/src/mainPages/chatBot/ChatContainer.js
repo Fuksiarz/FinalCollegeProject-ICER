@@ -72,11 +72,8 @@ function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
             :
                 chatIsMinimized === 2 ?
             <div className={`chat-container`}>
-                {/*przycisk do minimalizowania i powiększania chatu*/}
-                <MessageList messages={messages}/>
-
                 {/*funkcja posiadająca listę wiadomości, przekazujemy jej zmienną, która posiada konwerację*/}
-
+                <MessageList messages={messages}/>
 
                 {/*funkcja przyjmująca wiadomość od użytkownika, przyjmuje funkcję wysyłania wiadomości*/}
                 <ChatInput onSendMessage={handleSendMessage}  onToggleMinimize={handleToggleMinimize}/>

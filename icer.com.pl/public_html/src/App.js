@@ -5,20 +5,26 @@ import Main from "./Main";
 import Login from "./mainPages/account/Login";
 import {BrowserRouter as Router} from 'react-router-dom';
 import {ToastContainer} from "react-toastify";
-import {SettingsProvider} from "./mainPages/settings/SettingsContext";
+import SettingsContext, {SettingsProvider} from "./mainPages/settings/SettingsContext";
 import {Advert} from "./mainPages/advert/Advert";
 import ChatContainer from "./mainPages/chatBot/ChatContainer";
 
 function App() {
     const {user} = useContext(AuthContext);
+    //pobieranie informacji czy użytkownik jest użytkownikiem premium z kontekstu ustawień
+    const {premiumUser} = useContext(SettingsContext);
     // Zmienna określająca czy włączyć kontener z reklamą
     const [adIsOn, setAdIsOn] = useState();
     //zmienna określająca czy chat został zminimalizowany z początkową wartością ustawioną na 1
     const [chatIsMinimized, setChatIsMinimized] = useState(1);
 
+
+
     useEffect(() => {
-        if (user) {
-            setAdIsOn(true); // Ustaw zmienną adIsOn na true kiedy zaloguje się użytkownik
+        if (user && !premiumUser) {
+            setAdIsOn(true); // Ustaw zmienną adIsOn na true, kiedy zaloguje się użytkownik niebędący premium
+        } else {
+            setAdIsOn(false);
         }
 
     }, [user]);//odświeżanie kiedy zmieni się wartość 'user'
@@ -27,13 +33,14 @@ function App() {
         //Kontekst z ustawieniami, zamykamy całą aplikację w kontekście co pozawala na dostęp do ustawień z kazdego
         // jej miejsca
 
-        <SettingsProvider>
+        <>
             {/*Komponent Router z biblioteki react-router-dom do tworzenia struktury połączeń w aplikacji*/}
             <Router>
                 {/*Komponent z powiadomieniami*/}
                 <ToastContainer/>
                 {/*Logika wyświetlania aplikacji, jak jest użytkownik to:*/}
                 {user ?
+
                     /* jeśli adIsOn jest true to wyswietl reklamę, przekazuję parametry */
                     (adIsOn ? <Advert adIsOn={adIsOn} setAdIsOn={setAdIsOn}/>
                             :
@@ -53,7 +60,7 @@ function App() {
 
 
             </Router>
-        </SettingsProvider>
+        </>
     );
 }
 

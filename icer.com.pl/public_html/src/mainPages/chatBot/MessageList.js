@@ -20,7 +20,8 @@ function MessageList({messages}) {
                 {/*mapowanie w celu wyświetlenia wiadomości*/}
                 {messages.map(message => (
                     //w zależności od twórcy wiadomości zmiana klasy kontenera
-                    <div  className={message.sender === 'user' ? "userMessageDiv" : "botMessageDiv"} key={message.id}>{message.text}</div>
+                    <div  className={message.sender === 'user' ? "userMessageDiv" : "botMessageDiv"}
+                          key={message.id}>{message.text}</div>
                 ))}
                 {/*referencja końca kontenera z wiadomościami*/}
                 <div ref={messagesEndRef} />

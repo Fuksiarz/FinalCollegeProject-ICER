@@ -32,14 +32,9 @@ function ChatInput({ onSendMessage, onToggleMinimize  }) {
             {/*przy zatwierdzeniu wykonaj funkcję handleSubmit*/}
             <form  className="chat-input-container"  onSubmit={handleSubmit}>
                 <div className={`minimize-button`} onClick={handleMinimizeClick}>
-
                         <Icon className="minimize-buttonIcon" icon="solar:minimize-square-3-outline" rotate={1} />
-
-
-
                 </div>
                 {/*miejsce do wprowadzenia wiadomości*/}
-
                     <>
                         <input className="chatInput"
                                value={inputValue}

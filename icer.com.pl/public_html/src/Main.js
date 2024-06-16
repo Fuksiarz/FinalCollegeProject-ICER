@@ -92,7 +92,7 @@ function Main({chatIsMinimized,setChatIsMinimized}) {
                             <Route path="/Chatbot" element={<ChatContainer chatIsMinimized={chatIsMinimized}
                                                                            setChatIsMinimized={setChatIsMinimized} />} />
                             <Route path="/Advert" element={<Advert/>}/>
-                            <Route path="/GenerateQR" element={<GenerateQR/>}/>
+                            <Route path="/GenerujQR" element={<GenerateQR/>}/>
 
                         </Routes>
 
@@ -172,7 +172,7 @@ function Main({chatIsMinimized,setChatIsMinimized}) {
                                             </div>
                                         </Link>
                                         {/* link do generowania kodów QR */}
-                                        <Link to="/GenerateQR">
+                                        <Link to="/GenerujQR">
                                             <div className="navDiv">
                                                 {isIcon ? <h3>generuj</h3> :
                                                     <Icon className="menuIcons" icon="vaadin:qrcode" />}
