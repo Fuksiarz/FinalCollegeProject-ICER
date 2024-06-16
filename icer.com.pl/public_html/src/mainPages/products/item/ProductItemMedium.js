@@ -62,7 +62,7 @@ function ProductItemMedium({data, useProduct,elementRef,rightButtonDivRef, anima
                 //kontener z informacją czy przenieść do produktów wyczerpanych
                 <div className="moveToBinConfirmationDiv" >
                     {/*  komunikat  */}
-                    <h1 className="moveToBinConfirmationInfoHeader">Produkt {data.nazwa} zostanie przeniesiony do listy zużytych produktów wyczerpanych,
+                    <h1 className="moveToBinConfirmationInfoHeader">Produkt {data.nazwa} zostanie przeniesiony do listy produktów wyczerpanych,
                         kontynuować?</h1>
                     {/*  kontener z przyciskami */}
                     <div className="moveToBinConfirmationButtons">

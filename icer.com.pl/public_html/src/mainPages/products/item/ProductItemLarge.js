@@ -24,7 +24,7 @@ function ProductItemLarge({ data, useProduct,handleZero, handleRemove, handleEdi
                 <div className="moveToBinConfirmationDiv">
                     {/*  komunikat  */}
                     <h1 className="moveToBinConfirmationInfoHeader">Produkt {data.nazwa} zostanie przeniesiony do
-                        listy zużytych produktów wyczerpanych,
+                        listy produktów wyczerpanych,
                         kontynuować?</h1>
                     {/*  kontener z przyciskami */}
                     <div className="moveToBinConfirmationButtons">

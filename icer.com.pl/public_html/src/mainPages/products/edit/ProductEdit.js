@@ -117,37 +117,7 @@ function ProductEdit({product, handleEdit, setEditingProduct}) {
                 <div className="AddProductButtonDiv">
                     <button type="submit" className="addProductButton"><h4> Zaktualizuj </h4></button>
                 </div>
-                <div className="scanners">
 
-                    {/* etytkieta, której naciśnięcie wywoła skanowanie kodu QR */}
-                    <label onClick={() => {
-                        handleQRCodeScan(qrImage,
-                            setEditProduct,
-                            setQrImage,
-                            setQrImagePreview)
-                    }} className="scannerLabel">
-
-                        {/* jeśli nie ma obrazu QR to pokaż ikonę */}
-                        {!qrImage && <Icon className="qrIcon" icon="bx:qr-scan"/>}
-                        {/* jeśli jest podlgąd QR to pokaż go   */}
-                        {qrImagePreview && (
-                            <img
-                                src={qrImagePreview}
-                                alt="Podgląd"
-                                style={{maxWidth: '100px', maxHeight: '100px'}}
-                            />
-                        )}
-                        <h5> Skanuj QR </h5>
-                        {/* jeśli nie ma obrazku QR to pokaż pole od jego dodania:  */}
-                        {!qrImage && <input
-                            type="file"
-                            id="file-input"
-                            style={{display: 'none'}}
-                            /* obsługiwanie zmiany kod QR  */
-                            onChange={(e) => handleQRChange(e, setQrImage, setQrImagePreview)}
-                        />}
-                    </label>
-                </div>
 
 
             </form>

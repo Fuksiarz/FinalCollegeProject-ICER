@@ -22,10 +22,12 @@ export function NotificationsList({data, small = false, action, left = false}) {
     }
 
     //funkcja do odczytywania powiadomień
-    const handleNotificationClick = (productId) => {
-        // odczytuje powiadomienie jedynie kiedy rozwija listę
+    const handleNotificationClick = (productId, productNotification) => {
+        // odczytuje powiadomienie jedynie kiedy rozwija listę i jeśli powiadomienie nie jest jeszcze odczytane
         if (expandedProduct !== productId) {
+            if (productNotification){
             action.handleReadNotification(productId);
+            }
         }
         handleToggleExpand(productId);
     };
@@ -59,7 +61,8 @@ export function NotificationsList({data, small = false, action, left = false}) {
                             {/* kontener z nazwą powiadomienia*/}
                             <h5 className="notificationText"
                                 onClick={() => {
-                                    handleNotificationClick(product.id)
+
+                                    handleNotificationClick(product.id, product.powiadomienie)
                                 }}
                             >{product.nazwa}</h5>
                             {/* kontener z ikonami*/}
