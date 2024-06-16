@@ -27,7 +27,7 @@ function App() {
             setAdIsOn(false);
         }
 
-    }, [user]);//odświeżanie kiedy zmieni się wartość 'user'
+    }, [user,premiumUser]);//odświeżanie kiedy zmieni się wartość 'user'
 
     return (
         //Kontekst z ustawieniami, zamykamy całą aplikację w kontekście co pozawala na dostęp do ustawień z kazdego
