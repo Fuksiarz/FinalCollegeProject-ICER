@@ -5,7 +5,7 @@ import Main from "./Main";
 import Login from "./mainPages/account/Login";
 import {BrowserRouter as Router} from 'react-router-dom';
 import {ToastContainer} from "react-toastify";
-import SettingsContext, {SettingsProvider} from "./mainPages/settings/SettingsContext";
+import SettingsContext from "./mainPages/settings/SettingsContext";
 import {Advert} from "./mainPages/advert/Advert";
 import ChatContainer from "./mainPages/chatBot/ChatContainer";
 
