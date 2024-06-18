@@ -20,7 +20,11 @@ export function ShoppingCart() {
     const [newFields, setNewFields] = useState([]);
 
     //inicjuję obiekt, który posiada możliwe do wykonania akcje na liście zakupów
-    const shoppingCartActions = useShoppingCartActions();
+    const shoppingCartActions = useShoppingCartActions(
+        productDataCart.refresh, productDataCart.setRefresh
+
+    );
+
 
     //hook do uzupełniania pól po zdecydowaniu się na dodanie pozycji ręcznie, po ponownym naciśnięciu przycisku, który
     //wywołuje tego hooka pole się pojawia bądź znika

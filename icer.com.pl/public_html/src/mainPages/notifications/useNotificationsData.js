@@ -2,6 +2,7 @@ import {useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import { API_URL } from "../settings/config";
 import {AuthContext} from "../account/auth-context";
+import {useNotificationActions} from "./useNotificationActions";
 
 //funkcja odpowiedzialna za pobieranie danych o powiadomieniach z api
 export const useNotificationsData = () => {
@@ -14,6 +15,7 @@ export const useNotificationsData = () => {
     //zmienna odpowiedzialna za odświeżanie w ramach potrzeby
     const [refresh, setRefresh] = useState(false);
 
+
     //podczas wywołania pobiera informacje z api
     useEffect(() => {
         axios.post(`${API_URL}/api/Icer/get_notifications`, {sessionId})
@@ -22,13 +24,12 @@ export const useNotificationsData = () => {
                 //przypisuje dane do zmiennej a następnie odświeża
                 const newData = response.data;
                 setData(newData);
-                setRefresh(!refresh);
 
             })
             .catch((error) => {
                 console.error(`There was an error retrieving the data: ${error}`);
             });
-    }, [data, refresh]);// jeśli jakaś z tych wartości ulegnie zmianie to nastąpi ponowne pobieranie
+    }, [refresh]);// jeśli jakaś z tych wartości ulegnie zmianie to nastąpi ponowne pobieranie
 
     // zwracam wartości potrzebne do kontrolowania danych związanych z powiadomieniami w innych funkcjach
     return { data, setData, sessionId, refresh, setRefresh };

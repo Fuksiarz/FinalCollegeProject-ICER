@@ -14,11 +14,6 @@ function ProductEdit({product, handleEdit, setEditingProduct}) {
     //referencja do formularza edycji
     const myDivRef = useRef(null);
 
-    //zmienna, która posiada kod QR
-    const [qrImage, setQrImage] = useState('');
-
-    //podgląd kodu QR
-    const [qrImagePreview, setQrImagePreview] = useState('');
 
     //pobieram zmienne i funkcje do wykonywania działań na produkcie do edycji
     const {

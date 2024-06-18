@@ -1,8 +1,23 @@
+import os
+
 import mysql.connector
-from flask import session, jsonify
+from flask import jsonify
+from urllib.parse import urlparse
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
 
 class DatabaseConnector:
-    def __init__(self, host="localhost", user="root", password="root", database="Sklep"):
+    database_url = os.getenv('DATABASE_URL')
+    url = urlparse(database_url)
+    db_host = url.hostname
+    db_user = url.username
+    db_password = url.password
+    db_name = url.path[1:]
+
+    def __init__(self, host=db_host, user=db_user, password=db_password, database= db_name):
         self.host = host
         self.user = user
         self.password = password
@@ -24,6 +39,7 @@ class DatabaseConnector:
                 password=self.password,
                 database=self.database
             )
+            print('polaczylem z baza danych ')
             # print("Połączono z bazą danych!")
         except mysql.connector.Error as error:
             print("Błąd połączenia z bazą danych: ", error)
@@ -133,6 +149,7 @@ class DatabaseConnector:
 
     @staticmethod
     def get_user_id_by_username(cursor, session):
+        print(f'W get_user_id_by_username sesja: {session}')
         # Sprawdzenie, czy użytkownik jest zalogowany
         if 'username' not in session:
             return None, None, jsonify({"error": "User not logged in"}), 401

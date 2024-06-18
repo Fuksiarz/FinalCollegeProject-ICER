@@ -3,18 +3,24 @@ import {Icon} from "@iconify/react";
 import {useOutsideClick} from "../hooks/useOutsideClick";
 import {formatDate} from "../../hooks/formatDate";
 import {useShoppingCartActions} from "../../shoppingCart/useShoppingCartActions";
+import {useProductCartData} from "../../shoppingCart/useProductCartData";
 
 //funkcja przedstawiająca duży produkt, czyli wybrany z listy produktów na głównej stronie - lodówce
 function ProductItemLarge({ data, useProduct,handleZero, handleRemove, handleEditClick, filter,setIsSelected}) {
 
     //referencja
     const myDivRef = useRef();
+    //inicjuję obiekt, który posiada aktualne dane listy zakupów
+    const productDataCart = useProductCartData();
 
     //przy naciśnięciu poza produkt zmienia stan isSelected na null - nie ma żadnego wybranego produktu
     useOutsideClick(myDivRef, () => setIsSelected(null));
 
     //pobiera akcje z listy zakupów
-    const shoppingCartActions = useShoppingCartActions()
+    const shoppingCartActions = useShoppingCartActions(
+        productDataCart.refresh, productDataCart.setRefresh
+
+    )
     return (
         //kontener posiadający cały duży produkt
         <div ref={myDivRef} className="LargeProductItemContainer">

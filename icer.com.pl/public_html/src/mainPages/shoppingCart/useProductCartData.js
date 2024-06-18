@@ -14,6 +14,8 @@ export const useProductCartData = () =>{
     // zmienna do przechowywania danych
     const [data, setData] = useState(null);
 
+    const [refresh, setRefresh] = useState(false);
+
 useEffect(() => {
     //wysyła żądanie do api wraz z zamieszczeniem id sesji do autoryzacji
     axios.post(`${API_URL}/api/shoppingList`,{sessionId:sessionId} )
@@ -26,8 +28,8 @@ useEffect(() => {
             //w razie niepowodzenia wyświetl error z serwera w konsoli
             console.error(`There was an error retrieving the data: ${error}`);
         });
-}, [data]);// odśwież kiedy zmienią się dane
+}, [refresh]);// odśwież kiedy zmienią się dane
 
     //zwróć dane, możliwość ich ustawienia, użytkownika i sesję.
-    return{ data, setData,user, sessionId}
+    return{ data, setData,user, sessionId, refresh, setRefresh}
 }

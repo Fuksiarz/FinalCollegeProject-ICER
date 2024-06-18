@@ -51,8 +51,7 @@ export function Fridge() {
         const hasNotif = notificationData.data?.some(product => product.powiadomienie === 1);
         setHasNotification(hasNotif);
 
-
-    }, [notificationData.data]);//odświeża się po zmianie danych powiadomienia
+    }, [productActions]);//odświeża się po zmianie danych powiadomienia
 
     //po naciśnięciu na lampkę przestaje się świecić i wyświetla listę powiadomień
     const handleClick = () => {

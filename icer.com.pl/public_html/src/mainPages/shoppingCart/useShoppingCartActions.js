@@ -4,9 +4,10 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useContext} from "react";
 import {AuthContext} from "../account/auth-context";
+import {useProductCartData} from "./useProductCartData";
 
 //funkcja odpowiedzialna za łączenie się z api w celu wykonywania akcji na liście zakupów
-export const useShoppingCartActions = ()=>{
+export const useShoppingCartActions = (refresh, setRefresh)=>{
 
     //pobieram użytkownika w ramach autoryzacji
     const { user } = useContext(AuthContext);
@@ -26,14 +27,14 @@ export const useShoppingCartActions = ()=>{
             .then((response) => {
                 //w razie powodzenia wyświetl komunikat
                 toast.success(`Produkt został usunięty z listy zakupów!`);
-
-
+                setRefresh(!refresh);
             })
             .catch((error) => {
                 //w razie niepowodzenia wyświetl error z serwera w konsoli oraz wyświetl komunikat
                 console.error(`There was an error retrieving the data: ${error}`);
                 toast.error(`nie udało się usunąć produktu z listy zakupów!`);
             });
+
     };
 
     //usuń wszystkie elementy z listy zakupów
@@ -47,7 +48,7 @@ export const useShoppingCartActions = ()=>{
             .then((response) => {
                 //w razie powodzenia wyświetl komunikat
                 toast.success(`Wszystkie produkty zostały usunięte z listy zakupów!`);
-
+                setRefresh(!refresh);
 
             })
             .catch((error) => {
@@ -72,7 +73,7 @@ export const useShoppingCartActions = ()=>{
             .then((response) => {
                 //w razie powodzenia wyświetl komunikat
                 toast.success(`Produkt ${newFields.nazwa} został dodany do listy zakupów!`);
-
+                setRefresh(!refresh);
 
             })
             .catch((error) => {
@@ -96,7 +97,7 @@ export const useShoppingCartActions = ()=>{
             .then((response) => {
                 //w razie powodzenia wyświetl komunikat
                 toast.success(`Produkt został dodany do listy zakupów!`);
-
+                setRefresh(!refresh);
 
             })
             .catch((error) => {

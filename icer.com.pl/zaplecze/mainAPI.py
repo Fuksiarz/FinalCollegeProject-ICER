@@ -1,10 +1,11 @@
 import json
 import os
 import uuid  # potrzebne do generowania unikalnych ID sesji
+from datetime import timedelta
 
+from dotenv import load_dotenv
 import base64
 import tempfile
-
 import cv2
 from flask import session, jsonify, request
 
@@ -31,13 +32,16 @@ from modules.scan_module.decoder import decode_qr_code
 from modules.scan_module.gen import generate_qr_code
 from modules.value_manager import ProductManager
 
+load_dotenv()
+
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 socketio = SocketIO(app, cors_allowed_origins="*")
 app.config['BARCODE_FOLDER'] = os.path.join('static/', 'barcodes')
 app.config['QR_CODE_FOLDER'] = os.path.join('static/', 'qrcodes')
 app.config['FOOD_LIST_DIR'] = 'users_lists'
-app.config['SECRET_KEY'] = 'key'  # Zamienic na silne hasło
+
 
 # Uzyskaj ścieżkę do katalogu głównego (gdzie znajduje się mainAPI.py)
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -73,7 +77,6 @@ with open(json_file_path, 'r') as json_file:
     data = json.load(json_file)
 class_names = data.get('class_names', [])
 
-app.secret_key = 'secret_key'  # Klucz sesji
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
@@ -756,11 +759,12 @@ def get_products_with_red_flag():
 @app.route('/api/Icer', methods=['POST'])
 def get_icer():
     # Tworzenie instancji klasy DatabaseConnector
+
     db_connector = DatabaseConnector()
 
     # Łączenie z bazą danych
     db_connector.connect()
-
+    print(f'W Api/icer sesja: {session}')
     try:
         # Uzyskanie połączenia z bazą danych
         connection = db_connector.get_connection()
@@ -1208,6 +1212,7 @@ def login():
             session['username'] = username
             session_id = str(uuid.uuid4())
             session['session_id'] = session_id
+            print(f'Sesja: {session}, session[session_id]: ', session['session_id'])
             return jsonify({"message": "Logowanie udane", "session_id": session_id})
         else:
             return jsonify({"message": "Nieprawidłowa nazwa użytkownika lub hasło"}), 401
@@ -1709,6 +1714,11 @@ def start_video():
         return jsonify({"video_url": video_url, "message": "Start playing video"}), 200
     except FileNotFoundError:
         return jsonify({"error": "File not found"}), 404
+
+
+@app.route('/api/hello', methods=['GET'])
+def get_data():
+    return jsonify({"message": "Hello from Flask!"})
 
 
 # Pomocnicza do lokalizacji video

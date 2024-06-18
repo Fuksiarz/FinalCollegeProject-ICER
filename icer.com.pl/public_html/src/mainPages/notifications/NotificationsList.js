@@ -84,7 +84,7 @@ export function NotificationsList({data, small = false, action, left = false}) {
 
                                           icon="fluent:alert-16-regular"
                                           onClick={() => {
-                                              action.handleReadNotification(product.id)
+                                              handleNotificationClick(product.id, product.powiadomienie)
                                           }}
                                     />
                                 </div>

@@ -21,7 +21,7 @@ export const useEditProduct = (initialProduct) => {
 
     // ustawia zmiany w polach wejściowych aby były widoczne dla użytkownika
     const handleChange = (e) => {
-        console.log(editProduct)
+
         const { name, value } = e.target;
         setEditProduct((prevState) => ({
             ...prevState,

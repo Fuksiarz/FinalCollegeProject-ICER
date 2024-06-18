@@ -2,11 +2,17 @@ import React, {useEffect} from 'react';
 import {Icon} from "@iconify/react";
 import {formatDate} from "../../hooks/formatDate";
 import {useShoppingCartActions} from "../../shoppingCart/useShoppingCartActions";
+import {useProductCartData} from "../../shoppingCart/useProductCartData";
 
 function ProductItemMedium({data, useProduct,elementRef,rightButtonDivRef, animatingProductId,setAnimatingProductId, handleZero, handleRemove, handleEditClick, info, filter, mediumProductsCountSetting}) {
 
+    //inicjuję obiekt, który posiada aktualne dane listy zakupów
+    const productDataCart = useProductCartData();
+
     //tworzenie obiektu do akcji wykonywanych na liście zakupów
-    const shoppingCartActions = useShoppingCartActions()
+    const shoppingCartActions = useShoppingCartActions(
+        productDataCart.refresh, productDataCart.setRefresh
+    )
 
     useEffect(() => {
         //jesli jest referencja do elemettu i id animacji produtkut jest zgodny z produktem to:
