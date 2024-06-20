@@ -1585,6 +1585,12 @@ def get_frame():
 # Identyfikacja ze zdjęcia QR+AI
 @app.route('/upload_test_AI_QR', methods=['GET', 'POST'])
 def upload_predictor():
+        """
+    Obsługuje przesyłanie plików przez użytkowników, identyfikuje QR kody i klasyfikuje jedzenie przy użyciu AI.
+
+    Returns:
+        Response: Odpowiedź JSON zawierająca status i wyniki identyfikacji.
+    """
     try:
         print("Endpoint called with method: ", request.method)  # Logowanie metody żądania
         db_connector = DatabaseConnector()
@@ -1597,7 +1603,8 @@ def upload_predictor():
 
         if request.method == 'POST':
             print("Received a POST request")
-
+            
+            # Sprawdzenie, czy w żądaniu znajdują się plik i nazwa użytkownika
             if 'file' not in request.files or 'username' not in request.form:
                 flash('Brak części pliku lub nazwy użytkownika', 'error')
                 print("No file part or username in request")
@@ -1605,13 +1612,15 @@ def upload_predictor():
 
             file = request.files['file']
             username = request.form['username']
-
+            # Sprawdzenie, czy plik został wybrany
             if file.filename == '':
                 flash('Nie wybrano pliku', 'error')
                 print("No file selected")
                 return jsonify({"status": "error", "message": "No file selected"})
 
+            # Sprawdzenie, czy plik ma dozwolone rozszerzenie
             if file and allowed_file(file.filename):
+                # Zapisanie pliku na serwerze
                 filename = secure_filename(file.filename)
                 upload_folder = 'static/uploads/'
                 file_path = os.path.join(upload_folder, filename)
@@ -1638,9 +1647,11 @@ def upload_predictor():
                 print("Invalid file type.")
                 return jsonify({"status": "error", "message": "Invalid file type. Please upload an image file."})
 
+        # Obsługa żądania innego niż POST
         print("Handled as non-POST request")
         return jsonify({"status": "error", "message": "Send a POST request with an image"})
 
+    # Obsługa wyjątków i błędów
     except Exception as e:
         print(f"An error occurred: {e}")
         return jsonify({"status": "error", "message": "An internal server error occurred."})
@@ -1679,7 +1690,7 @@ def advert_reciever():
         # Usuwanie pliku tymczasowego
         os.remove(tmp_path)
 
-        # Aktualizacja stanu wideo, jeśli jest wybrany videoplayback.mp4
+        # Aktualizacja stanu wideo
         if video_state["video_choice"] == 1:
             if len(detected_faces) > 0 and len(detected_eyes) > 0:
                 video_state["playing"] = True
@@ -1694,7 +1705,7 @@ def advert_reciever():
             "eyes": detected_eyes.tolist() if isinstance(detected_eyes, np.ndarray) else detected_eyes,
             "video_playing": video_state["playing"]
         }
-
+        # Zwracanie odpowiedzi
         return jsonify(response), 200
 
     except Exception as e:
@@ -1704,29 +1715,34 @@ def advert_reciever():
 # Startowanie video
 @app.route('/start_video', methods=['POST'])
 def start_video():
+    """
+    Rozpoczyna odtwarzanie wybranego wideo na podstawie przesłanego wyboru użytkownika.
+    """
+    # Sprawdzanie poprawnosci formatu przesłanych danych
     if not request.is_json:
         return jsonify({"error": "Invalid input format. Expected JSON"}), 400
-
+        
+    # Pobierz dane JSON z żądania
     data = request.get_json()
     video_choice = data.get('video_choice')
-
+    # Sprawdź, czy 'video_choice' ma wlaściwą wartość i nie jest None
     if video_choice is None or video_choice not in [0, 1]:
         return jsonify({"error": "Invalid video choice. Expected 0 or 1"}), 400
-
+        
+    # Wybierz plik wideo na podstawie przesłanej wartośći
     video_file = 'videoplayback.mp4' if video_choice == 1 else 'videoplaybackalt.mp4'
 
     try:
+        # Aktualizacja stanu video
         video_state["video_choice"] = video_choice
         video_state["playing"] = True
+        # Generuj URL do wybranego wideo
         video_url = f'/video/{video_file}'
+        # Zwróć odpowiedź JSON z URL wideo i informacją o sukcesie
         return jsonify({"video_url": video_url, "message": "Start playing video"}), 200
+    # Jeśli nie znaleziono pliku zwróć błąd    
     except FileNotFoundError:
         return jsonify({"error": "File not found"}), 404
-
-
-@app.route('/api/hello', methods=['GET'])
-def get_data():
-    return jsonify({"message": "Hello from Flask!"})
 
 
 # Pomocnicza do lokalizacji video
@@ -1746,13 +1762,13 @@ def control_video():
 
     data = request.get_json()
     action = data.get('action')
-
+    # Obsługa niewłaściwej akcji
     if action not in ['play', 'pause']:
         return jsonify({"error": "Invalid action. Expected 'play' or 'pause'"}), 400
-
+    # Aktualizacja na podstawie akcji
     video_state["playing"] = (action == 'play')
 
-    return jsonify({"message": f"Video is now {action}ed", "video_playing": video_state["playing"]}), 200
+    return jsonify({"message": f"Video jest {action}ed", "video_playing": video_state["playing"]}), 200
 
 
 # Strona wylogowania
@@ -1765,5 +1781,6 @@ def logout():
 
 # Ladowanie wstepne modeli do video
 if __name__ == '__main__':
+    # Preładowanie modeli do rozpoznawania z video
     preload()
     app.run()
