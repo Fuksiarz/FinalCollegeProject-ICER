@@ -66,22 +66,20 @@ video_state = {
 model = load_model('model3.h5')
 print("Model loaded successfully:", model is not None)
 
+
+# Otwórz plik JSON i załaduj jego zawartość
 json_file_path = 'modules/foodIdent_module/classes.json'
 with open(json_file_path, 'r') as json_file:
     data = json.load(json_file)
+# Pobierz listę nazw klas z załadowanych danych
 class_names = data.get('class_names', [])
 
-# Ladowanie modulow
-json_file_path = 'modules/foodIdent_module/classes.json'
-with open(json_file_path, 'r') as json_file:
-    data = json.load(json_file)
-class_names = data.get('class_names', [])
-
-
+# Dopuszczone rozszerzenia do ładowanych plików
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-
+# Funkcja sprawdza, czy podany plik ma dozwolone rozszerzenie.
 def allowed_file(filename):
+# Sprawdź, czy nazwa pliku zawiera kropkę i czy rozszerzenie pliku jest dozwolone    
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
@@ -1543,17 +1541,26 @@ def reset_food_list():
 # Analiza klatki z video
 @app.route('/adison_molotow', methods=['POST'])
 def get_frame():
+    """
+    Analizuje klatki z video przesłane jako obrazy w formacie base64, przetwarza je, a następnie aktualizuje listę jedzenia dla danego użytkownika.
+
+    Returns:
+        Response: Odpowiedź JSON zawierająca komunikaty o sukcesie lub błędach dla każdej przesłanej klatki obrazu.
+    """
+    # Pobierz dane JSON z żądania
     data = request.json
+     # Sprawdź, czy w data jest nazwa użytkownika i zdjęcie, jak nie zwróć błąd
     if data is None or 'images' not in data or 'username' not in data:
         return jsonify({'error': 'No images or username provided'}), 400
-
+    # Pobierz obrazy i nazwę użytkownika
     images_data = data['images']
-    username = data['username']  # Pobieranie nazwy użytkownika z żądania
-    responses = []
-    print(data)
+    username = data['username']  
+    responses = []    # Lista do przechowywania odpowiedzi dla każdego obrazu
+    print(data) # Debug, printuje dane
+    # Przetwarzanie każdego obrazu z listy
     for idx, image_data in enumerate(images_data):
         try:
-            image_bytes = base64.b64decode(image_data)
+            image_bytes = base64.b64decode(image_data) # Dekodowanie z base 64
             # Użycie tempfile do stworzenia tymczasowego pliku
             with tempfile.NamedTemporaryFile(delete=False, suffix='.png', dir=temp_dir) as tmp:
                 tmp.write(image_bytes)
@@ -1562,15 +1569,16 @@ def get_frame():
             # Wywołanie funkcji do przewidywania i aktualizacji listy jedzenia
             predict_and_update_food_list(tmp_path, username)
 
-            # Opcjonalnie usunąć plik tymczasowy po użyciu, jeśli nie jest już potrzebny
+            # Usuwanie pliku tymczasowego dla oszczedzania miejsca
             os.remove(tmp_path)
-
+             # Dodaj wiadomość o sukcesie do odpowiedzi
             responses.append({'message': f'Image received and processed successfully, saved at {tmp_path}'})
         except Exception as e:
+            # Dodaj info o błędzie jeśli zaszedł
             responses.append({'error': str(e)})
             if 'tmp_path' in locals():
                 os.remove(tmp_path)  # Usunięcie pliku, jeśli wystąpi błąd
-
+    # Odpowiedź w JSON
     return jsonify(responses), 200
 
 
