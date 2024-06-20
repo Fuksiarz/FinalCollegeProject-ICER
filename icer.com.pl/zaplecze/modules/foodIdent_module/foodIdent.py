@@ -31,6 +31,7 @@ def pred_and_plot(model, filename, class_names, username):
 
     # Wykonanie predykcji za pomocą wytrenowanego modelu
     pred = model.predict(tf.expand_dims(img, axis=0))
+    # Printowanie tablicy predykcji dla debugu
     print("Tablica predykcji:", pred)
 
     pred_class = None

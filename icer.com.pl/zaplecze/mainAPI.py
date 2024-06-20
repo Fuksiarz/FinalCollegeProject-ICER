@@ -66,22 +66,20 @@ video_state = {
 model = load_model('model3.h5')
 print("Model loaded successfully:", model is not None)
 
+
+# Otwórz plik JSON i załaduj jego zawartość
 json_file_path = 'modules/foodIdent_module/classes.json'
 with open(json_file_path, 'r') as json_file:
     data = json.load(json_file)
+# Pobierz listę nazw klas z załadowanych danych
 class_names = data.get('class_names', [])
 
-# Ladowanie modulow
-json_file_path = 'modules/foodIdent_module/classes.json'
-with open(json_file_path, 'r') as json_file:
-    data = json.load(json_file)
-class_names = data.get('class_names', [])
-
-
+# Dopuszczone rozszerzenia do ładowanych plików
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-
+# Funkcja sprawdza, czy podany plik ma dozwolone rozszerzenie.
 def allowed_file(filename):
+# Sprawdź, czy nazwa pliku zawiera kropkę i czy rozszerzenie pliku jest dozwolone    
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
@@ -1543,17 +1541,26 @@ def reset_food_list():
 # Analiza klatki z video
 @app.route('/adison_molotow', methods=['POST'])
 def get_frame():
+    """
+    Analizuje klatki z video przesłane jako obrazy w formacie base64, przetwarza je, a następnie aktualizuje listę jedzenia dla danego użytkownika.
+
+    Returns:
+        Response: Odpowiedź JSON zawierająca komunikaty o sukcesie lub błędach dla każdej przesłanej klatki obrazu.
+    """
+    # Pobierz dane JSON z żądania
     data = request.json
+     # Sprawdź, czy w data jest nazwa użytkownika i zdjęcie, jak nie zwróć błąd
     if data is None or 'images' not in data or 'username' not in data:
         return jsonify({'error': 'No images or username provided'}), 400
-
+    # Pobierz obrazy i nazwę użytkownika
     images_data = data['images']
-    username = data['username']  # Pobieranie nazwy użytkownika z żądania
-    responses = []
-    print(data)
+    username = data['username']  
+    responses = []    # Lista do przechowywania odpowiedzi dla każdego obrazu
+    print(data) # Debug, printuje dane
+    # Przetwarzanie każdego obrazu z listy
     for idx, image_data in enumerate(images_data):
         try:
-            image_bytes = base64.b64decode(image_data)
+            image_bytes = base64.b64decode(image_data) # Dekodowanie z base 64
             # Użycie tempfile do stworzenia tymczasowego pliku
             with tempfile.NamedTemporaryFile(delete=False, suffix='.png', dir=temp_dir) as tmp:
                 tmp.write(image_bytes)
@@ -1562,21 +1569,28 @@ def get_frame():
             # Wywołanie funkcji do przewidywania i aktualizacji listy jedzenia
             predict_and_update_food_list(tmp_path, username)
 
-            # Opcjonalnie usunąć plik tymczasowy po użyciu, jeśli nie jest już potrzebny
+            # Usuwanie pliku tymczasowego dla oszczedzania miejsca
             os.remove(tmp_path)
-
+             # Dodaj wiadomość o sukcesie do odpowiedzi
             responses.append({'message': f'Image received and processed successfully, saved at {tmp_path}'})
         except Exception as e:
+            # Dodaj info o błędzie jeśli zaszedł
             responses.append({'error': str(e)})
             if 'tmp_path' in locals():
                 os.remove(tmp_path)  # Usunięcie pliku, jeśli wystąpi błąd
-
+    # Odpowiedź w JSON
     return jsonify(responses), 200
 
 
 # Identyfikacja ze zdjęcia QR+AI
 @app.route('/upload_test_AI_QR', methods=['GET', 'POST'])
 def upload_predictor():
+        """
+    Obsługuje przesyłanie plików przez użytkowników, identyfikuje QR kody i klasyfikuje jedzenie przy użyciu AI.
+
+    Returns:
+        Response: Odpowiedź JSON zawierająca status i wyniki identyfikacji.
+    """
     try:
         print("Endpoint called with method: ", request.method)  # Logowanie metody żądania
         db_connector = DatabaseConnector()
@@ -1589,7 +1603,8 @@ def upload_predictor():
 
         if request.method == 'POST':
             print("Received a POST request")
-
+            
+            # Sprawdzenie, czy w żądaniu znajdują się plik i nazwa użytkownika
             if 'file' not in request.files or 'username' not in request.form:
                 flash('Brak części pliku lub nazwy użytkownika', 'error')
                 print("No file part or username in request")
@@ -1597,13 +1612,15 @@ def upload_predictor():
 
             file = request.files['file']
             username = request.form['username']
-
+            # Sprawdzenie, czy plik został wybrany
             if file.filename == '':
                 flash('Nie wybrano pliku', 'error')
                 print("No file selected")
                 return jsonify({"status": "error", "message": "No file selected"})
 
+            # Sprawdzenie, czy plik ma dozwolone rozszerzenie
             if file and allowed_file(file.filename):
+                # Zapisanie pliku na serwerze
                 filename = secure_filename(file.filename)
                 upload_folder = 'static/uploads/'
                 file_path = os.path.join(upload_folder, filename)
@@ -1630,9 +1647,11 @@ def upload_predictor():
                 print("Invalid file type.")
                 return jsonify({"status": "error", "message": "Invalid file type. Please upload an image file."})
 
+        # Obsługa żądania innego niż POST
         print("Handled as non-POST request")
         return jsonify({"status": "error", "message": "Send a POST request with an image"})
 
+    # Obsługa wyjątków i błędów
     except Exception as e:
         print(f"An error occurred: {e}")
         return jsonify({"status": "error", "message": "An internal server error occurred."})
@@ -1671,7 +1690,7 @@ def advert_reciever():
         # Usuwanie pliku tymczasowego
         os.remove(tmp_path)
 
-        # Aktualizacja stanu wideo, jeśli jest wybrany videoplayback.mp4
+        # Aktualizacja stanu wideo
         if video_state["video_choice"] == 1:
             if len(detected_faces) > 0 and len(detected_eyes) > 0:
                 video_state["playing"] = True
@@ -1686,7 +1705,7 @@ def advert_reciever():
             "eyes": detected_eyes.tolist() if isinstance(detected_eyes, np.ndarray) else detected_eyes,
             "video_playing": video_state["playing"]
         }
-
+        # Zwracanie odpowiedzi
         return jsonify(response), 200
 
     except Exception as e:
@@ -1696,29 +1715,34 @@ def advert_reciever():
 # Startowanie video
 @app.route('/start_video', methods=['POST'])
 def start_video():
+    """
+    Rozpoczyna odtwarzanie wybranego wideo na podstawie przesłanego wyboru użytkownika.
+    """
+    # Sprawdzanie poprawnosci formatu przesłanych danych
     if not request.is_json:
         return jsonify({"error": "Invalid input format. Expected JSON"}), 400
-
+        
+    # Pobierz dane JSON z żądania
     data = request.get_json()
     video_choice = data.get('video_choice')
-
+    # Sprawdź, czy 'video_choice' ma wlaściwą wartość i nie jest None
     if video_choice is None or video_choice not in [0, 1]:
         return jsonify({"error": "Invalid video choice. Expected 0 or 1"}), 400
-
+        
+    # Wybierz plik wideo na podstawie przesłanej wartośći
     video_file = 'videoplayback.mp4' if video_choice == 1 else 'videoplaybackalt.mp4'
 
     try:
+        # Aktualizacja stanu video
         video_state["video_choice"] = video_choice
         video_state["playing"] = True
+        # Generuj URL do wybranego wideo
         video_url = f'/video/{video_file}'
+        # Zwróć odpowiedź JSON z URL wideo i informacją o sukcesie
         return jsonify({"video_url": video_url, "message": "Start playing video"}), 200
+    # Jeśli nie znaleziono pliku zwróć błąd    
     except FileNotFoundError:
         return jsonify({"error": "File not found"}), 404
-
-
-@app.route('/api/hello', methods=['GET'])
-def get_data():
-    return jsonify({"message": "Hello from Flask!"})
 
 
 # Pomocnicza do lokalizacji video
@@ -1738,13 +1762,13 @@ def control_video():
 
     data = request.get_json()
     action = data.get('action')
-
+    # Obsługa niewłaściwej akcji
     if action not in ['play', 'pause']:
         return jsonify({"error": "Invalid action. Expected 'play' or 'pause'"}), 400
-
+    # Aktualizacja na podstawie akcji
     video_state["playing"] = (action == 'play')
 
-    return jsonify({"message": f"Video is now {action}ed", "video_playing": video_state["playing"]}), 200
+    return jsonify({"message": f"Video jest {action}ed", "video_playing": video_state["playing"]}), 200
 
 
 # Strona wylogowania
@@ -1757,5 +1781,6 @@ def logout():
 
 # Ladowanie wstepne modeli do video
 if __name__ == '__main__':
+    # Preładowanie modeli do rozpoznawania z video
     preload()
     app.run()

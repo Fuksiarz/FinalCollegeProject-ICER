@@ -116,7 +116,7 @@ def get_bot_response(user_input):
             user_input_tfidf = vectorizer.fit_transform([user_input, wiki_content])
             cosine_sim = cosine_similarity(user_input_tfidf[0], user_input_tfidf[1])
             
-            if cosine_sim > 0.2:
+            if cosine_sim > 0.4:
                 bot_response = "Oto informacje z Wikipedii:\n"
                 relevant_sentences = extract_relevant_sentences(wiki_content, user_input)
                 bot_response += "\n".join(relevant_sentences)
