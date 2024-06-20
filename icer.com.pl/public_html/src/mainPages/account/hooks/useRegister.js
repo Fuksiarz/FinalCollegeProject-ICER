@@ -6,12 +6,19 @@ const useRegister = () => {
     // Funkcja obsługująca rejestrację
     const handlePostRegister = async (data) => {
         try {
+            // Wysłanie żądania POST do API w celu rejestracji użytkownika
+            const response = await axios.post(`${API_URL}/register`, data);
 
-            await axios.post(`${API_URL}/register`, data); // Wysłanie żądania POST do API w celu rejestracji użytkownika
-            toast.success(`Zarejestrowano!`); // Wyświetlenie powiadomienia o pomyślnej rejestracji
-            // Możesz również dodać automatyczne logowanie po udanej rejestracji lub komunikat o sukcesie
+            toast.success(response.data.message); // Wyświetlenie powiadomienia o pomyślnej rejestracji
+
         } catch (error) {
-            console.error('Error during POST register', error); // Obsługa błędu podczas rejestracji
+            if (error.response && error.response.data && error.response.data.message) {
+                toast.error(error.response.data.message); // Wyświetlenie wiadomości o błędzie z odpowiedzi API
+            } else {
+                // Wyświetlenie wiadomości o błędzie
+                toast.error('Wystąpił problem w trakcie rejestracji. Proszę spróbować ponownie.');
+            }
+
         }
     };
 

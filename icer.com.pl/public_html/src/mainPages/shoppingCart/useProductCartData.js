@@ -8,7 +8,7 @@ export const useProductCartData = () =>{
     //pobieram użytkownika w ramach autoryzacji
     const { user } = useContext(AuthContext);
 
-    //ustawiam sesja z informacji o użytkowniku w ramach autoryzacji
+    //ustawiam sesję z informacji o użytkowniku w ramach autoryzacji
     const sessionId = user ? user.sessionId : null;
 
     // zmienna do przechowywania danych

@@ -30,10 +30,9 @@ export const useLogin = () => {
             if (error.response && error.response.data && error.response.data.message) {
                 toast.error(error.response.data.message); // Wyświetlenie wiadomości o błędzie z odpowiedzi API
             } else {
-                // Wyświetlenie ogólnej wiadomości o błędzie
+                // Wyświetlenie wiadomości o błędzie
                 toast.error('Wystąpił problem w trakcie logowania. Proszę spróbować ponownie.');
             }
-            console.error(error.message); // Logowanie błędu do konsoli
         }
     };
 

@@ -11,14 +11,17 @@ axios.defaults.withCredentials = true;
 //rejestracja serviceWorker - pozwala na PWA(Progressive Web Application)
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
+        // Rejestracja pliku service worker 'sw.js' po załadowaniu strony
         navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/sw.js`).then(registration => {
+            // Pomyślna rejestracja service workera
             console.log('Service Worker registered with scope:', registration.scope);
         }, err => {
+            // Obsługa błędów rejestracji service workera
             console.log('Service Worker registration failed:', err);
         });
     });
 }
-//tworzenie podstawy - "korzenia"
+//tworzenie podstawy - "korzenia" do drzewa DOM
 const root = ReactDOM.createRoot(document.getElementById('root'));
 //renderuje drzewo elementów:
 root.render(

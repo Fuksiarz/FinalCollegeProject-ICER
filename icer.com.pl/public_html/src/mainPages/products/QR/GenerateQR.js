@@ -1,9 +1,8 @@
-import { AuthContext } from "../../account/auth-context";
-import React, { useContext, useState } from "react";
-import { Icon } from "@iconify/react";
-import { handleImageChange } from "../pictures/handleImageChange";
+import React, {useState} from "react";
+import {Icon} from "@iconify/react";
+import {handleImageChange} from "../pictures/handleImageChange";
 import "../add/AddProduct.css";
-import { generateQRCode } from "../API/generateQRCode";
+import {generateQRCode} from "../API/generateQRCode";
 
 export function GenerateQR() {
     // Stan formularza

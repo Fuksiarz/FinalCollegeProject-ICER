@@ -30,7 +30,6 @@ export function Account() {
             <div className={`accountInfo  ${premiumUser ? 'vip-border' : ''}`}>
                 {premiumUser && (
                     <>
-
                         <div className="side-border left-border"><h5 className='vipName'>VIP</h5></div>
                         <div className="side-border right-border"><h5 className='vipName'>VIP</h5></div>
                     </>
