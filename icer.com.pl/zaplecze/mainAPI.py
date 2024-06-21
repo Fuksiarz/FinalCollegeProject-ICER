@@ -332,13 +332,10 @@ def add_product():
     try:
         # Tworzenie instancji klasy DatabaseConnector
         db_connector = DatabaseConnector()
-
         # Łączenie z bazą danych
         db_connector.connect()
-
         # Tworzenie instancji ProductManager
         product_manager = ProductManager(db_connector)
-
         # Pobieranie danych z żądania
         data = request.json
         image_data = data.get('imageData')
@@ -348,7 +345,6 @@ def add_product():
 
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
-
         if response:
             return response, status_code
 
@@ -379,7 +375,6 @@ def add_product():
             VALUES (%s, %s, %s, %s, NOW())
         """
         cursor.execute(add_icer_query, (user_id, product_id, data['ilosc'], data['data_waznosci']))
-
         # Wywołanie procedury UpdateSwiezosc dla nowo dodanego produktu
         cursor.callproc('UpdateSwiezosc', (cursor.lastrowid,))
 
@@ -390,7 +385,7 @@ def add_product():
         connection.commit()
         cursor.close()
 
-        return jsonify({"message": "Product added successfully!"})
+        return jsonify({"message": "Produkt dodany poprawnie!"})
 
     except Exception as error:
         return jsonify({"error": str(error)}), 500
@@ -408,7 +403,6 @@ def edit_product(product_id):
         # Pobieranie danych produktu z żądania
         data = request.json
         image_data = data.get('imageData')
-
         # Pobieranie user_id z funkcji get_user_id_by_username
         connection = db_connector.get_connection()
 
@@ -448,12 +442,10 @@ def edit_product(product_id):
 def get_icer_shopping():
     # Tworzenie instancji klasy DatabaseConnector
     db_connector = DatabaseConnector()
-
     # Łączenie z bazą danych
     db_connector.connect()
 
     try:
-
         # Uzyskanie połączenia z bazą danych
         connection = db_connector.get_connection()
         if not connection:
@@ -476,7 +468,6 @@ def get_icer_shopping():
 
         # Pobranie ID aktualnie zalogowanego użytkownika
         username = session['username']
-
         user_query = "SELECT id FROM Users WHERE username = %s"
         cursor.execute(user_query, (username,))
         user_result = cursor.fetchone()
@@ -497,9 +488,8 @@ def get_icer_shopping():
         """
         cursor.execute(query, (user_id,))
         results = cursor.fetchall()
-
+        # Obsługa błędów
         return jsonify(results)
-
     except ValueError as ve:
         return jsonify({"error": str(ve)}), 400
     except PermissionError as pe:
@@ -512,7 +502,6 @@ def get_icer_shopping():
         # Tutaj możemy logować błąd w bardziej szczegółowy sposób
         current_app.logger.error(f"Unexpected error: {error}")
         return jsonify({"error": "Unexpected server error"}), 500
-
     finally:
         if cursor:
             cursor.close()
@@ -960,25 +949,20 @@ def update_preferences():
     try:
         # Tworzenie instancji klasy DatabaseConnector
         db_connector = DatabaseConnector()
-
         # Łączenie z bazą danych
         db_connector.connect()
-
         # Pobieranie danych z żądania
         data = request.json
-
         # Funkcja do walidacji rozmiaru
         def validate_size(value):
             valid_sizes = ['bardzo male', 'male', 'srednie', 'duze', 'bardzo duze']
             return value.lower() in valid_sizes
-
         # Sprawdzenie poprawności wartości
         if not validate_size(data['wielkosc_lodowki']) or not validate_size(data['wielkosc_strony_produktu']):
             return jsonify({"error": "Nieprawidłowe wartości wielkości."}), 400
 
         connection = db_connector.get_connection()
         cursor = connection.cursor(dictionary=True)
-
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
 
@@ -1018,9 +1002,7 @@ def update_preferences():
 
         connection.commit()
         cursor.close()
-
-        return jsonify({"message": "Preferences updated successfully!"})
-
+        return jsonify({"message": "Preferencje zaktualizowane"})
     except Exception as error:
         return jsonify({"error": str(error)}), 500
 
@@ -1071,7 +1053,6 @@ def get_user_preferences():
         """
         cursor.execute(get_preferences_query, (user_id,))
         preferences = cursor.fetchone()
-
         cursor.close()
 
         if preferences:
@@ -1080,9 +1061,7 @@ def get_user_preferences():
                 profile_photo_path = os.path.join("public/data/userProfilePicture", "face.jpg")
             else:
                 profile_photo_path = preferences['lokalizacja_zdj']
-
             preferences['profile_photo'] = profile_photo_path
-
             return jsonify(preferences)
         else:
             return jsonify({"error": "Preferences not found."}), 404
@@ -1124,37 +1103,28 @@ def update_food_list():
         username = session.get('username')
         project_path = os.path.dirname(os.path.abspath(__file__))
         user_food_list_path = os.path.join(project_path, 'users_lists', f'{username}_food_list.json')
-
         # Tworzenie instancji klasy DatabaseConnector
         db_connector = DatabaseConnector()
         # Łączenie z bazą danych
         db_connector.connect()
-
         connection = db_connector.get_connection()
         cursor = connection.cursor(dictionary=True)
-
         # Wczytaj zawartość pliku JSON
         with open(user_food_list_path, 'r') as file:
             food_list = json.load(file)
-
         # Pobieranie danych produktów z bazy danych
         select_query = """
                 SELECT nazwa, cena, kalorie, tluszcze, weglowodany, bialko, kategoria
                 FROM Produkty
                 WHERE podstawowy = 1 AND nazwa IN ({})
             """
-
         # Tworzenie ciągu znaków '?' do zastąpienia w zapytaniu SQL
         placeholders = ', '.join(['%s' for _ in range(len(food_list))])
-
         # Wypełnienie zapytania SQL odpowiednią liczbą znaków '?'
         formatted_query = select_query.format(placeholders)
-
         # Wykonaj zapytanie z uwzględnieniem listy produktów z pliku JSON
         cursor.execute(formatted_query, tuple(food_list))
-
         products = cursor.fetchall()
-
         cursor.close()
         connection.close()
 
@@ -1187,31 +1157,39 @@ def update_food_list():
 
         # Zwróć zawartość zaktualizowanego pliku JSON jako odpowiedź
         return jsonify(updated_food_list_content)
-
-
-
+        # Obsługa błędów
     except Exception as error:
         return jsonify({"error": str(error)}), 500
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Sprawdzenie, czy metoda żądania to POST
     if request.method == 'POST':
+        # Pobranie danych z żądania w formacie JSON
         data = request.get_json()
+        # Pobranie nazwy użytkownika i hasła z danych żądania
         username = data.get('username')
         password = data.get('password')
 
+        # Sprawdzenie, czy podano nazwę użytkownika i hasło
         if not username or not password:
             return jsonify({"message": "Brak nazwy użytkownika lub hasła"}), 400
 
+        # Sprawdzenie poprawności nazwy użytkownika i hasła
         if check_user(username, password):
+            # Ustawienie sesji dla zalogowanego użytkownika
             session['username'] = username
+            # Generowanie unikalnego identyfikatora sesji
             session_id = str(uuid.uuid4())
             session['session_id'] = session_id
+            # Zwrócenie odpowiedzi z wiadomością o udanym logowaniu i identyfikatorem sesji
             return jsonify({"message": "Logowanie udane", "session_id": session_id})
         else:
+            # Zwrócenie odpowiedzi z wiadomością o nieprawidłowych danych logowania
             return jsonify({"message": "Nieprawidłowa nazwa użytkownika lub hasło"}), 401
     else:
+        # Zwrócenie odpowiedzi z wiadomością o niedozwolonej metodzie żądania
         return jsonify({"message": "Metoda niedozwolona"}), 405
 
 
@@ -1329,7 +1307,6 @@ def edit_user():
         new_username = data.get('new_username')
         db_connector = DatabaseConnector()
         db_connector.connect()  # Nawiązanie połączenia
-
         cursor = db_connector.get_connection().cursor()
 
         # Jeśli użytkownik dostarczył nowe hasło, aktualizuj hasło
