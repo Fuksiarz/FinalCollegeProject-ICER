@@ -25,7 +25,6 @@ def load_and_prep_image(filename, img_shape=224):
 
 # Predykcja dla zdjecia + testowanie dla pewnosci
 def pred_and_plot(model, filename, class_names, username):
-    # Funkcja do przewidywania
     # Wczytanie i przygotowanie obrazu
     img = load_and_prep_image(filename)
 
