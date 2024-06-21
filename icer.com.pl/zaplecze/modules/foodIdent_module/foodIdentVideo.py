@@ -46,8 +46,8 @@ def load_and_prep_image(filename, img_shape=224):
 
 # Proces wideo i przekazanie nazwy użytkownika dla wersji z backend
 def process_video(username):
+    # Zmienna globalna dla statusu kamery
     global camera_running
-
     # Funkcja pomocnicza do znalezienia pierwszej dostępnej kamery
     def find_first_available_camera(max_checks=5):
         for i in range(max_checks):
@@ -147,7 +147,7 @@ def clear_food_username(username):
     base_dir = Path(app.config['FOOD_LIST_DIR'])
     file_path = base_dir / f'{username}_food_list.json'
     try:
-        # Upewnij się, że katalog istnieje
+        # Sprawdzenie czy katalog istnieje
         base_dir.mkdir(parents=True, exist_ok=True)
 
         with open(file_path, 'w') as file:
@@ -161,7 +161,8 @@ def clear_food_username(username):
 
 def preload():
     """
-    Ładuje konfigurację nazw klas oraz modele do globalnych zmiennych.
+    Ładuje konfigurację nazw klas oraz modele do globalnych zmiennych,
+    by przyspieszyć działanie
     """
     global models, class_names
 
@@ -172,7 +173,7 @@ def preload():
     class_names = data.get('class_names', [])
 
     # Ładowanie modeli
-    model_paths = ["model_1.h5", "model_2.h5"]
+    model_paths = ["model_1.h5", "model_2.h5", "model_3.h5"]
     models = load_models(model_paths)
 
 def load_models(model_paths):
@@ -194,7 +195,7 @@ def load_models(model_paths):
 
 
 def predict_and_update_food_list(tmp_path, username):
-        """
+    """
     Przeprowadza predykcję klasy jedzenia na podstawie obrazu za pomocą wielu modeli,
     następnie aktualizuje listę jedzenia dla danego użytkownika.
     """
@@ -279,45 +280,14 @@ def update_food_list(username, pred_class):
             json.dump(food_list, file)
     # Obsługa błędu
     except Exception as e:
-        print(f"Error while updating food list: {e}")
+        print(f"Błąd aktualizacji listy jedzenia: {e}")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Przewidywanie żywnośći, wersja gdzie dane są z frontend
 def pred_and_plot(models, img, class_names, food_list, username):
+    """
+    Przy użyciu danych przesłanych przez frontend, rozpoznaje jedzenie
+    """
     # Przygotowanie obrazu
     img_tensor = tf.convert_to_tensor(img, dtype=tf.float32)
     if len(img_tensor.shape) == 3:
@@ -373,65 +343,9 @@ def pred_and_plot(models, img, class_names, food_list, username):
     # Użyj nazwy użytkownika przy zapisywaniu nazwy
     json_file_path = os.path.join(save_dir, f'{username}_food_list.json')
 
-    # Zapisz food_list
+    # Zapisz bezpiecznie food_list
     with file_lock:
         with open(json_file_path, 'w') as json_file:
             json.dump(food_list, json_file, indent=4)
 
     return food_list
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def pred_and_plot(models, img, class_names, username):
-#     img_tensor = tf.convert_to_tensor(img, dtype=tf.float32)
-#     if len(img_tensor.shape) == 3:
-#         img_tensor = tf.expand_dims(img_tensor, axis=0)
-#
-#     votes = {class_name: 0 for class_name in class_names}
-#     probabilities = []
-#
-#     with ThreadPoolExecutor(max_workers=len(models)) as executor:
-#         futures = {executor.submit(model_predict, model, img_tensor): model for model in models}
-#         for future in as_completed(futures):
-#             pred, pred_class_index = future.result()
-#             pred_class_name = class_names[pred_class_index]
-#             votes[pred_class_name] += 1
-#             probabilities.append(np.max(pred))
-#
-#     max_votes = max(votes.values())
-#     winners = [class_name for class_name, vote in votes.items() if vote == max_votes]
-#     pred_class = max(winners, key=lambda x: votes[x])
-#
-#     # Odczytaj aktualną listę jedzenia z pliku
-#     food_list_path = os.path.join('path_to_food_list_directory', f'{username}_food_list.json')
-#     with open(food_list_path, 'r') as file:
-#         food_list = json.load(file)
-#
-#     # Dodaj nowe przewidywanie do listy jedzenia, jeśli spełnia kryteria
-#     if np.max(probabilities) >= 0.70 and pred_class not in food_list:
-#         food_list.append(pred_class)
-#
-#         # Zapisz zmodyfikowaną listę jedzenia
-#         with open(food_list_path, 'w') as file:
-#             json.dump(food_list, file, indent=4)
-#
-#     return food_list
