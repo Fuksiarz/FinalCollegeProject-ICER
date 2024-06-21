@@ -1533,6 +1533,9 @@ def username_forward(username):
 # Resetowania listy zakupow
 @app.route('/reset_food_list', methods=['POST'])
 def reset_food_list():
+    """
+    Resetowanie nazwy użytkownika
+    """
     # Pobranie nazwy użytkownika z żądania
     data = request.json
     if not data or 'username' not in data:
@@ -1562,7 +1565,7 @@ def get_frame():
     data = request.json
      # Sprawdź, czy w data jest nazwa użytkownika i zdjęcie, jak nie zwróć błąd
     if data is None or 'images' not in data or 'username' not in data:
-        return jsonify({'error': 'Brak zdjcia '}), 400
+        return jsonify({'error': 'Brak zdjęcia lub nazwy użytkownika '}), 400
     # Pobierz obrazy i nazwę użytkownika
     images_data = data['images']
     username = data['username']  
@@ -1583,7 +1586,7 @@ def get_frame():
             # Usuwanie pliku tymczasowego dla oszczedzania miejsca
             os.remove(tmp_path)
              # Dodaj wiadomość o sukcesie do odpowiedzi
-            responses.append({'message': f'Image received and processed successfully, saved at {tmp_path}'})
+            responses.append({'message': f'Zdjęcie zostało poprawnie przetworzone, zapisano {tmp_path}'})
         except Exception as e:
             # Dodaj info o błędzie jeśli zaszedł
             responses.append({'error': str(e)})
@@ -1600,7 +1603,7 @@ def upload_predictor():
     Obsługuje przesyłanie plików przez użytkowników, identyfikuje QR kody i klasyfikuje jedzenie przy użyciu AI.
     """
     try:
-        print("Endpoint called with method: ", request.method)  # Logowanie metody żądania
+        print("Endpoint wywołany: ", request.method)  # Logowanie metody żądania
         db_connector = DatabaseConnector()
         db_connector.connect()  # Nawiązanie połączenia
 
@@ -1610,21 +1613,21 @@ def upload_predictor():
         cursor = connection.cursor(dictionary=True)
 
         if request.method == 'POST':
-            print("Received a POST request")
+            print("Otrzymano zapytanie POST")
             
             # Sprawdzenie, czy w żądaniu znajdują się plik i nazwa użytkownika
             if 'file' not in request.files or 'username' not in request.form:
                 flash('Brak części pliku lub nazwy użytkownika', 'error')
-                print("No file part or username in request")
-                return jsonify({"status": "error", "message": "No file part or username provided"})
+                print("Brak części pliku lub nazwy użytkownika")
+                return jsonify({"status": "error", "message": "Brak części pliku lub nazwy użytkownika"})
 
             file = request.files['file']
             username = request.form['username']
             # Sprawdzenie, czy plik został wybrany
             if file.filename == '':
                 flash('Nie wybrano pliku', 'error')
-                print("No file selected")
-                return jsonify({"status": "error", "message": "No file selected"})
+                print("Nie wybrano pliku")
+                return jsonify({"status": "error", "message": "Nie wybrano pliku"})
 
             # Sprawdzenie, czy plik ma dozwolone rozszerzenie
             if file and allowed_file(file.filename):
@@ -1633,36 +1636,36 @@ def upload_predictor():
                 upload_folder = 'static/uploads/'
                 file_path = os.path.join(upload_folder, filename)
                 file.save(file_path)
-                print("File saved to: ", file_path)  # Logowanie ścieżki pliku
+                print("Plik zapisano do: ", file_path)  # Logowanie ścieżki pliku
 
                 # Próba odczytu kodu QR
                 decoded_data = decode_qr_code(file_path)
                 if decoded_data and decoded_data != "QR code not detected":
-                    print("QR Code decoded: ", decoded_data)
+                    print("Kod QR rozszyfrowany: ", decoded_data)
                     return jsonify({"status": "success", "type": "qr", "data": decoded_data})
                 # Informacja o braku kodu QR
-                print("No QR Code detected, proceeding with food prediction.")
+                print("Nie wykryto kodu QR, przechodzę dalej.")
 
                 # Dokonanie predykcji na podstawie przesłanego obrazu
                 pred_class = pred_and_plot(model, file_path, class_names, username)
                 if pred_class:
-                    print("Food identified: ", pred_class)
+                    print("Zidentyfikowano jedzenie: ", pred_class)
                     return jsonify({"status": "success", "type": "food", "data": pred_class})
                 else:
                     print("No food detected.")
-                    return jsonify({"status": "error", "message": "No food detected or QR code found."})
+                    return jsonify({"status": "error", "message": "Nie wykryto kodu QR i jedzenia."})
             else:
                 print("Invalid file type.")
-                return jsonify({"status": "error", "message": "Invalid file type. Please upload an image file."})
+                return jsonify({"status": "error", "message": "Zły typ pliku, prześlij poprawny"})
 
         # Obsługa żądania innego niż POST
-        print("Handled as non-POST request")
-        return jsonify({"status": "error", "message": "Send a POST request with an image"})
+        print("Przetworzono jako żądanie nie post")
+        return jsonify({"status": "error", "message": "Wysłano zapytanie POST z obrazem"})
 
     # Obsługa wyjątków i błędów
     except Exception as e:
         print(f"An error occurred: {e}")
-        return jsonify({"status": "error", "message": "An internal server error occurred."})
+        return jsonify({"status": "error", "message": "Błąd wewnętrzny serwera."})
 
 
 # Wybór typu reklamy
@@ -1673,11 +1676,11 @@ def advert_reciever():
     """
     # Sprawdzenie, czy dane są przekazywane w formacie JSON
     if not request.is_json:
-        return jsonify({"error": "Invalid input format. Expected JSON"}), 400
+        return jsonify({"error": "Zły typ pliku, użyj JSON"}), 400
     data = request.get_json()
     # Sprawdzenie, czy obraz jest w danych JSON
     if 'image' not in data:
-        return jsonify({"error": "No image data provided"}), 400
+        return jsonify({"error": "Brak danych obrazu"}), 400
     image_data = data['image']
 
     # Usunięcie prefiksu `data:image/png;base64,` jeśli istnieje
@@ -1693,7 +1696,7 @@ def advert_reciever():
         # Odczytywanie zapisanego obrazu
         image = cv2.imread(tmp_path)
         if image is None:
-            return jsonify({"error": "Failed to load image"}), 500
+            return jsonify({"error": "Nie udało się załadować obrazu"}), 500
 
         # Wykrywanie twarzy i oczu
         detected_faces, detected_eyes = detect_faces_and_eyes(image)
@@ -1731,14 +1734,14 @@ def start_video():
     """
     # Sprawdzanie poprawnosci formatu przesłanych danych
     if not request.is_json:
-        return jsonify({"error": "Invalid input format. Expected JSON"}), 400
+        return jsonify({"error": "Zły typ pliku, oczekiwano JSON"}), 400
         
     # Pobierz dane JSON z żądania
     data = request.get_json()
     video_choice = data.get('video_choice')
     # Sprawdź, czy 'video_choice' ma wlaściwą wartość i nie jest None
     if video_choice is None or video_choice not in [0, 1]:
-        return jsonify({"error": "Invalid video choice. Expected 0 or 1"}), 400
+        return jsonify({"error": "Zły wybór, podaj 1 lub 2"}), 400
         
     # Wybierz plik wideo na podstawie przesłanej wartośći
     video_file = 'videoplayback.mp4' if video_choice == 1 else 'videoplaybackalt.mp4'
@@ -1750,10 +1753,10 @@ def start_video():
         # Generuj URL do wybranego wideo
         video_url = f'/video/{video_file}'
         # Zwróć odpowiedź JSON z URL wideo i informacją o sukcesie
-        return jsonify({"video_url": video_url, "message": "Start playing video"}), 200
+        return jsonify({"video_url": video_url, "message": "Rozpoczynam odtwarzani wideo"}), 200
     # Jeśli nie znaleziono pliku zwróć błąd    
     except FileNotFoundError:
-        return jsonify({"error": "File not found"}), 404
+        return jsonify({"error": "Nie znaleziono pliku"}), 404
 
 
 # Pomocnicza do lokalizacji video
@@ -1762,20 +1765,20 @@ def serve_video(filename):
     try:
         return send_from_directory(video_dir, filename, as_attachment=False)
     except FileNotFoundError:
-        return jsonify({"error": "File not found"}), 404
+        return jsonify({"error": "Nie znaleziono pliku"}), 404
 
 
 # Do sterowania video
 @app.route('/control_video', methods=['POST'])
 def control_video():
     if not request.is_json:
-        return jsonify({"error": "Invalid input format. Expected JSON"}), 400
+        return jsonify({"error": "Zły typ pliku, podaj w JSON"}), 400
 
     data = request.get_json()
     action = data.get('action')
     # Obsługa niewłaściwej akcji
     if action not in ['play', 'pause']:
-        return jsonify({"error": "Invalid action. Expected 'play' or 'pause'"}), 400
+        return jsonify({"error": "Zła akcja. Podaj 'play' lub 'pause'"}), 400
     # Aktualizacja na podstawie akcji
     video_state["playing"] = (action == 'play')
 
