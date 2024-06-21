@@ -9,6 +9,7 @@ def decode_qr_code(image_path):
     decoded_objects = decode(qr_image)
 
     if decoded_objects:
+        # Wymuszenie utf-8 dla zwiększenia kompatybilnośći
         decoded_data = decoded_objects[0].data.decode('utf-8')
 
         # Zamień ciąg na słownik
@@ -17,10 +18,10 @@ def decode_qr_code(image_path):
             key, value = item.split(':')
             data_dict[key.strip()] = value.strip()
 
-        # Znajdź lokalizację skryptu
+        # Znajdź lokalizację
         current_dir = os.path.dirname(__file__)
 
-        # Podaj PATH do zapisania JSON
+        # Podaj scieżkę do zapisania JSON
         json_file_path = os.path.join(current_dir, 'decoded_data.json')
 
         # Zapisz JSON w obecnym folderze
