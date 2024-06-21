@@ -30,4 +30,4 @@ def decode_qr_code(image_path):
 
         return data_dict
     else:
-        return "QR code not detected"
+        return "Kod QR nie został wykryty"
