@@ -1379,7 +1379,7 @@ def get_response():
         response = get_bot_response(user_input)
 
         # Utwórz JSON z odpowiedzią bota
-        response_data = {'odpoweidź': response}
+        response_data = {'odpowiedź': response}
 
         # Zwróć odpowiedź
         return jsonify(response_data), 200, {'Content-Type': 'application/json; charset=utf-8'}
@@ -1721,8 +1721,6 @@ def start_video():
         return jsonify({"error": "Zły wybór, podaj 1 lub 2"}), 400
         
 
-
-
     # Wybierz plik wideo na podstawie przesłanej wartośći
     video_file = 'videoplayback.mp4' if video_choice == 1 else 'videoplaybackalt.mp4'
 
@@ -1779,3 +1777,4 @@ if __name__ == '__main__':
     # Preładowanie modeli do rozpoznawania z video
     preload()
     app.run()
+
