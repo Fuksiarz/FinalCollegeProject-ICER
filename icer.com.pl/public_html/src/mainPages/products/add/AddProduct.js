@@ -53,7 +53,7 @@ function AddProduct() {
     //podlgąd wybranego obrazu do identyfikacji poprzez zdjęcie
     const [imageForIdentyficationURL, setImageForIdentyficationURL] = useState(null);
     // Dodana zmienna stanu do przechowywania trybu kamery
-    const [cameraFacingMode, setCameraFacingMode] = useState('user');
+    const [cameraFacingMode, setCameraFacingMode] = useState('environment');
 
     const [info, setInfo] = useState('');
     const videoRef = useRef(null);
@@ -116,7 +116,7 @@ function AddProduct() {
     };
 
     const toggleCamera = () => {
-        setCameraFacingMode((prevMode) => (prevMode === 'user' ? 'environment' : 'user'));
+        setCameraFacingMode((prevMode) => (prevMode === 'environment' ? 'user' : 'environment'));
         startCamera(); // Restart kamery z nowym trybem
     };
 
