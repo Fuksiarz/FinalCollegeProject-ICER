@@ -51,7 +51,7 @@ os.makedirs(temp_dir, exist_ok=True)
 # Ścieżka do katalogu z plikami wideo
 video_dir = os.path.join(base_dir, 'static', 'adverts')
 
-# Startowanie wideo, wyślij 1 jeśli kamera jest i 0 jeśli kamery nie ma.
+
 
 # Upewnij się, że katalog tmp istnieje
 os.makedirs(temp_dir, exist_ok=True)
@@ -1551,7 +1551,7 @@ def reset_food_list():
         # Jeśli tak zwracam komunikat sukcesu i kod 200
         return jsonify({"message": f"Lista dla {result} została zresetowana"}), 200
     else:
-        # Jeśli tak zwracam komunikat błędu i kod 500
+        # Jeśli nie zwracam komunikat błędu i kod 500
         return jsonify({"error": "Błąd resetowania listy"}), 500
 
 
@@ -1574,7 +1574,7 @@ def get_frame():
     # Przetwarzanie każdego obrazu z listy
     for idx, image_data in enumerate(images_data):
         try:
-            image_bytes = base64.b64decode(image_data) # Dekodowanie z base 64
+            image_bytes = base64.b64decode(image_data) # Dekodowanie z base64
             # Użycie tempfile do stworzenia tymczasowego pliku
             with tempfile.NamedTemporaryFile(delete=False, suffix='.png', dir=temp_dir) as tmp:
                 tmp.write(image_bytes)
@@ -1588,7 +1588,7 @@ def get_frame():
              # Dodaj wiadomość o sukcesie do odpowiedzi
             responses.append({'message': f'Zdjęcie zostało poprawnie przetworzone, zapisano {tmp_path}'})
         except Exception as e:
-            # Dodaj info o błędzie jeśli zaszedł
+            # Podaj info o błędzie jeśli zaszedł
             responses.append({'error': str(e)})
             if 'tmp_path' in locals():
                 os.remove(tmp_path)  # Usunięcie pliku, jeśli wystąpi błąd
@@ -1668,11 +1668,11 @@ def upload_predictor():
         return jsonify({"status": "error", "message": "Błąd wewnętrzny serwera."})
 
 
-# Wybór typu reklamy
+# Analiza klatek reklama + podawanie statusu dla odtwarzana video
 @app.route('/advert_reciever', methods=['POST'])
 def advert_reciever():
     """
-    Obsługuje analizę klatek dla inteligentej reklamy
+    Obsługuje analizę klatek dla inteligentej reklamy i status video
     """
     # Sprawdzenie, czy dane są przekazywane w formacie JSON
     if not request.is_json:
@@ -1753,7 +1753,7 @@ def start_video():
         # Generuj URL do wybranego wideo
         video_url = f'/video/{video_file}'
         # Zwróć odpowiedź JSON z URL wideo i informacją o sukcesie
-        return jsonify({"video_url": video_url, "message": "Rozpoczynam odtwarzani wideo"}), 200
+        return jsonify({"video_url": video_url, "message": "Rozpoczynam odtwarzanie wideo"}), 200
     # Jeśli nie znaleziono pliku zwróć błąd    
     except FileNotFoundError:
         return jsonify({"error": "Nie znaleziono pliku"}), 404
