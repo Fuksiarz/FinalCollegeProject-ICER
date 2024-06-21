@@ -56,7 +56,7 @@ video_dir = os.path.join(base_dir, 'static', 'adverts')
 # Upewnij się, że katalog tmp istnieje
 os.makedirs(temp_dir, exist_ok=True)
 
-# Status video
+# Status video, domyślnie false
 video_state = {
     "playing": False,
     "video_choice": None
@@ -1367,9 +1367,12 @@ def edit_user():
         return jsonify({"error": str(error)})
 
 
-# Obsluga chatbota
+# Obsluga chatbota (HTML)
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    """
+    Obsługuja bota wersja HTML
+    """
     # Pusty ciąg znaków dla odpowiedzi chatbota
     bot_response = ""
 
@@ -1389,6 +1392,9 @@ def index():
 # Pobieranie odpowiedzi na podstawie zapytania
 @app.route('/get_response', methods=['POST'])
 def get_response():
+    """
+    Pobieranie odpowiedzi od bota
+    """
     # Pobierz dane wejściowe użytkownika z JSON
     user_input = request.json.get('user_input')
 
@@ -1398,7 +1404,7 @@ def get_response():
         response = get_bot_response(user_input)
 
         # Utwórz JSON z odpowiedzią bota
-        response_data = {'response': response}
+        response_data = {'odpoweidź': response}
 
         # Zwróć odpowiedź
         return jsonify(response_data), 200, {'Content-Type': 'application/json; charset=utf-8'}
@@ -1410,6 +1416,9 @@ def get_response():
 # Generowanie kodu QR
 @app.route('/generate_qr_code', methods=['POST'])
 def generate_qr_code_route():
+    """
+    Funkcja obsługująca generowanie kodów QR.
+    """
     try:
         # Wyodrębnij dane przesłane z formularza
         data = {
@@ -1430,7 +1439,7 @@ def generate_qr_code_route():
         # Pobierz URL wygenerowanego obrazu kodu QR w folderze 'static'
         qr_code_image_url = url_for('static', filename='qrcodes/' + qr_code_image_filename)
 
-        # Zakoduj obraz kodu QR w base64
+        # Zakoduj obraz kodu QR w base64, utf-8 by uniknąć błędów
         qr_code_image_path = os.path.join(app.config['QR_CODE_FOLDER'], qr_code_image_filename)
         with open(qr_code_image_path, "rb") as image_file:
             encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
@@ -1457,9 +1466,12 @@ def generate_qr_code_route():
 # Dekodowanie kodu QR
 @app.route('/decode_qr_code', methods=['POST'])
 def decode_qr_code_route():
+    """
+    Dekodowanie informacji z kodu QR
+    """
     # Sprawdzenie, czy plik 'qr_code_image' istnieje 
     if 'qr_code_image' not in request.files:
-        flash('No file part', 'error')
+        flash('Plik nie istnieje', 'error')
         return redirect(request.url)
 
     # Pobranie pliku 
@@ -1467,7 +1479,7 @@ def decode_qr_code_route():
 
     # Sprawdzenie, czy nie wybrano pliku
     if file.filename == '':
-        flash('No selected file', 'error')
+        flash('Nie wybrano pliku', 'error')
         return redirect(request.url)
 
     # Sprawdzenie, czy wybrany plik ma dozwolone rozszerzenie
@@ -1482,17 +1494,17 @@ def decode_qr_code_route():
 
         if decoded_data:
             # Wyświetlenie komunikatu o sukcesie
-            flash("QR Code decoded successfully!", "success")
-            return f"Decoded QR Code Data: {decoded_data}"
+            flash("Kod QR zdekodowano pomyślnie!", "success")
+            return f"Zdekodowanie dane z QR: {decoded_data}"
 
         else:
             # Wyświetlenie komunikatu o błędzie i przekierowanie z powrotem do strony przesyłania pliku
-            flash("Failed to decode QR Code.", "error")
+            flash("Nie udało się zdekodować pliku.", "error")
             return redirect(request.url)
 
     else:
         # Wyświetlenie komunikatu o błędzie dla niedozwolonego typu pliku.
-        flash('Invalid file type. Please upload an image file.', 'error')
+        flash('Zły typ pliku, prześlij plik obrazu, w dozwolonym formacie.', 'error')
         return redirect(request.url)
 
 
@@ -1504,16 +1516,16 @@ def get_username_route():
 
     # Sprawdź, czy nazwa użytkownika została pobrana poprawnie
     if username is None:
-        return jsonify({"error": "Username not found in session"}), 400
+        return jsonify({"error": "Nie znaleziono nazwy użytkownika w sesji"}), 400
 
     # Wywołaj funkcję przekazującą nazwę użytkownika
     username_forward(username)
-
     return "Nazwa użytkownika przekazana."
 
 
 # Przesyłanie nazwy użytkownika
 def username_forward(username):
+    # skorzystaj z funkcji pomocniczej
     clear_food_username(username)
     print(username)
 
@@ -1524,18 +1536,20 @@ def reset_food_list():
     # Pobranie nazwy użytkownika z żądania
     data = request.json
     if not data or 'username' not in data:
-        return jsonify({"error": "Username is required"}), 400
+        return jsonify({"error": "Nazwa użytkownika wymagana"}), 400
 
     username = data['username']
 
     # Wywołanie funkcji do resetowania listy jedzenia
     result = clear_food_username(username)
 
-    # Sprawdzenie, czy funkcja zakończyła się sukcesem
+    # Sprawdzenie, czy funkcja zakończyła się sukcesem 
     if result:
-        return jsonify({"message": f"Food list for {result} has been reset"}), 200
+        # Jeśli tak zwracam komunikat sukcesu i kod 200
+        return jsonify({"message": f"Lista dla {result} została zresetowana"}), 200
     else:
-        return jsonify({"error": "Failed to reset food list"}), 500
+        # Jeśli tak zwracam komunikat błędu i kod 500
+        return jsonify({"error": "Błąd resetowania listy"}), 500
 
 
 # Analiza klatki z video
@@ -1543,15 +1557,12 @@ def reset_food_list():
 def get_frame():
     """
     Analizuje klatki z video przesłane jako obrazy w formacie base64, przetwarza je, a następnie aktualizuje listę jedzenia dla danego użytkownika.
-
-    Returns:
-        Response: Odpowiedź JSON zawierająca komunikaty o sukcesie lub błędach dla każdej przesłanej klatki obrazu.
     """
     # Pobierz dane JSON z żądania
     data = request.json
      # Sprawdź, czy w data jest nazwa użytkownika i zdjęcie, jak nie zwróć błąd
     if data is None or 'images' not in data or 'username' not in data:
-        return jsonify({'error': 'No images or username provided'}), 400
+        return jsonify({'error': 'Brak zdjcia '}), 400
     # Pobierz obrazy i nazwę użytkownika
     images_data = data['images']
     username = data['username']  
@@ -1585,11 +1596,8 @@ def get_frame():
 # Identyfikacja ze zdjęcia QR+AI
 @app.route('/upload_test_AI_QR', methods=['GET', 'POST'])
 def upload_predictor():
-        """
+    """
     Obsługuje przesyłanie plików przez użytkowników, identyfikuje QR kody i klasyfikuje jedzenie przy użyciu AI.
-
-    Returns:
-        Response: Odpowiedź JSON zawierająca status i wyniki identyfikacji.
     """
     try:
         print("Endpoint called with method: ", request.method)  # Logowanie metody żądania
@@ -1632,7 +1640,7 @@ def upload_predictor():
                 if decoded_data and decoded_data != "QR code not detected":
                     print("QR Code decoded: ", decoded_data)
                     return jsonify({"status": "success", "type": "qr", "data": decoded_data})
-
+                # Informacja o braku kodu QR
                 print("No QR Code detected, proceeding with food prediction.")
 
                 # Dokonanie predykcji na podstawie przesłanego obrazu
@@ -1660,6 +1668,9 @@ def upload_predictor():
 # Wybór typu reklamy
 @app.route('/advert_reciever', methods=['POST'])
 def advert_reciever():
+    """
+    Obsługuje analizę klatek dla inteligentej reklamy
+    """
     # Sprawdzenie, czy dane są przekazywane w formacie JSON
     if not request.is_json:
         return jsonify({"error": "Invalid input format. Expected JSON"}), 400
