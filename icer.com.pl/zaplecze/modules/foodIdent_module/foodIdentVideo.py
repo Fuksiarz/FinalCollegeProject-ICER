@@ -173,7 +173,7 @@ def preload():
     class_names = data.get('class_names', [])
 
     # Ładowanie modeli
-    model_paths = ["model_1.h5", "model_2.h5"]
+    model_paths = ["model_1.h5", "model_2.h5", "model_3.h5"]
     models = load_models(model_paths)
 
 def load_models(model_paths):
@@ -280,7 +280,7 @@ def update_food_list(username, pred_class):
             json.dump(food_list, file)
     # Obsługa błędu
     except Exception as e:
-        print(f"Error while updating food list: {e}")
+        print(f"Błąd aktualizacji listy jedzenia: {e}")
 
 
 # Przewidywanie żywnośći, wersja gdzie dane są z frontend
