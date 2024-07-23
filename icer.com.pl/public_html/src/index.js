@@ -26,7 +26,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 //renderuje drzewo elementów:
 root.render(
   <React.StrictMode>{/* jest narzędziem do wskazywania potencjalnych problemów w aplikacji*/}
-      <AuthProvider>{/* Jest to komponent kontekstowy, który dostarcza logikę i stan uwierzytelniania dla pozostałych komponentów w drzewie*/}
+      {/* Jest to komponent kontekstowy, który dostarcza logikę i stan uwierzytelniania dla pozostałych komponentów w drzewie*/}
+      <AuthProvider>
           <SettingsProvider>
               <App /> {/* główny komponent aplikacji */}
           </SettingsProvider>
@@ -34,7 +35,4 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

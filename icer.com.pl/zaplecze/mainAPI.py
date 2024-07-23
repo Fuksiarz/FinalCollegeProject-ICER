@@ -1822,83 +1822,25 @@ def success():
             print(f"Username from metadata: {username}")  # Logowanie username
 
             # Aktualizuj status użytkownika w bazie danych
-            # TU SE BAZE ZMIEN JAK TAM SIE TA TWOJA NAZYWA I JAK TAM
-            # SE PRZECHOWUJESZ CZY KTOS JEST PREMIUM
             if username in users_db:
                 users_db[username]['status'] = 'premium'
-                return f"Payment succeeded! Session ID: {session_id}, Customer: {checkout_session['customer']}, User: {username} is now premium."
+                return jsonify(
+                    message="Payment succeeded!",
+                    session_id=session_id,
+                    customer=checkout_session['customer'],
+                    username=username,
+                    status="premium"
+                )
             else:
-                return "User not found in the database."
+                return jsonify(message="User not found in the database."), 404
         else:
-            return "Payment not completed successfully."
+            return jsonify(message="Payment not completed successfully."), 400
     else:
-        return "Payment succeeded, but session ID is missing."
+        return jsonify(message="Payment succeeded, but session ID is missing."), 400
 
 @app.route('/cancel')
 def cancel():
-    return "Payment canceled"
-
-
-# WERSJA JSONIFY JAKBY CO
-# @app.route('/create-checkout-session', methods=['POST'])
-# def create_checkout_session():
-#     try:
-#         data = request.json
-#         username = data.get('username', 'unknown_user')
-#         session = stripe.checkout.Session.create(
-#             payment_method_types=['card'],
-#             line_items=[{
-#                 'price_data': {
-#                     'currency': 'usd',
-#                     'product_data': {
-#                         'name': 'Premium Account',
-#                     },
-#                     'unit_amount': 500,  # Cena w centach (500 centów = 5 dolarów)
-#                 },
-#                 'quantity': 1,
-#             }],
-#             mode='payment',
-#             success_url='http://localhost:5000/success?session_id={CHECKOUT_SESSION_ID}',
-#             cancel_url='http://localhost:5000/cancel',
-#             metadata={
-#                 'username': username
-#             }
-#         )
-#         return jsonify(session_id=session.id)
-#     except Exception as e:
-#         return jsonify(error=str(e)), 400
-#
-# @app.route('/success')
-# def success():
-#     session_id = request.args.get('session_id')
-#     print(f"Received session_id: {session_id}")  # Logowanie session_id
-#     if session_id:
-#         checkout_session = stripe.checkout.Session.retrieve(session_id)
-#         if checkout_session.payment_status == 'paid':
-#             # Pobierz nazwę użytkownika z metadanych sesji
-#             username = checkout_session['metadata']['username']
-#             print(f"Username from metadata: {username}")  # Logowanie username
-#
-#             # Aktualizuj status użytkownika w bazie danych
-#             if username in users_db:
-#                 users_db[username]['status'] = 'premium'
-#                 return jsonify(
-#                     message="Payment succeeded!",
-#                     session_id=session_id,
-#                     customer=checkout_session['customer'],
-#                     username=username,
-#                     status="premium"
-#                 )
-#             else:
-#                 return jsonify(message="User not found in the database."), 404
-#         else:
-#             return jsonify(message="Payment not completed successfully."), 400
-#     else:
-#         return jsonify(message="Payment succeeded, but session ID is missing."), 400
-#
-# @app.route('/cancel')
-# def cancel():
-#     return jsonify(message="Payment canceled")
+    return jsonify(message="Payment canceled")
 
 
 

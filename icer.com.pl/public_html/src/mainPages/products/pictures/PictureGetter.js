@@ -12,7 +12,7 @@ export const PictureGetter=(image, setImage, photo)=>{
                 setImage(noImage);
             }else
             //ustawia zdjęcie produktu na te, do którego zdjęcie jest przypisane
-            setImage(require(`../../../../data/userPhotos/${photo}`));
+            setImage(require(`../../../../public/data/userPhotos/${photo}`));
 
         } catch (e) {
             console.error("Nie udało się załadować obrazu: ", e);

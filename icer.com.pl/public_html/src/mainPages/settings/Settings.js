@@ -4,6 +4,10 @@ import {API_URL} from "./config";
 import './Settings.css'
 import {AuthContext} from "../account/auth-context";
 import SettingsContext from "./SettingsContext";
+import { loadStripe } from '@stripe/stripe-js';
+import {useNavigate} from "react-router-dom";
+
+const stripePromise = loadStripe(process.env.REACT_APP_PUBLIC_STRIPE_KEY);
 
 //funkcja od ustawień, przyjmuje informacje gdzie ma zostać wyświetlana
 export function Settings({where}) {
@@ -12,6 +16,7 @@ export function Settings({where}) {
     const { user } = useContext(AuthContext);
     // wyodrębnienie sesji użytkownika do przesłania do api w ramach autoryzacji
     const sessionId = user ? user.sessionId : null;
+    const navigate = useNavigate(); // Use navigate
     //pobieranie wartości ustawień z kontekstu ustawień
     const { fridgeSizeElements, setFridgeSizeElements, productsSizeElements,
         setProductsSizeElements, infoProducts, setInfoProducts, premiumUser, setPremiumUser  } = useContext(SettingsContext);
@@ -52,7 +57,7 @@ export function Settings({where}) {
     }`;
 
     useEffect(() => {
-        console.log("premium: ", premiumUser)
+        console.log("publickey: ", process.env.REACT_APP_PUBLIC_STRIPE_KEY)
         //przypisuje ustawienia do wartości wysyłanych do API
         const preferences = {
             wielkosc_lodowki: fridgeSizeElements,
@@ -76,6 +81,25 @@ export function Settings({where}) {
         return sizeMapping[sizeIndex];
 
     };
+
+    const handleStripeCheckout = async () => {
+        try {
+            const stripe = await stripePromise;
+            console.log('username:' + user.username)
+            const { data } = await axios.post(`${API_URL}/create-checkout-session`, { username: user.username });
+            const { session_id } = data;
+
+            const { error } = await stripe.redirectToCheckout({ sessionId: session_id });
+            if (error) {
+                console.error('Error redirecting to checkout:', error);
+                navigate(-1)
+            }
+        } catch (error) {
+            console.error('Error during Stripe checkout:', error);
+            navigate(-1)
+        }
+    };
+
 
 
     return (
@@ -153,9 +177,9 @@ export function Settings({where}) {
                             <div
                                 className={`${customRadioButtonClass} . 'selected'`}
                                 // Przy naciśnięciu ma się ustawiać wybrana opcja
-                                onClick={handleOptionClickPremium}
+                                onClick={handleStripeCheckout}
                             >
-                                {premiumUser ? <label>odrzuć</label> : <label>odbierz</label>}
+                                {premiumUser ? <label>Pozbądź się premium</label> : <label>Zdobądź premium za $5</label>}
                             </div>
                         </div>
                     </div>
