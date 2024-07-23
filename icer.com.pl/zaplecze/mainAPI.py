@@ -28,7 +28,7 @@ from modules.foodIdent_module.foodIdent import pred_and_plot, load_model
 from modules.foodIdent_module.foodIdentVideo import clear_food_username, \
     predict_and_update_food_list, preload
 from modules.image_handler import handle_image_upload, change_user_profile
-from modules.scan_module.decoder import decode_qr_code
+from modules.scan_module.decoder import decode_qr_code, decode_qr_code_frames
 from modules.scan_module.gen import generate_qr_code
 from modules.value_manager import ProductManager
 
@@ -1537,37 +1537,47 @@ def get_frame():
     """
     # Pobierz dane JSON z żądania
     data = request.json
-     # Sprawdź, czy w data jest nazwa użytkownika i zdjęcie, jak nie zwróć błąd
+    # Sprawdź, czy w data jest nazwa użytkownika i zdjęcie, jak nie zwróć błąd
     if data is None or 'images' not in data or 'username' not in data:
         return jsonify({'error': 'Brak zdjęcia lub nazwy użytkownika '}), 400
+
     # Pobierz obrazy i nazwę użytkownika
     images_data = data['images']
     username = data['username']
-    responses = []    # Lista do przechowywania odpowiedzi dla każdego obrazu
-    print(data) # Debug, printuje dane
+    responses = []  # Lista do przechowywania odpowiedzi dla każdego obrazu
+    print(data)  # Debug, printuje dane
+
     # Przetwarzanie każdego obrazu z listy
     for idx, image_data in enumerate(images_data):
         try:
-            image_bytes = base64.b64decode(image_data) # Dekodowanie z base64
+            image_bytes = base64.b64decode(image_data)  # Dekodowanie z base64
             # Użycie tempfile do stworzenia tymczasowego pliku
             with tempfile.NamedTemporaryFile(delete=False, suffix='.png', dir=temp_dir) as tmp:
                 tmp.write(image_bytes)
                 tmp_path = tmp.name  # Zapisz ścieżkę do pliku tymczasowego
 
-            # Wywołanie funkcji do przewidywania i aktualizacji listy jedzenia
-            predict_and_update_food_list(tmp_path, username)
+            # Próba odczytu kodu QR
+            decoded_data = decode_qr_code_frames(tmp_path)
+            if decoded_data and decoded_data != "Kod QR nie został wykryty":
+                # Łączenie danych z kodu QR w jeden ciąg
+                qr_data = ', '.join([f'{key}: {value}' for key, value in decoded_data.items()])
+                responses.append({'type': 'qr', 'data': qr_data})
+            else:
+                # Jeśli kod QR nie został wykryty, spróbuj zidentyfikować jedzenie
+                pred_class = predict_and_update_food_list(tmp_path, username)
+                responses.append({'type': 'food', 'data': pred_class})
 
-            # Usuwanie pliku tymczasowego dla oszczedzania miejsca
+            # Usuwanie pliku tymczasowego dla oszczędzania miejsca
             os.remove(tmp_path)
-             # Dodaj wiadomość o sukcesie do odpowiedzi
-            responses.append({'message': f'Zdjęcie zostało poprawnie przetworzone, zapisano {tmp_path}'})
         except Exception as e:
             # Podaj info o błędzie jeśli zaszedł
             responses.append({'error': str(e)})
             if 'tmp_path' in locals():
                 os.remove(tmp_path)  # Usunięcie pliku, jeśli wystąpi błąd
+
     # Odpowiedź w JSON
     return jsonify(responses), 200
+
 
 
 # Identyfikacja ze zdjęcia QR+AI
