@@ -31,3 +31,22 @@ def decode_qr_code(image_path):
         return data_dict
     else:
         return "Kod QR nie został wykryty"
+
+
+def decode_qr_code_frames(image_path):
+    qr_image = Image.open(image_path)
+    decoded_objects = decode(qr_image)
+
+    if decoded_objects:
+        # Wymuszenie utf-8 dla zwiększenia kompatybilnośći
+        decoded_data = decoded_objects[0].data.decode('utf-8')
+
+        # Zamień ciąg na słownik
+        data_dict = {}
+        for item in decoded_data.split(', '):
+            key, value = item.split(':')
+            data_dict[key.strip()] = value.strip()
+
+        return data_dict
+    else:
+        return "Kod QR nie został wykryty"
