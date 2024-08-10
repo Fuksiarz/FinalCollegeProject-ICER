@@ -603,6 +603,7 @@ def edit_shopping_cart():
 
 @app.route('/api/Icer/get_notifications', methods=['POST'])
 def get_notifications():
+    cursor = None
     try:
         db_connector = DatabaseConnector()
         db_connector.connect()
@@ -1097,33 +1098,27 @@ def change_user_photo():
         return jsonify({"error": str(error)}), 500
 
 
-@app.route('/api/update_food_list', methods=['GET', 'POST'])
-def update_food_list():
+@app.route('/api/update_food_list', methods=['POST'])
+def update_food_list(food_list):
     try:
-        # Pobierz nazwę użytkownika z sesji lub z argumentów
-        username = session.get('username')
-        project_path = os.path.dirname(os.path.abspath(__file__))
-        user_food_list_path = os.path.join(project_path, 'users_lists', f'{username}_food_list.json')
         # Tworzenie instancji klasy DatabaseConnector
         db_connector = DatabaseConnector()
         # Łączenie z bazą danych
         db_connector.connect()
         connection = db_connector.get_connection()
         cursor = connection.cursor(dictionary=True)
-        # Wczytaj zawartość pliku JSON
-        with open(user_food_list_path, 'r') as file:
-            food_list = json.load(file)
+
         # Pobieranie danych produktów z bazy danych
         select_query = """
-                SELECT nazwa, cena, kalorie, tluszcze, weglowodany, bialko, kategoria
-                FROM Produkty
-                WHERE podstawowy = 1 AND nazwa IN ({})
-            """
+            SELECT nazwa, cena, kalorie, tluszcze, weglowodany, bialko, kategoria
+            FROM Produkty
+            WHERE podstawowy = 1 AND nazwa IN ({})
+        """
         # Tworzenie ciągu znaków '?' do zastąpienia w zapytaniu SQL
         placeholders = ', '.join(['%s' for _ in range(len(food_list))])
         # Wypełnienie zapytania SQL odpowiednią liczbą znaków '?'
         formatted_query = select_query.format(placeholders)
-        # Wykonaj zapytanie z uwzględnieniem listy produktów z pliku JSON
+        # Wykonaj zapytanie z uwzględnieniem listy produktów
         cursor.execute(formatted_query, tuple(food_list))
         products = cursor.fetchall()
         cursor.close()
@@ -1132,7 +1127,6 @@ def update_food_list():
         # Utwórz listę słowników na podstawie wyników zapytania
         updated_food_list = []
         for product in products:
-            # Dodaj dodatkowy klucz do każdego produktu
             product['ilosc'] = 1
             updated_food_list.append({
                 "nazwa": product['nazwa'],
@@ -1145,22 +1139,10 @@ def update_food_list():
                 "ilosc": 1  # Zawsze ustaw ilość na 1
             })
 
-        # Zapisz zaktualizowane produkty do pliku JSON
-        with open(user_food_list_path, 'w') as file:
-            json.dump(updated_food_list, file, indent=4)
-
-        # Otwórz zaktualizowany plik JSON do odczytu
-        with open(user_food_list_path, 'r') as file:
-            updated_food_list_content = json.load(file)
-
-        # Usuń plik po odczycie jego zawartości
-        os.remove(user_food_list_path)
-
-        # Zwróć zawartość zaktualizowanego pliku JSON jako odpowiedź
-        return jsonify(updated_food_list_content)
-        # Obsługa błędów
+        # Zwróć zaktualizowaną listę produktów
+        return updated_food_list
     except Exception as error:
-        return jsonify({"error": str(error)}), 500
+        return {"error": str(error)}, 500
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -1529,7 +1511,6 @@ def reset_food_list():
         return jsonify({"error": "Błąd resetowania listy"}), 500
 
 
-# Analiza klatki z video
 @app.route('/adison_molotow', methods=['POST'])
 def get_frame():
     """
@@ -1537,50 +1518,56 @@ def get_frame():
     """
     # Pobierz dane JSON z żądania
     data = request.json
-    # Sprawdź, czy w data jest nazwa użytkownika i zdjęcie, jak nie zwróć błąd
     if data is None or 'images' not in data or 'username' not in data:
         return jsonify({'error': 'Brak zdjęcia lub nazwy użytkownika '}), 400
 
-    # Pobierz obrazy i nazwę użytkownika
     images_data = data['images']
     username = data['username']
     responses = []  # Lista do przechowywania odpowiedzi dla każdego obrazu
-    print(data)  # Debug, printuje dane
+    print(data)  # Debug
 
     # Przetwarzanie każdego obrazu z listy
     for idx, image_data in enumerate(images_data):
         try:
             image_bytes = base64.b64decode(image_data)  # Dekodowanie z base64
-            # Użycie tempfile do stworzenia tymczasowego pliku
             with tempfile.NamedTemporaryFile(delete=False, suffix='.png', dir=temp_dir) as tmp:
                 tmp.write(image_bytes)
                 tmp_path = tmp.name  # Zapisz ścieżkę do pliku tymczasowego
 
-            # Próba odczytu kodu QR
             decoded_data = decode_qr_code_frames(tmp_path)
             if decoded_data and decoded_data != "Kod QR nie został wykryty":
-                # Łączenie danych z kodu QR w jeden ciąg
-                qr_data = ', '.join([f'{key}: {value}' for key, value in decoded_data.items()])
-                responses.append({'type': 'qr', 'data': qr_data})
+                # Przekształcanie danych QR do formatu jak dla jedzenia
+                qr_data = {key.lower(): value for key, value in decoded_data.items()}
+                # Dodanie domyślnych wartości dla brakujących pól
+                qr_data.update({
+                    "cena": float(qr_data.get("cena", 0)),
+                    "kalorie": int(qr_data.get("kalorie", 0)),
+                    "tłuszcze": float(qr_data.get("tluszcze", 0)),
+                    "węglowodany": float(qr_data.get("weglowodany", 0)),
+                    "białko": float(qr_data.get("bialko", 0)),
+                    "ilość": int(qr_data.get("ilosc", 0)),
+                    "kategoria": qr_data.get("kategoria", "unknown"),
+                    "kategoria": qr_data.get("kategoria", "unknown")
+                })
+                responses.append(qr_data)
             else:
                 # Jeśli kod QR nie został wykryty, spróbuj zidentyfikować jedzenie
                 pred_class = predict_and_update_food_list(tmp_path, username)
-                responses.append({'type': 'food', 'data': pred_class})
+                # Aktualizacja listy jedzenia tylko jeśli nie jest to QR
+                updated_food_list = update_food_list([pred_class])
+                responses.extend(updated_food_list)
 
-            # Usuwanie pliku tymczasowego dla oszczędzania miejsca
             os.remove(tmp_path)
         except Exception as e:
-            # Podaj info o błędzie jeśli zaszedł
             responses.append({'error': str(e)})
             if 'tmp_path' in locals():
                 os.remove(tmp_path)  # Usunięcie pliku, jeśli wystąpi błąd
 
-    # Odpowiedź w JSON
+    print(responses)
     return jsonify(responses), 200
 
 
 
-# Identyfikacja ze zdjęcia QR+AI
 @app.route('/upload_test_AI_QR', methods=['GET', 'POST'])
 def upload_predictor():
     """
@@ -1599,7 +1586,6 @@ def upload_predictor():
         if request.method == 'POST':
 
             print("Otrzymano zapytanie POST")
-            
             # Sprawdzenie, czy w żądaniu znajdują się plik i nazwa użytkownika
             if 'file' not in request.files or 'username' not in request.form:
                 flash('Brak części pliku lub nazwy użytkownika', 'error')
@@ -1625,11 +1611,12 @@ def upload_predictor():
 
                 # Próba odczytu kodu QR
                 decoded_data = decode_qr_code(file_path)
-                if decoded_data and decoded_data != "QR code not detected":
+                if decoded_data and decoded_data != "Kod QR nie został wykryty":
                     print("Kod QR rozszyfrowany: ", decoded_data)
                     return jsonify({"status": "success", "type": "qr", "data": decoded_data})
-                # Informacja o braku kodu QR
-                print("Nie wykryto kodu QR, przechodzę dalej.")
+                else:
+                    # Informacja o braku kodu QR i przejście do predykcji jedzenia
+                    print("Nie wykryto kodu QR, przechodzę do klasyfikacji jedzenia.")
 
                 # Dokonanie predykcji na podstawie przesłanego obrazu
                 pred_class = pred_and_plot(model, file_path, class_names, username)
@@ -1637,14 +1624,14 @@ def upload_predictor():
                     print("Zidentyfikowano jedzenie: ", pred_class)
                     return jsonify({"status": "success", "type": "food", "data": pred_class})
                 else:
-                    print("No food detected.")
+                    print("Nie wykryto jedzenia.")
                     return jsonify({"status": "error", "message": "Nie wykryto kodu QR i jedzenia."})
             else:
-                print("Invalid file type.")
+                print("Zły typ pliku.")
                 return jsonify({"status": "error", "message": "Zły typ pliku, prześlij poprawny"})
 
         # Obsługa żądania innego niż POST
-        print("Przetworzono jako żądanie nie post")
+        print("Oczekiwano żądania POST z obrazem.")
         return jsonify({"status": "error", "message": "Wysłano zapytanie POST z obrazem"})
 
     # Obsługa wyjątków i błędów

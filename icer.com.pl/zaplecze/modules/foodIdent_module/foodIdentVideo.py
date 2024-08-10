@@ -251,8 +251,10 @@ def predict_and_update_food_list(tmp_path, username):
     if max_probability < 0.75:
         pred_class = 'uncertain'
 
+
     # Aktualizacja pliku użytkownika
     update_food_list(username, pred_class)
+    return pred_class
 
 #Aktualizowanie listy food_list
 def update_food_list(username, pred_class):
