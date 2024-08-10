@@ -8,6 +8,8 @@ import base64
 import tempfile
 import cv2
 from flask import session, jsonify, request
+import unicodedata
+
 
 import numpy as np
 
@@ -1511,6 +1513,11 @@ def reset_food_list():
         return jsonify({"error": "Błąd resetowania listy"}), 500
 
 
+def normalize_key(key):
+    # Zamienia polskie znaki na ich odpowiedniki bez polskich znaków i konwertuje na lowercase
+    return unicodedata.normalize('NFKD', key).encode('ascii', 'ignore').decode('ascii').lower()
+
+
 @app.route('/adison_molotow', methods=['POST'])
 def get_frame():
     """
@@ -1523,37 +1530,32 @@ def get_frame():
 
     images_data = data['images']
     username = data['username']
-    responses = []  # Lista do przechowywania odpowiedzi dla każdego obrazu
-    print(data)  # Debug
+    responses = []
 
-    # Przetwarzanie każdego obrazu z listy
     for idx, image_data in enumerate(images_data):
         try:
-            image_bytes = base64.b64decode(image_data)  # Dekodowanie z base64
+            image_bytes = base64.b64decode(image_data)
             with tempfile.NamedTemporaryFile(delete=False, suffix='.png', dir=temp_dir) as tmp:
                 tmp.write(image_bytes)
-                tmp_path = tmp.name  # Zapisz ścieżkę do pliku tymczasowego
+                tmp_path = tmp.name
 
             decoded_data = decode_qr_code_frames(tmp_path)
             if decoded_data and decoded_data != "Kod QR nie został wykryty":
-                # Przekształcanie danych QR do formatu jak dla jedzenia
-                qr_data = {key.lower(): value for key, value in decoded_data.items()}
-                # Dodanie domyślnych wartości dla brakujących pól
-                qr_data.update({
-                    "cena": float(qr_data.get("cena", 0)),
-                    "kalorie": int(qr_data.get("kalorie", 0)),
-                    "tłuszcze": float(qr_data.get("tluszcze", 0)),
-                    "węglowodany": float(qr_data.get("weglowodany", 0)),
-                    "białko": float(qr_data.get("bialko", 0)),
-                    "ilość": int(qr_data.get("ilosc", 0)),
-                    "kategoria": qr_data.get("kategoria", "unknown"),
-                    "kategoria": qr_data.get("kategoria", "unknown")
+                # Normalizacja kluczy w decoded_data
+                normalized_data = {normalize_key(key): value for key, value in decoded_data.items()}
+                # Aktualizacja z domyślnymi wartościami
+                normalized_data.update({
+                    "cena": float(normalized_data.get("cena", 0)),
+                    "kalorie": int(normalized_data.get("kalorie", 0)),
+                    "tluszcze": float(normalized_data.get("tluszcze", 0)),
+                    "weglowodany": float(normalized_data.get("weglowodany", 0)),
+                    "bialko": float(normalized_data.get("bialko", 0)),
+                    "ilosc": int(normalized_data.get("ilosc", 0)),
+                    "kategoria": normalized_data.get("kategoria", "brak")
                 })
-                responses.append(qr_data)
+                responses.append(normalized_data)
             else:
-                # Jeśli kod QR nie został wykryty, spróbuj zidentyfikować jedzenie
                 pred_class = predict_and_update_food_list(tmp_path, username)
-                # Aktualizacja listy jedzenia tylko jeśli nie jest to QR
                 updated_food_list = update_food_list([pred_class])
                 responses.extend(updated_food_list)
 
@@ -1561,7 +1563,7 @@ def get_frame():
         except Exception as e:
             responses.append({'error': str(e)})
             if 'tmp_path' in locals():
-                os.remove(tmp_path)  # Usunięcie pliku, jeśli wystąpi błąd
+                os.remove(tmp_path)
 
     print(responses)
     return jsonify(responses), 200
