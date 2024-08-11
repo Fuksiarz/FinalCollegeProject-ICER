@@ -27,7 +27,7 @@ export const useProductsData = ( filter) => {
                 //takie zastosowanie wyeliminowało problem z errorami przy pobieraniu
                 const newData = response.data;
                 setData(newData);
-
+                console.log(newData)
                 //zmienna przechowująca przefiltrowane dane względem wartości filter
                 const newFilteredProducts = newData.filter(product => {
                     if (filter === 'current') {
