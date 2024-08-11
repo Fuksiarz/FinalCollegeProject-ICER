@@ -763,6 +763,7 @@ def get_icer():
         cursor = connection.cursor(dictionary=True)
         if not cursor:
             raise Exception("Failed to create a cursor for the database.")
+
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
 
@@ -791,15 +792,21 @@ def get_icer():
         for result in results:
             zdjecie_lokalizacja = result['zdjecie_lokalizacja']
             if zdjecie_lokalizacja:
-                # Tutaj zdjecie_lokalizacja będzie zawierać lokalizację zdjęcia z odpowiedniej tabeli
-                print(zdjecie_lokalizacja)
+                # Zakodowanie zdjęcia w Base64
+                try:
+                    image_path = os.path.join("../zaplecze/photos", zdjecie_lokalizacja)
+                    with open(image_path, "rb") as image_file:
+                        encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+                    result['zdjecie_lokalizacja'] = encoded_image
+                except FileNotFoundError:
+                    # Obsługa, gdy plik zdjęcia nie został znaleziony
+                    result['zdjecie_lokalizacja'] = None
             else:
                 # Obsługa, gdy lokalizacja zdjęcia nie została znaleziona
-                print("Brak lokalizacji zdjęcia")
+                result['zdjecie_lokalizacja'] = None
 
         return jsonify(results)
 
-        # Obsługa błędów
     except ValueError as ve:
         return jsonify({"error": str(ve)}), 400
     except PermissionError as pe:
