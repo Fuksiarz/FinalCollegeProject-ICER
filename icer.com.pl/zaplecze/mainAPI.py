@@ -800,7 +800,7 @@ def get_icer():
             else:
                 # Obsługa, gdy lokalizacja zdjęcia nie została znaleziona
                 result['zdjecie_lokalizacja'] = None
-
+        print(results)
         return jsonify(results)
 
     except ValueError as ve:
