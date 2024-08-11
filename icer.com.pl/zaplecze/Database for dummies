@@ -1,3 +1,4 @@
+
 DELIMITER //
 
 -- Tworzenie procedury CreateAllTablesAndProcedures
@@ -90,7 +91,6 @@ BEGIN
     
     
     
-    
 
     -- Tworzenie tabeli Photos
 	CREATE TABLE IF NOT EXISTS Photos (
@@ -139,6 +139,7 @@ BEGIN
     podstawowe_profilowe TINYINT(1) NOT NULL DEFAULT 1,
     lokalizacja_zdj VARCHAR(255),
     uzytkownik_premium BOOLEAN NOT NULL DEFAULT 0,
+    data_koniec_premium DATE DEFAULT NULL,
     FOREIGN KEY (UserID) REFERENCES Users(id)
 );
 
@@ -254,6 +255,27 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE TRIGGER set_premium_end_date
+BEFORE UPDATE ON preferencje_uzytkownikow
+FOR EACH ROW
+BEGIN
+    -- Jeśli użytkownik staje się premium, ustaw datę końca premium na miesiąc w przód
+    IF NEW.uzytkownik_premium = 1 AND OLD.uzytkownik_premium = 0 THEN
+        SET NEW.data_koniec_premium = DATE_ADD(CURDATE(), INTERVAL 1 MONTH);
+    END IF;
+
+    -- Jeśli użytkownik przestaje być premium, usuń datę końca premium
+    IF NEW.uzytkownik_premium = 0 THEN
+        SET NEW.data_koniec_premium = NULL;
+    END IF;
+END; //
+
+DELIMITER ;
+
 
 
 CALL CreateAllTables();
+CALL UpdateSwiezosc(NULL);
+CALL UpdatePowiadomienia();

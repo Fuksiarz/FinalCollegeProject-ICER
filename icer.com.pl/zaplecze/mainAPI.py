@@ -9,7 +9,7 @@ import tempfile
 import cv2
 from flask import session, jsonify, request
 import unicodedata
-
+from datetime import datetime
 import numpy as np
 
 import bcrypt
@@ -1034,48 +1034,44 @@ def get_user_preferences():
         if response:
             return response, status_code
 
-        # Sprawdzenie, czy istnieje wpis w tabeli preferencje_uzytkownikow
-        check_preferences_query = """
-            SELECT UserID FROM preferencje_uzytkownikow WHERE UserID = %s
-        """
-        cursor.execute(check_preferences_query, (user_id,))
-        existing_user = cursor.fetchone()
-
-        # Jeżeli użytkownik nie ma jeszcze wpisu, dodaj nowy wpis do tabeli preferencje_uzytkownikow
-        if not existing_user:
-            insert_preferences_query = """
-                INSERT INTO preferencje_uzytkownikow (UserID)
-                VALUES (%s)
-            """
-            cursor.execute(insert_preferences_query, [user_id])
-            connection.commit()
-
-        # Pobieranie preferencji użytkownika
+        # Pobieranie preferencji użytkownika i statusu premium
         get_preferences_query = """
             SELECT wielkosc_lodowki, wielkosc_strony_produktu, 
                    widocznosc_informacji_o_produkcie, lokalizacja_zdj, 
-                   podstawowe_profilowe, uzytkownik_premium
+                   podstawowe_profilowe, uzytkownik_premium, data_koniec_premium
             FROM preferencje_uzytkownikow
             WHERE UserID = %s
         """
         cursor.execute(get_preferences_query, (user_id,))
         preferences = cursor.fetchone()
-        cursor.close()
 
         if preferences:
+            # Sprawdzenie, czy okres premium minął
+            if preferences['uzytkownik_premium'] == 1 and preferences['data_koniec_premium']:
+                if datetime.now().date() > preferences['data_koniec_premium']:
+                    # Jeśli minął miesiąc od aktywacji premium, resetuj status
+                    update_premium_status_query = """
+                        UPDATE preferencje_uzytkownikow 
+                        SET uzytkownik_premium = 0, data_koniec_premium = NULL 
+                        WHERE UserID = %s
+                    """
+                    cursor.execute(update_premium_status_query, (user_id,))
+                    connection.commit()
+                    preferences['uzytkownik_premium'] = 0
+                    preferences['data_koniec_premium'] = None
+
             # Odczytanie i zakodowanie zdjęcia profilowego w Base64
             if preferences['podstawowe_profilowe'] == 1:
                 profile_photo_path = os.path.join("../zaplecze/photos/userProfilePicture", "face.jpg")
             else:
                 profile_photo_path = os.path.join("../zaplecze/photos/userProfilePicture", preferences['lokalizacja_zdj'])
 
-            # Zakodowanie zdjęcia w Base64
             try:
+                # Otwieranie i kodowanie zdjęcia do Base64
                 with open(profile_photo_path, "rb") as image_file:
                     encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
                 preferences['profile_photo'] = encoded_image
             except FileNotFoundError:
-                # Obsługa, gdy plik zdjęcia nie został znaleziony
                 preferences['profile_photo'] = None
 
             return jsonify(preferences)
@@ -1083,6 +1079,7 @@ def get_user_preferences():
             return jsonify({"error": "Preferences not found."}), 404
 
     except Exception as error:
+        # Zwrócenie ogólnego błędu
         return jsonify({"error": str(error)}), 500
 
 
