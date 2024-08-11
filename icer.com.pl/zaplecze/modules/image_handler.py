@@ -67,7 +67,7 @@ def change_user_profile(db_connector, user_id, image_data_base64):
         image_name = f"{int(time.time())}.jpg"
 
         # Nowa lokalizacja folderu, gdzie mają być zapisane obrazy
-        images_folder = os.path.join("../public_html/public/data/userProfilePicture")
+        images_folder = os.path.join("../zaplecze/photos/userProfilePicture")
 
         # Tworzenie ścieżki do zapisu obrazu
         image_path = os.path.join(images_folder, image_name)

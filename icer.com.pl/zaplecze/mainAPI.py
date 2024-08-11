@@ -10,7 +10,6 @@ import cv2
 from flask import session, jsonify, request
 import unicodedata
 
-
 import numpy as np
 
 import bcrypt
@@ -44,7 +43,6 @@ app.config['BARCODE_FOLDER'] = os.path.join('static/', 'barcodes')
 app.config['QR_CODE_FOLDER'] = os.path.join('static/', 'qrcodes')
 app.config['FOOD_LIST_DIR'] = 'users_lists'
 
-
 # Uzyskaj ścieżkę do katalogu głównego (gdzie znajduje się mainAPI.py)
 base_dir = os.path.dirname(os.path.abspath(__file__))
 # Ścieżka do katalogu tmp
@@ -52,8 +50,6 @@ temp_dir = os.path.join(base_dir, 'tmp')
 os.makedirs(temp_dir, exist_ok=True)
 # Ścieżka do katalogu z plikami wideo
 video_dir = os.path.join(base_dir, 'static', 'adverts')
-
-
 
 # Upewnij się, że katalog tmp istnieje
 os.makedirs(temp_dir, exist_ok=True)
@@ -68,7 +64,6 @@ video_state = {
 model = load_model('model3.h5')
 print("Model loaded successfully:", model is not None)
 
-
 # Otwórz plik JSON i załaduj jego zawartość
 json_file_path = 'modules/foodIdent_module/classes.json'
 with open(json_file_path, 'r') as json_file:
@@ -79,9 +74,10 @@ class_names = data.get('class_names', [])
 # Dopuszczone rozszerzenia do ładowanych plików
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
+
 # Funkcja sprawdza, czy podany plik ma dozwolone rozszerzenie.
 def allowed_file(filename):
-# Sprawdź, czy nazwa pliku zawiera kropkę i czy rozszerzenie pliku jest dozwolone
+    # Sprawdź, czy nazwa pliku zawiera kropkę i czy rozszerzenie pliku jest dozwolone
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
@@ -964,10 +960,12 @@ def update_preferences():
         db_connector.connect()
         # Pobieranie danych z żądania
         data = request.json
+
         # Funkcja do walidacji rozmiaru
         def validate_size(value):
             valid_sizes = ['bardzo male', 'male', 'srednie', 'duze', 'bardzo duze']
             return value.lower() in valid_sizes
+
         # Sprawdzenie poprawności wartości
         if not validate_size(data['wielkosc_lodowki']) or not validate_size(data['wielkosc_strony_produktu']):
             return jsonify({"error": "Nieprawidłowe wartości wielkości."}), 400
@@ -1018,7 +1016,6 @@ def update_preferences():
         return jsonify({"error": str(error)}), 500
 
 
-# Endpoint do pobierania preferencji użytkownika
 @app.route('/api/get_user_preferences', methods=['GET'])
 def get_user_preferences():
     try:
@@ -1046,7 +1043,6 @@ def get_user_preferences():
 
         # Jeżeli użytkownik nie ma jeszcze wpisu, dodaj nowy wpis do tabeli preferencje_uzytkownikow
         if not existing_user:
-            # Tworzenie nowego wpisu w tabeli preferencje_uzytkownikow
             insert_preferences_query = """
                 INSERT INTO preferencje_uzytkownikow (UserID)
                 VALUES (%s)
@@ -1067,12 +1063,21 @@ def get_user_preferences():
         cursor.close()
 
         if preferences:
-            # Zwracanie preferencji wraz ze ścieżką do zdjęcia profilowego
+            # Odczytanie i zakodowanie zdjęcia profilowego w Base64
             if preferences['podstawowe_profilowe'] == 1:
-                profile_photo_path = os.path.join("public/data/userProfilePicture", "face.jpg")
+                profile_photo_path = os.path.join("../zaplecze/photos/userProfilePicture", "face.jpg")
             else:
-                profile_photo_path = preferences['lokalizacja_zdj']
-            preferences['profile_photo'] = profile_photo_path
+                profile_photo_path = os.path.join("../zaplecze/photos/userProfilePicture", preferences['lokalizacja_zdj'])
+
+            # Zakodowanie zdjęcia w Base64
+            try:
+                with open(profile_photo_path, "rb") as image_file:
+                    encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+                preferences['profile_photo'] = encoded_image
+            except FileNotFoundError:
+                # Obsługa, gdy plik zdjęcia nie został znaleziony
+                preferences['profile_photo'] = None
+
             return jsonify(preferences)
         else:
             return jsonify({"error": "Preferences not found."}), 404
@@ -1576,7 +1581,6 @@ def get_frame():
     return jsonify(responses), 200
 
 
-
 @app.route('/upload_test_AI_QR', methods=['GET', 'POST'])
 def upload_predictor():
     """
@@ -1716,7 +1720,6 @@ def start_video():
     # Sprawdzanie poprawnosci formatu przesłanych danych
     if not request.is_json:
         return jsonify({"error": "Zły typ pliku, oczekiwano JSON"}), 400
-        
 
     # Pobierz dane JSON z żądania
     data = request.get_json()
@@ -1724,7 +1727,6 @@ def start_video():
     # Sprawdź, czy 'video_choice' ma wlaściwą wartość i nie jest None
     if video_choice is None or video_choice not in [0, 1]:
         return jsonify({"error": "Zły wybór, podaj 1 lub 2"}), 400
-        
 
     # Wybierz plik wideo na podstawie przesłanej wartośći
     video_file = 'videoplayback.mp4' if video_choice == 1 else 'videoplaybackalt.mp4'
@@ -1768,15 +1770,18 @@ def control_video():
 
     return jsonify({"message": f"Video jest {action}ed", "video_playing": video_state["playing"]}), 200
 
+
 # Stripe -------------------------------------------------------
 import stripe
+
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
-#FEJKOWA BAZA DO TESTOW WITEK ZMIEN ZEBY DO PRAWDZIWEJ SZLO!!!
-#W SENSIE NIŻEJ W KODZIE TO MOŻESZ SKASOWAĆ
+# FEJKOWA BAZA DO TESTOW WITEK ZMIEN ZEBY DO PRAWDZIWEJ SZLO!!!
+# W SENSIE NIŻEJ W KODZIE TO MOŻESZ SKASOWAĆ
 users_db = {
     'example_user': {'status': 'basic'}
 }
+
 
 @app.route('/create-checkout-session', methods=['POST'])
 def create_checkout_session():
@@ -1806,6 +1811,7 @@ def create_checkout_session():
     except Exception as e:
         return jsonify(error=str(e)), 400
 
+
 @app.route('/success')
 def success():
     session_id = request.args.get('session_id')
@@ -1834,29 +1840,10 @@ def success():
     else:
         return jsonify(message="Payment succeeded, but session ID is missing."), 400
 
+
 @app.route('/cancel')
 def cancel():
     return jsonify(message="Payment canceled")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # Strona wylogowania
@@ -1872,4 +1859,3 @@ if __name__ == '__main__':
     # Preładowanie modeli do rozpoznawania z video
     preload()
     app.run()
-
