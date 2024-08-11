@@ -1523,8 +1523,22 @@ def reset_food_list():
 
 
 def normalize_key(key):
-    # Zamienia polskie znaki na ich odpowiedniki bez polskich znaków i konwertuje na lowercase
-    return unicodedata.normalize('NFKD', key).encode('ascii', 'ignore').decode('ascii').lower()
+    """
+    Normalizuje klucze w danych z QR kodu do jednolitych kluczy używanych w aplikacji.
+    """
+    # Mapowanie kluczy na jednorodne klucze
+    key_mappings = {
+        'Nazwa': 'nazwa',
+        'Cena': 'cena',
+        'Kalorie': 'kalorie',
+        'Tłuszcze': 'tluszcze',
+        'Węglowodany': 'weglowodany',
+        'Białko': 'bialko',
+        'Kategoria': 'kategoria',
+        'Ilość': 'ilosc',
+        'Data': 'data'
+    }
+    return key_mappings.get(key, key.lower())  # Domyślnie przekształca na małe litery
 
 
 @app.route('/adison_molotow', methods=['POST'])
@@ -1594,7 +1608,6 @@ def upload_predictor():
         cursor = connection.cursor(dictionary=True)
 
         if request.method == 'POST':
-
             print("Otrzymano zapytanie POST")
             # Sprawdzenie, czy w żądaniu znajdują się plik i nazwa użytkownika
             if 'file' not in request.files or 'username' not in request.form:
@@ -1623,7 +1636,22 @@ def upload_predictor():
                 decoded_data = decode_qr_code(file_path)
                 if decoded_data and decoded_data != "Kod QR nie został wykryty":
                     print("Kod QR rozszyfrowany: ", decoded_data)
-                    return jsonify({"status": "success", "type": "qr", "data": decoded_data})
+
+                    # Normalizacja kluczy oraz wartości w danych z QR kodu
+                    normalized_data = {normalize_key(key): value for key, value in decoded_data.items()}
+                    normalized_data.update({
+                        "cena": float(normalized_data.get("cena", 0)),
+                        "kalorie": int(normalized_data.get("kalorie", 0)),
+                        "tluszcze": float(normalized_data.get("tluszcze", 0)),
+                        "weglowodany": float(normalized_data.get("weglowodany", 0)),
+                        "bialko": float(normalized_data.get("bialko", 0)),
+                        "ilosc": int(normalized_data.get("ilosc", 0)),
+                        "kategoria": normalized_data.get("kategoria", "brak")
+                    })
+
+                    # Zwróć dane z QR kodu bez aktualizacji listy jedzenia
+                    return jsonify({"status": "success", "data": normalized_data})
+
                 else:
                     # Informacja o braku kodu QR i przejście do predykcji jedzenia
                     print("Nie wykryto kodu QR, przechodzę do klasyfikacji jedzenia.")
@@ -1632,7 +1660,10 @@ def upload_predictor():
                 pred_class = pred_and_plot(model, file_path, class_names, username)
                 if pred_class:
                     print("Zidentyfikowano jedzenie: ", pred_class)
-                    return jsonify({"status": "success", "type": "food", "data": pred_class})
+
+                    # Aktualizacja listy jedzenia na podstawie wyniku predykcji
+                    updated_food_list = update_food_list([pred_class])
+                    return jsonify({"status": "success", "data": updated_food_list})
                 else:
                     print("Nie wykryto jedzenia.")
                     return jsonify({"status": "error", "message": "Nie wykryto kodu QR i jedzenia."})
