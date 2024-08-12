@@ -50,6 +50,9 @@ function AddProduct() {
     //obraz do identyfikacji poprzez zdjęcie
     const [imageIdentyfication, setImageIdentyfication] = useState(null);
 
+    // Stan do przechowywania listy wyników
+    const [foodItems, setFoodItems] = useState([]);
+
     //podlgąd wybranego obrazu do identyfikacji poprzez zdjęcie
     const [imageForIdentyficationURL, setImageForIdentyficationURL] = useState(null);
     // Dodana zmienna stanu do przechowywania trybu kamery
@@ -98,12 +101,16 @@ function AddProduct() {
 
     const startCamera = () => {// włącz kamerę w celu identyfikacji żywności
         const stopRecordingFunc = cameraControlFoodId(videoRef, canvasRef, setStreamCamera, setProductBackpack,
-                                                        setInfo, user, cameraFacingMode);
+            setInfo, user, cameraFacingMode, foodItems, setFoodItems);
         setStopRecording(() => stopRecordingFunc);
         setStreamCamera(true);
     };
     const stopCamera = () => { //zatrzymaj kamerę i zaktualizuj kosz z zakupami
-        updateFood(setProductBackpack, setStreamCamera);
+
+
+        setProductBackpack(foodItems);//dodajemy zaktualizowane dane do torby z zakupami
+
+
         console.log("Attempting to stop the camera.");
         if (stopRecording) {
             console.log("stopRecording is defined, calling it.");
@@ -131,8 +138,8 @@ function AddProduct() {
                     {/* konener, który przy naciśnięciu zatrzymuje kamerę */}
                     {info && <div className="info-overlay">{info}</div>}
                     <div onClick={stopCamera} className="stopCameraButton"><Icon className="stopCameraButtonIcon"
-                                                          icon="fluent-emoji-high-contrast:stop-button"
-                                                          style={{color: '#f50000'}}/></div>
+                                                                                 icon="fluent-emoji-high-contrast:stop-button"
+                                                                                 style={{color: '#f50000'}}/></div>
                     <div onClick={toggleCamera} className="toggleCameraButton">
                         <Icon className="toggleCameraButtonIcon"  icon="ion:camera-reverse-sharp"/>
 
@@ -294,13 +301,13 @@ function AddProduct() {
                                         </div>
                                         <div >
                                             <div className="addPhotoFromDirIconDiv">
-                                        {/* ikona, która po naciśnięciu pokazuje opcje identyfikacji  */}
-                                        <Icon className="addPhotoFromDirIcon" icon="ph:qr-code" onClick={handleCameraClick}/>
-                                        <Icon className="addPhotoFromDirIcon" icon="icon-park-twotone:camera-one"
+                                                {/* ikona, która po naciśnięciu pokazuje opcje identyfikacji  */}
+                                                <Icon className="addPhotoFromDirIcon" icon="ph:qr-code" onClick={handleCameraClick}/>
+                                                <Icon className="addPhotoFromDirIcon" icon="icon-park-twotone:camera-one"
 
-                                              onClick={handleCameraClick}/>
+                                                      onClick={handleCameraClick}/>
                                             </div>
-                                        <span> <h5>jedzenie</h5> </span>
+                                            <span> <h5>jedzenie</h5> </span>
                                         </div>
                                     </label>
                                 </div>

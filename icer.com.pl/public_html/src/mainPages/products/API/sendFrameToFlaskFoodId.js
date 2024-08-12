@@ -15,7 +15,7 @@ export const sendFrameToFlaskFoodId = async (frameBase64, user) => {
                 "Content-Type": "application/json",
             },
         });
-        console.log(response.data)
+
         return response.data; // zwracane dane
     } catch (error) { //w ramach błędów wyświetl w konsoli:
         console.error("Error sending frame to Flask server:", error);

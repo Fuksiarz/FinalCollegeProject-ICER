@@ -1,12 +1,15 @@
 import { sendFrameToFlaskFoodId } from "./sendFrameToFlaskFoodId";
+import {useState} from "react";
 
-export const cameraControlFoodId = (videoRef, canvasRef, setStreamCamera, setProductBackpack, setInfo, user,cameraFacingMode) => {
+export const cameraControlFoodId = (videoRef, canvasRef, setStreamCamera,setProductBackpack, setInfo, user,cameraFacingMode, foodItems, setFoodItems) => {
     let isRecording = true; // Flaga do kontrolowania stanu nagrywania
     const frameRate = 100; // Ustawienie liczby klatek na sekundę
     const interval = 20000 / frameRate; // Interwał między klatkami
 
+
     const stopRecording = () => {
         isRecording = false; // Zatrzymanie nagrywania
+        setFoodItems([]);//dodajemy zaktualizowane dane do torby z zakupami
 
         if (videoRef.current && videoRef.current.srcObject) {
             const tracks = videoRef.current.srcObject.getTracks();
@@ -74,11 +77,23 @@ export const cameraControlFoodId = (videoRef, canvasRef, setStreamCamera, setPro
 
                             const analysisResult = await sendFrameToFlaskFoodId(frameBase64, user); // Wysłanie klatki do analizy
 
+
                             if (analysisResult && analysisResult.length > 0) {
-                                const firstResponse = analysisResult[0];
-                                if (firstResponse.message) {
+
+                                setFoodItems((prevItems) => {
+                                    // Dodanie do listy, jeśli element jeszcze nie istnieje
+                                    if (
+                                        analysisResult[0] &&
+                                        !prevItems.some((item) => item.nazwa === analysisResult[0].nazwa)
+                                    ) {
+
+                                        return [...prevItems, analysisResult[0]];
+                                    }
+                                    return prevItems;
+                                });
+                                if (analysisResult[0].message) {
                                     //setInfo(`Otrzymano wiadomość: ${firstResponse.message}`); // Wyświetlenie wiadomości
-                                } else if (firstResponse.error) {
+                                } else if (analysisResult[0].error) {
                                     //setInfo(`Wystąpił błąd: ${firstResponse.error}`); // Wyświetlenie błędu
                                 }
                             }
