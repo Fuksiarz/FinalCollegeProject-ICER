@@ -1934,6 +1934,7 @@ def create_checkout_session():
 def success():
     session_id = request.args.get('session_id')
     print(f"Received session_id: {session_id}")  # Logowanie session_id
+
     if session_id:
         checkout_session = stripe.checkout.Session.retrieve(session_id)
         if checkout_session.payment_status == 'paid':
@@ -1941,9 +1942,29 @@ def success():
             username = checkout_session['metadata']['username']
             print(f"Username from metadata: {username}")  # Logowanie username
 
-            # Aktualizuj status użytkownika w bazie danych
-            if username in users_db:
-                users_db[username]['status'] = 'premium'
+            # Połącz się z bazą danych
+            db_connector = DatabaseConnector()
+            db_connector.connect()
+
+            connection = db_connector.get_connection()
+            cursor = connection.cursor()
+
+            try:
+                # Sprawdzenie, czy użytkownik jest zalogowany
+                user_id, username, response, status_code = db_connector.get_user_id_by_username(cursor, session)
+
+                if status_code != 200:
+                    return jsonify(message="Użytkownik nie jest zalogowany."), 401
+
+                # Ustaw uzytkownik_premium na 1 (data_koniec_premium jest aktualizowana automatycznie przez trigger)
+                query_update = """
+                    UPDATE preferencje_uzytkownikow 
+                    SET uzytkownik_premium = %s
+                    WHERE UserID = %s
+                """
+                cursor.execute(query_update, (1, user_id))
+                connection.commit()
+
                 return jsonify(
                     message="Payment succeeded!",
                     session_id=session_id,
@@ -1951,12 +1972,21 @@ def success():
                     username=username,
                     status="premium"
                 )
-            else:
-                return jsonify(message="User not found in the database."), 404
+
+            except Exception as e:
+                print(f"Błąd podczas aktualizacji statusu użytkownika: {e}")
+                return jsonify(message="Wystąpił błąd podczas aktualizacji statusu użytkownika."), 500
+
+            finally:
+                if cursor:
+                    cursor.close()
+                if db_connector:
+                    db_connector.disconnect()
         else:
             return jsonify(message="Payment not completed successfully."), 400
     else:
         return jsonify(message="Payment succeeded, but session ID is missing."), 400
+
 
 
 @app.route('/cancel')
