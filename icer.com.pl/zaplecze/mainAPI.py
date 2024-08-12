@@ -1,7 +1,16 @@
 import json
 import os
 import uuid  # potrzebne do generowania unikalnych ID sesji
-from datetime import timedelta
+from datetime import timedelta, datetime
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+
+from flask import Flask, request, jsonify, url_for
+from flask_mail import Mail, Message
+import jwt
+
 
 from dotenv import load_dotenv
 import base64
@@ -9,7 +18,6 @@ import tempfile
 import cv2
 from flask import session, jsonify, request
 import unicodedata
-from datetime import datetime
 import numpy as np
 
 import bcrypt
@@ -1064,7 +1072,8 @@ def get_user_preferences():
             if preferences['podstawowe_profilowe'] == 1:
                 profile_photo_path = os.path.join("../zaplecze/photos/userProfilePicture", "face.jpg")
             else:
-                profile_photo_path = os.path.join("../zaplecze/photos/userProfilePicture", preferences['lokalizacja_zdj'])
+                profile_photo_path = os.path.join("../zaplecze/photos/userProfilePicture",
+                                                  preferences['lokalizacja_zdj'])
 
             try:
                 # Otwieranie i kodowanie zdjęcia do Base64
@@ -1235,27 +1244,81 @@ def save_user(username, password):
                 cursor.close()
 
 
+
+# Konfiguracja SMTP dla Yahoo
+SMTP_SERVER = 'smtp.mail.yahoo.com'
+SMTP_PORT = 587
+SMTP_USER = 'icerpoland@yahoo.com'
+SMTP_PASSWORD = ',R/j2kL-DSQ6baX'
+
+
+
+def send_verification_email(email, token):
+    subject = 'Potwierdzenie rejestracji'
+    link = url_for('confirm_email', token=token, _external=True)
+    body = f'Kliknij w ten link, aby potwierdzić swoją rejestrację: {link}'
+
+    msg = MIMEMultipart()
+    msg['From'] = SMTP_USER
+    msg['To'] = email
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body, 'plain'))
+
+    try:
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()  # Rozpocznij TLS
+            server.login(SMTP_USER, SMTP_PASSWORD)  # Zaloguj się
+            server.sendmail(SMTP_USER, email, msg.as_string())  # Wyślij e-mail
+        print('Email wysłany pomyślnie!')
+    except Exception as e:
+        print(f'Błąd podczas wysyłania e-maila: {e}')
+
+
+def generate_confirmation_token(email):
+    expiration = datetime.utcnow() + timedelta(hours=24)
+    token = jwt.encode(
+        {'email': email, 'exp': expiration},
+        app.config['SECRET_KEY'],
+        algorithm='HS256'
+    )
+    return token
+
+
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    try:
+        email = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])['email']
+        if confirm_user(email):
+            return jsonify({"message": "Adres e-mail został potwierdzony."})
+        else:
+            return jsonify({"message": "Błąd podczas potwierdzania adresu e-mail."}), 500
+    except jwt.ExpiredSignatureError:
+        return jsonify({"message": "Token wygasł."}), 400
+    except jwt.InvalidTokenError:
+        return jsonify({"message": "Nieprawidłowy token."}), 400
+
 @app.route('/register', methods=['POST'])
 def register():
-    # Pobierz dane JSON z żądania
     data = request.get_json()
-    username = data.get('username')
+    email = data.get('username')
     password = data.get('password')
 
-    # Sprawdź, czy podane dane są poprawne
-    if not username or not password:
-        return jsonify({"message": "Nazwa użytkownika lub hasło są wymagane"}), 400
+    if not email or not password:
+        return jsonify({"message": "Adres e-mail lub hasło są wymagane"}), 400
 
-    # Sprawdź, czy użytkownik już istnieje w bazie danych
-    if user_exists(username):
-        return jsonify({"message": "Użytkownik już istnieje"}), 400
+    if user_exists(email):
+        return jsonify({"message": "Użytkownik z takim adresem e-mail już istnieje"}), 400
 
-    # Zapisz użytkownika do bazy danych
-    if save_user(username, password):
-        return jsonify({"message": "Rejestracja udana"})
+    if save_user(email, password):
+        token = generate_confirmation_token(email)
+        send_verification_email(email, token)
+        return jsonify({"message": "Rejestracja udana. Sprawdź swoją skrzynkę pocztową, aby potwierdzić adres e-mail."})
     else:
         return jsonify({"message": "Błąd podczas rejestracji"}), 500
 
+def confirm_user(email):
+    # Oznacz użytkownika w bazie danych jako potwierdzonego.
+    pass
 
 def check_user(username, password):
     db_connector = DatabaseConnector()
