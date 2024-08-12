@@ -2016,6 +2016,41 @@ def cancel_placeholder():
     return jsonify(message="Payment was canceled.")
 
 
+# Wersja alternatywna, tak samo, wywołujesz z sessionid zeby sprawdzic status płatnosci
+@app.route('/payment-status-checker', methods=['GET'])
+def payment_status():
+    session_id = request.args.get('session_id')
+    if not session_id:
+        return jsonify({'error': 'session_id is required'}), 400
+
+    try:
+        checkout_session = stripe.checkout.Session.retrieve(session_id)
+        payment_status = checkout_session.payment_status
+
+        if payment_status == 'paid':
+            # Aktualizacja statusu użytkownika w bazie przez witka tutaj
+
+
+            return jsonify({
+                'status': 'success',
+                'message': 'Payment succeeded!',
+                'username': checkout_session['metadata']['username']
+            })
+
+        return jsonify({'status': payment_status}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+
+
+
+
+
+
+
 
 
 
