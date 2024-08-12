@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ea189cc-219c-4978-a52b-9b08d868a2c4" name="Default Changelist" comment="send email to confirm account (not working and no hash on passwd for testing)">
+    <list default="true" id="1ea189cc-219c-4978-a52b-9b08d868a2c4" name="Default Changelist" comment="Stripe premium update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py" beforeDir="false" afterPath="$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py" afterDir="false" />
     </list>
@@ -181,8 +181,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.save" />
         <item itemvalue="Python.mainAPI (1)" />
+        <item itemvalue="Python.save" />
         <item itemvalue="Python.mainAPI" />
         <item itemvalue="Python.image_handler" />
         <item itemvalue="Python.foodIdentVideo" />
@@ -278,7 +278,14 @@
       <option name="project" value="LOCAL" />
       <updated>1723425980816</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Stripe premium update">
+      <created>1723489135058</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1723489135058</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -305,87 +312,118 @@
     <MESSAGE value="New image formatting and new image localization for profile pic" />
     <MESSAGE value="upload_predictor with normalized_data and update_food_list" />
     <MESSAGE value="send email to confirm account (not working and no hash on passwd for testing)" />
-    <option name="LAST_COMMIT_MESSAGE" value="send email to confirm account (not working and no hash on passwd for testing)" />
+    <MESSAGE value="Stripe premium update" />
+    <option name="LAST_COMMIT_MESSAGE" value="Stripe premium update" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1004</line>
+          <line>1006</line>
           <option name="timeStamp" value="57" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1742</line>
+          <line>1823</line>
           <option name="timeStamp" value="63" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1755</line>
+          <line>1836</line>
           <option name="timeStamp" value="65" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1307</line>
+          <line>1309</line>
           <option name="timeStamp" value="66" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1294</line>
+          <line>1296</line>
           <option name="timeStamp" value="70" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1303</line>
+          <line>1305</line>
           <option name="timeStamp" value="71" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1299</line>
+          <line>1301</line>
           <option name="timeStamp" value="72" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1306</line>
+          <line>1308</line>
           <option name="timeStamp" value="73" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1305</line>
+          <line>1307</line>
           <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1059</line>
+          <line>1061</line>
           <option name="timeStamp" value="79" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1276</line>
+          <line>1278</line>
           <option name="timeStamp" value="82" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1245</line>
+          <line>1247</line>
           <option name="timeStamp" value="91" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1264</line>
+          <line>1266</line>
           <option name="timeStamp" value="92" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
-          <line>1263</line>
+          <line>1265</line>
           <option name="timeStamp" value="93" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
+          <line>1414</line>
+          <option name="timeStamp" value="94" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
+          <line>1447</line>
+          <option name="timeStamp" value="95" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
+          <line>1451</line>
+          <option name="timeStamp" value="96" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
+          <line>1405</line>
+          <option name="timeStamp" value="98" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
+          <line>1402</line>
+          <option name="timeStamp" value="103" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/icer.com.pl/zaplecze/mainAPI.py</url>
+          <line>1394</line>
+          <option name="timeStamp" value="104" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Projekt$image_handler.coverage" NAME="image_handler Coverage Results" MODIFIED="1723385923259" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/icer.com.pl/zaplecze/modules" />
-    <SUITE FILE_PATH="coverage/Projekt$mainAPI__1_.coverage" NAME="mainAPI (1) Coverage Results" MODIFIED="1723487192689" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/icer.com.pl/zaplecze" />
+    <SUITE FILE_PATH="coverage/Projekt$mainAPI__1_.coverage" NAME="mainAPI (1) Coverage Results" MODIFIED="1723494376037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/icer.com.pl/zaplecze" />
     <SUITE FILE_PATH="coverage/Projekt$mainAPI.coverage" NAME="mainAPI Coverage Results" MODIFIED="1723414576604" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Icer" />
   </component>
 </project>
