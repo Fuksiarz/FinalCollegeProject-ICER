@@ -15,7 +15,7 @@ export function GenerateQR() {
         protein: 0,
         category: 0,
         amount: 0,
-        date: new Date().toISOString().split('T')[0], // Ustawienie dzisiejszej daty jako domyślnej wartości
+        date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Ustawienie dzisiejszej daty jako domyślnej wartości
     });
 
 

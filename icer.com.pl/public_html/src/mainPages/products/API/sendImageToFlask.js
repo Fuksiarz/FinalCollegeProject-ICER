@@ -3,15 +3,6 @@ import {API_URL} from "../../settings/config";
 import {toast} from "react-toastify";
 
 // Funkcja do normalizacji nazw pól na małe litery
-const normalizeDataKeys = (data) => {
-    const normalizedData = {};
-    for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-            normalizedData[key.toLowerCase()] = data[key];
-        }
-    }
-    return normalizedData;
-};
 
 
 // Funkcja do komunikacji z API w celu identyfikacji obrazu z jedzeniem, przyjmuje plik i ustawienie podglądu zdjęcia
@@ -28,41 +19,31 @@ export const sendImageToFlask = async (setProduct, file, setImageForIdentyficati
                 'Content-Type': 'multipart/form-data' // Wskazuje, że dane będą w formacie form-data
             }
         });
-        console.log('dostalem:' , response.data)
+
         if (response.data && response.data.type === 'qr') {
-            const identified = normalizeDataKeys(response.data.data);
+            const identified = response.data.data;
             toast.success('Rozpoznano kod!');
             console.log('identified :', identified)
 
             const updatedProduct = {
-                nazwa: identified.nazwa || "",
-                cena: identified.cena || "",
-                kalorie: identified.kalorie || "",
-                tluszcze: identified.tłuszcze || "",
-                weglowodany: identified.węglowodany || "",
-                bialko: identified.białko || "",
-                kategoria: identified.kategoria || "",
-                ilosc: identified.ilość || "",
-                data_waznosci: identified.data || new Date().toISOString().split('T')[0] // Default to today if not provided
+                ...identified,
+                data_waznosci: identified.data || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // Dodajemy datę ważności
             };
-            console.log(updatedProduct)
+
             setProduct(updatedProduct);
 
-        } else {
+        } else if (response.data && response.data.type === 'food'){
             // Aktualizuje listę produktów
-            axios.get(`${API_URL}/api/update_food_list`)
-                .then((response) => {
-                    // W razie powodzenia wyświetl komunikat
-                    toast.success('nowe produkty w torbie z zakupami!');
-                    const identified = normalizeDataKeys(response.data[0]);
-                    console.log(identified)
-                    // Dodajemy datę ważności do produktu
-                    const updatedProduct = {
-                        ...identified,
-                        data_waznosci: new Date().toISOString().split('T')[0] // Dodajemy datę ważności
-                    };
-                    setProduct(updatedProduct);
-                });
+                console.log('wchodzi do foodid')
+                const identified = response.data.data[0];
+                console.log('food:' , response.data)
+                // Dodajemy datę ważności do produktu
+                const updatedProduct = {
+                    ...identified,
+                    data_waznosci: identified.data || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // Dodajemy datę ważności
+                };
+                setProduct(updatedProduct);
+
         }
         setImageForIdentyficationURL(null); // Wyłącza podgląd
 

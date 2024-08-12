@@ -1650,7 +1650,7 @@ def upload_predictor():
                     })
 
                     # Zwróć dane z QR kodu bez aktualizacji listy jedzenia
-                    return jsonify({"status": "success", "data": normalized_data})
+                    return jsonify({"status": "success", "type": "qr", "data": normalized_data})
 
                 else:
                     # Informacja o braku kodu QR i przejście do predykcji jedzenia
@@ -1663,7 +1663,7 @@ def upload_predictor():
 
                     # Aktualizacja listy jedzenia na podstawie wyniku predykcji
                     updated_food_list = update_food_list([pred_class])
-                    return jsonify({"status": "success", "data": updated_food_list})
+                    return jsonify({"status": "success", "type": "food", "data": updated_food_list})
                 else:
                     print("Nie wykryto jedzenia.")
                     return jsonify({"status": "error", "message": "Nie wykryto kodu QR i jedzenia."})

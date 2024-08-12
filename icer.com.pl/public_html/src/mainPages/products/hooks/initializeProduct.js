@@ -9,6 +9,6 @@ export const  initializeProduct = () => {
         bialko: 0,
         kategoria: 'Jedzenie',
         ilosc: 1,
-        data_waznosci: new Date().toISOString().split('T')[0], // Domyślna data ważności
+        data_waznosci: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Domyślna data ważności
     };
 };
