@@ -1994,6 +1994,34 @@ def cancel():
     return jsonify(message="Payment canceled")
 
 
+@app.route('/payment-status/<session_id>', methods=['GET'])
+def payment_status(session_id):
+    try:
+        checkout_session = stripe.checkout.Session.retrieve(session_id)
+        return jsonify({
+            'payment_status': checkout_session.payment_status,
+            'customer': checkout_session['customer'],
+            'username': checkout_session['metadata']['username'],
+        })
+    except Exception as e:
+        return jsonify(error=str(e)), 400
+
+
+@app.route('/success_placeholder')
+def success_placeholder():
+    return jsonify(message="Payment processing...")
+
+@app.route('/cancel_placeholder')
+def cancel_placeholder():
+    return jsonify(message="Payment was canceled.")
+
+
+
+
+
+
+
+
 # Strona wylogowania
 @app.route('/logout')
 def logout():
