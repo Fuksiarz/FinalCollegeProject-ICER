@@ -5,12 +5,13 @@ from datetime import timedelta, datetime
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+from email.utils import formataddr
+from email.header import Header
+import getpass
 
 from flask import Flask, request, jsonify, url_for
 from flask_mail import Mail, Message
 import jwt
-
 
 from dotenv import load_dotenv
 import base64
@@ -1167,32 +1168,24 @@ def update_food_list(food_list):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # Sprawdzenie, czy metoda żądania to POST
     if request.method == 'POST':
-        # Pobranie danych z żądania w formacie JSON
         data = request.get_json()
-        # Pobranie nazwy użytkownika i hasła z danych żądania
         username = data.get('username')
         password = data.get('password')
 
-        # Sprawdzenie, czy podano nazwę użytkownika i hasło
         if not username or not password:
             return jsonify({"message": "Brak nazwy użytkownika lub hasła"}), 400
 
-        # Sprawdzenie poprawności nazwy użytkownika i hasła
-        if check_user(username, password):
-            # Ustawienie sesji dla zalogowanego użytkownika
+        result = check_user(username, password)
+
+        if result == True:
             session['username'] = username
-            # Generowanie unikalnego identyfikatora sesji
             session_id = str(uuid.uuid4())
             session['session_id'] = session_id
-            # Zwrócenie odpowiedzi z wiadomością o udanym logowaniu i identyfikatorem sesji
             return jsonify({"message": "Logowanie udane", "session_id": session_id})
         else:
-            # Zwrócenie odpowiedzi z wiadomością o nieprawidłowych danych logowania
-            return jsonify({"message": "Nieprawidłowa nazwa użytkownika lub hasło"}), 401
+            return result
     else:
-        # Zwrócenie odpowiedzi z wiadomością o niedozwolonej metodzie żądania
         return jsonify({"message": "Metoda niedozwolona"}), 405
 
 
@@ -1244,13 +1237,10 @@ def save_user(username, password):
                 cursor.close()
 
 
-
-# Konfiguracja SMTP dla Yahoo
-SMTP_SERVER = 'smtp.mail.yahoo.com'
-SMTP_PORT = 587
-SMTP_USER = 'icerpoland@yahoo.com'
+SMTP_SERVER = 'smtp-mail.outlook.com'
+SMTP_USER = 'icerpoland@outlook.com'
 SMTP_PASSWORD = ',R/j2kL-DSQ6baX'
-
+SMTP_PORT = 587
 
 
 def send_verification_email(email, token):
@@ -1259,16 +1249,19 @@ def send_verification_email(email, token):
     body = f'Kliknij w ten link, aby potwierdzić swoją rejestrację: {link}'
 
     msg = MIMEMultipart()
-    msg['From'] = SMTP_USER
+    msg['From'] = formataddr((str(Header('Icer Poland', 'utf-8')), SMTP_USER))
     msg['To'] = email
-    msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
+    msg['Subject'] = Header(subject, 'utf-8')
+
+    # Użyj MIMEText z kodowaniem UTF-8 dla treści wiadomości
+    msg.attach(MIMEText(body, 'plain', 'utf-8'))
 
     try:
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()  # Rozpocznij TLS
             server.login(SMTP_USER, SMTP_PASSWORD)  # Zaloguj się
-            server.sendmail(SMTP_USER, email, msg.as_string())  # Wyślij e-mail
+            # Zamiast msg.as_string() użyj str() z kodowaniem UTF-8
+            server.sendmail(SMTP_USER, email, msg.as_string().encode('utf-8'))  # Wyślij e-mail
         print('Email wysłany pomyślnie!')
     except Exception as e:
         print(f'Błąd podczas wysyłania e-maila: {e}')
@@ -1297,6 +1290,7 @@ def confirm_email(token):
     except jwt.InvalidTokenError:
         return jsonify({"message": "Nieprawidłowy token."}), 400
 
+
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -1316,9 +1310,36 @@ def register():
     else:
         return jsonify({"message": "Błąd podczas rejestracji"}), 500
 
+
 def confirm_user(email):
-    # Oznacz użytkownika w bazie danych jako potwierdzonego.
-    pass
+    db_connector = DatabaseConnector()
+    db_connector.connect()
+
+    connection = db_connector.get_connection()
+    cursor = connection.cursor()
+
+    try:
+        query = "UPDATE Users SET zatwierdzony = %s WHERE username = %s"
+        values = (True, email)
+
+        cursor.execute(query, values)
+        connection.commit()
+
+        if cursor.rowcount > 0:
+            return jsonify({"message": "Użytkownik został zatwierdzony."}), 200
+        else:
+            return jsonify({"message": "Nie znaleziono użytkownika."}), 404
+
+    except Exception as error:
+        print("Błąd podczas zatwierdzania użytkownika:", error)
+        return jsonify({"message": "Wystąpił błąd podczas zatwierdzania użytkownika."}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if db_connector:
+            db_connector.disconnect()
+
 
 def check_user(username, password):
     db_connector = DatabaseConnector()
@@ -1328,14 +1349,19 @@ def check_user(username, password):
     cursor = connection.cursor()
 
     try:
-        query = "SELECT password FROM Users WHERE username = %s"
+        query = "SELECT password, zatwierdzony FROM Users WHERE username = %s"
         values = (username,)
 
         cursor.execute(query, values)
         result = cursor.fetchone()
 
         if result:
-            db_password = result[0].encode('utf-8')
+            db_password, zatwierdzony = result
+            db_password = db_password.encode('utf-8')
+
+            if not zatwierdzony:
+                return jsonify({"message": "Użytkownik nie został jeszcze zatwierdzony."}), 403
+
             if bcrypt.checkpw(password.encode('utf-8'), db_password):
                 session['username'] = username
                 return True
@@ -1343,8 +1369,9 @@ def check_user(username, password):
         return False
 
     except Exception as error:
-        print("Error during user authentication:", error)
-        return False
+        print("Błąd podczas uwierzytelniania użytkownika:", error)
+        return jsonify({"message": "Wystąpił błąd podczas logowania."}), 500
+
     finally:
         if cursor:
             cursor.close()
