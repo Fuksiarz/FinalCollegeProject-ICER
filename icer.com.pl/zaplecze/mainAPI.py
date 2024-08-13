@@ -358,14 +358,34 @@ def add_product():
         if response:
             return response, status_code
 
-        # Sprawdzenie, czy produkt już istnieje
-        check_product_query = "SELECT id FROM Produkty WHERE nazwa = %s AND cena = %s"
-        cursor.execute(check_product_query, (data['nazwa'], data['cena']))
+        # Sprawdzenie, czy istnieje produkt z takimi samymi wartościami i który jest podstawowy
+        check_product_query = """
+            SELECT id 
+            FROM Produkty 
+            WHERE nazwa = %s 
+              AND cena = %s 
+              AND kalorie = %s 
+              AND tluszcze = %s 
+              AND weglowodany = %s 
+              AND bialko = %s 
+              AND kategoria = %s 
+              AND podstawowy = 1
+        """
+        cursor.execute(check_product_query, (
+            data['nazwa'],
+            data['cena'],
+            data['kalorie'],
+            data['tluszcze'],
+            data['weglowodany'],
+            data['bialko'],
+            data['kategoria']
+        ))
         product_exists = cursor.fetchone()
 
         if product_exists:
             product_id = product_exists['id']
         else:
+            # Jeśli taki produkt nie istnieje, dodaj nowy produkt
             product_id = product_manager.dodaj_produkt(
                 data['nazwa'],
                 data['cena'],
@@ -2096,66 +2116,66 @@ def cancel_placeholder():
     return jsonify(message="Payment was canceled.")
 
 
-@app.route('/payment-status-checker', methods=['GET'])
-def payment_status():
-    session_id = request.args.get('session_id')
-    if not session_id:
-        return jsonify({'error': 'session_id is required'}), 400
-
-    try:
-        checkout_session = stripe.checkout.Session.retrieve(session_id)
-        payment_status = checkout_session.payment_status
-
-        if payment_status == 'paid':
-            # Pobierz nazwę użytkownika z metadanych sesji
-            username = checkout_session['metadata']['username']
-
-            # Połącz z bazą danych
-            db_connector = DatabaseConnector()
-            db_connector.connect()
-
-            connection = db_connector.get_connection()
-            cursor = connection.cursor()
-
-            try:
-                # Pobierz user_id na podstawie username
-                user_id_query = "SELECT id FROM Users WHERE username = %s"
-                cursor.execute(user_id_query, (username,))
-                user_id_result = cursor.fetchone()
-
-                if not user_id_result:
-                    return jsonify({"message": "Użytkownik nie został znaleziony."}), 404
-
-                user_id = user_id_result[0]
-
-                # Aktualizuj status premium w tabeli preferencje_uzytkownikow
-                update_query = """
-                UPDATE preferencje_uzytkownikow 
-                SET uzytkownik_premium = 1 
-                WHERE UserID = %s
-                """
-                cursor.execute(update_query, (user_id,))
-                connection.commit()
-
-            except Exception as e:
-                return jsonify({'error': f"Błąd podczas aktualizacji bazy danych: {str(e)}"}), 500
-
-            finally:
-                if cursor:
-                    cursor.close()
-                if db_connector:
-                    db_connector.disconnect()
-
-            return jsonify({
-                'status': 'success',
-                'message': 'Payment succeeded!',
-                'username': username
-            })
-
-        return jsonify({'status': payment_status}), 200
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+# @app.route('/payment-status-checker', methods=['GET'])
+# def payment_status():
+#     session_id = request.args.get('session_id')
+#     if not session_id:
+#         return jsonify({'error': 'session_id is required'}), 400
+#
+#     try:
+#         checkout_session = stripe.checkout.Session.retrieve(session_id)
+#         payment_status = checkout_session.payment_status
+#
+#         if payment_status == 'paid':
+#             # Pobierz nazwę użytkownika z metadanych sesji
+#             username = checkout_session['metadata']['username']
+#
+#             # Połącz z bazą danych
+#             db_connector = DatabaseConnector()
+#             db_connector.connect()
+#
+#             connection = db_connector.get_connection()
+#             cursor = connection.cursor()
+#
+#             try:
+#                 # Pobierz user_id na podstawie username
+#                 user_id_query = "SELECT id FROM Users WHERE username = %s"
+#                 cursor.execute(user_id_query, (username,))
+#                 user_id_result = cursor.fetchone()
+#
+#                 if not user_id_result:
+#                     return jsonify({"message": "Użytkownik nie został znaleziony."}), 404
+#
+#                 user_id = user_id_result[0]
+#
+#                 # Aktualizuj status premium w tabeli preferencje_uzytkownikow
+#                 update_query = """
+#                 UPDATE preferencje_uzytkownikow
+#                 SET uzytkownik_premium = 1
+#                 WHERE UserID = %s
+#                 """
+#                 cursor.execute(update_query, (user_id,))
+#                 connection.commit()
+#
+#             except Exception as e:
+#                 return jsonify({'error': f"Błąd podczas aktualizacji bazy danych: {str(e)}"}), 500
+#
+#             finally:
+#                 if cursor:
+#                     cursor.close()
+#                 if db_connector:
+#                     db_connector.disconnect()
+#
+#             return jsonify({
+#                 'status': 'success',
+#                 'message': 'Payment succeeded!',
+#                 'username': username
+#             })
+#
+#         return jsonify({'status': payment_status}), 200
+#
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
 
 
