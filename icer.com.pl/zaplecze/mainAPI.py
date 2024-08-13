@@ -2096,7 +2096,6 @@ def cancel_placeholder():
     return jsonify(message="Payment was canceled.")
 
 
-# Wersja alternatywna, tak samo, wywołujesz z sessionid zeby sprawdzic status płatnosci
 @app.route('/payment-status-checker', methods=['GET'])
 def payment_status():
     session_id = request.args.get('session_id')
@@ -2108,13 +2107,49 @@ def payment_status():
         payment_status = checkout_session.payment_status
 
         if payment_status == 'paid':
-            # Aktualizacja statusu użytkownika w bazie przez witka tutaj
+            # Pobierz nazwę użytkownika z metadanych sesji
+            username = checkout_session['metadata']['username']
 
+            # Połącz z bazą danych
+            db_connector = DatabaseConnector()
+            db_connector.connect()
+
+            connection = db_connector.get_connection()
+            cursor = connection.cursor()
+
+            try:
+                # Pobierz user_id na podstawie username
+                user_id_query = "SELECT id FROM Users WHERE username = %s"
+                cursor.execute(user_id_query, (username,))
+                user_id_result = cursor.fetchone()
+
+                if not user_id_result:
+                    return jsonify({"message": "Użytkownik nie został znaleziony."}), 404
+
+                user_id = user_id_result[0]
+
+                # Aktualizuj status premium w tabeli preferencje_uzytkownikow
+                update_query = """
+                UPDATE preferencje_uzytkownikow 
+                SET uzytkownik_premium = 1 
+                WHERE UserID = %s
+                """
+                cursor.execute(update_query, (user_id,))
+                connection.commit()
+
+            except Exception as e:
+                return jsonify({'error': f"Błąd podczas aktualizacji bazy danych: {str(e)}"}), 500
+
+            finally:
+                if cursor:
+                    cursor.close()
+                if db_connector:
+                    db_connector.disconnect()
 
             return jsonify({
                 'status': 'success',
                 'message': 'Payment succeeded!',
-                'username': checkout_session['metadata']['username']
+                'username': username
             })
 
         return jsonify({'status': payment_status}), 200
