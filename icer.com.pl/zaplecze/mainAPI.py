@@ -8,6 +8,8 @@ from email.mime.text import MIMEText
 from email.utils import formataddr
 from email.header import Header
 import getpass
+import secrets
+import string
 
 from flask import Flask, request, jsonify, url_for
 from flask_mail import Mail, Message
@@ -356,14 +358,34 @@ def add_product():
         if response:
             return response, status_code
 
-        # Sprawdzenie, czy produkt już istnieje
-        check_product_query = "SELECT id FROM Produkty WHERE nazwa = %s AND cena = %s"
-        cursor.execute(check_product_query, (data['nazwa'], data['cena']))
+        # Sprawdzenie, czy istnieje produkt z takimi samymi wartościami i który jest podstawowy
+        check_product_query = """
+            SELECT id 
+            FROM Produkty 
+            WHERE nazwa = %s 
+              AND cena = %s 
+              AND kalorie = %s 
+              AND tluszcze = %s 
+              AND weglowodany = %s 
+              AND bialko = %s 
+              AND kategoria = %s 
+              AND podstawowy = 1
+        """
+        cursor.execute(check_product_query, (
+            data['nazwa'],
+            data['cena'],
+            data['kalorie'],
+            data['tluszcze'],
+            data['weglowodany'],
+            data['bialko'],
+            data['kategoria']
+        ))
         product_exists = cursor.fetchone()
 
         if product_exists:
             product_id = product_exists['id']
         else:
+            # Jeśli taki produkt nie istnieje, dodaj nowy produkt
             product_id = product_manager.dodaj_produkt(
                 data['nazwa'],
                 data['cena'],
@@ -1379,6 +1401,85 @@ def check_user(username, password):
             db_connector.disconnect()
 
 
+def send_new_password_email(email, new_password):
+    subject = 'Resetowanie hasła'
+    body = f'Twoje nowe hasło to: {new_password}'
+
+    msg = MIMEMultipart()
+    msg['From'] = formataddr((str(Header('Icer Poland', 'utf-8')), SMTP_USER))
+    msg['To'] = email
+    msg['Subject'] = Header(subject, 'utf-8')
+
+    msg.attach(MIMEText(body, 'plain', 'utf-8'))
+
+    try:
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASSWORD)
+            # Kodowanie wiadomości w UTF-8
+            message_string = msg.as_string().encode('utf-8')
+            server.sendmail(SMTP_USER, email, message_string)
+        print('Email z nowym hasłem wysłany pomyślnie!')
+    except Exception as e:
+        print(f'Błąd podczas wysyłania e-maila: {e}')
+        import traceback
+        print(traceback.format_exc())
+
+
+def generate_random_password(length=12):
+    characters = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(secrets.choice(characters) for _ in range(length))
+
+
+@app.route('/reset-password', methods=['POST'])
+def reset_password():
+    data = request.get_json()
+    email = data.get('email')
+
+    if not email:
+        return jsonify({"message": "Adres e-mail jest wymagany"}), 400
+
+    db_connector = DatabaseConnector()
+    db_connector.connect()
+
+    connection = db_connector.get_connection()
+    cursor = connection.cursor()
+
+    try:
+        query = "SELECT id FROM Users WHERE username = %s"
+        cursor.execute(query, (email,))
+        result = cursor.fetchone()
+
+        if not result:
+            return jsonify({"message": "Użytkownik o podanym adresie e-mail nie istnieje"}), 404
+
+        user_id = result[0]
+
+        # Generowanie nowego hasła
+        new_password = generate_random_password()
+        hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+
+        # Aktualizacja hasła w bazie danych
+        update_query = "UPDATE Users SET password = %s WHERE id = %s"
+        cursor.execute(update_query, (hashed_password, user_id))
+        connection.commit()
+
+        # Wysłanie nowego hasła e-mailem
+        send_new_password_email(email, new_password)
+
+        return jsonify({"message": "Hasło zostało zresetowane i wysłane na Twój adres e-mail"}), 200
+
+    except Exception as error:
+        print(f"Błąd podczas resetowania hasła: {error}")
+        return jsonify({"message": "Wystąpił błąd podczas resetowania hasła"}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if db_connector:
+            db_connector.disconnect()
+
+
 @app.route('/api/edit_user', methods=['POST'])
 def edit_user():
     # Sprawdzanie, czy użytkownik jest zalogowany
@@ -1988,7 +2089,6 @@ def success():
         return jsonify(message="Payment succeeded, but session ID is missing."), 400
 
 
-
 @app.route('/cancel')
 def cancel():
     return jsonify(message="Payment canceled")
@@ -2016,31 +2116,66 @@ def cancel_placeholder():
     return jsonify(message="Payment was canceled.")
 
 
-# Wersja alternatywna, tak samo, wywołujesz z sessionid zeby sprawdzic status płatnosci
-@app.route('/payment-status-checker', methods=['GET'])
-def payment_status():
-    session_id = request.args.get('session_id')
-    if not session_id:
-        return jsonify({'error': 'session_id is required'}), 400
-
-    try:
-        checkout_session = stripe.checkout.Session.retrieve(session_id)
-        payment_status = checkout_session.payment_status
-
-        if payment_status == 'paid':
-            # Aktualizacja statusu użytkownika w bazie przez witka tutaj
-
-
-            return jsonify({
-                'status': 'success',
-                'message': 'Payment succeeded!',
-                'username': checkout_session['metadata']['username']
-            })
-
-        return jsonify({'status': payment_status}), 200
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+# @app.route('/payment-status-checker', methods=['GET'])
+# def payment_status():
+#     session_id = request.args.get('session_id')
+#     if not session_id:
+#         return jsonify({'error': 'session_id is required'}), 400
+#
+#     try:
+#         checkout_session = stripe.checkout.Session.retrieve(session_id)
+#         payment_status = checkout_session.payment_status
+#
+#         if payment_status == 'paid':
+#             # Pobierz nazwę użytkownika z metadanych sesji
+#             username = checkout_session['metadata']['username']
+#
+#             # Połącz z bazą danych
+#             db_connector = DatabaseConnector()
+#             db_connector.connect()
+#
+#             connection = db_connector.get_connection()
+#             cursor = connection.cursor()
+#
+#             try:
+#                 # Pobierz user_id na podstawie username
+#                 user_id_query = "SELECT id FROM Users WHERE username = %s"
+#                 cursor.execute(user_id_query, (username,))
+#                 user_id_result = cursor.fetchone()
+#
+#                 if not user_id_result:
+#                     return jsonify({"message": "Użytkownik nie został znaleziony."}), 404
+#
+#                 user_id = user_id_result[0]
+#
+#                 # Aktualizuj status premium w tabeli preferencje_uzytkownikow
+#                 update_query = """
+#                 UPDATE preferencje_uzytkownikow
+#                 SET uzytkownik_premium = 1
+#                 WHERE UserID = %s
+#                 """
+#                 cursor.execute(update_query, (user_id,))
+#                 connection.commit()
+#
+#             except Exception as e:
+#                 return jsonify({'error': f"Błąd podczas aktualizacji bazy danych: {str(e)}"}), 500
+#
+#             finally:
+#                 if cursor:
+#                     cursor.close()
+#                 if db_connector:
+#                     db_connector.disconnect()
+#
+#             return jsonify({
+#                 'status': 'success',
+#                 'message': 'Payment succeeded!',
+#                 'username': username
+#             })
+#
+#         return jsonify({'status': payment_status}), 200
+#
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
 
 
