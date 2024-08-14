@@ -11,8 +11,7 @@ import getpass
 import secrets
 import string
 
-from flask import Flask, request, jsonify, url_for
-from flask_mail import Mail, Message
+
 import jwt
 
 from dotenv import load_dotenv
@@ -2020,8 +2019,8 @@ def create_checkout_session():
                 'quantity': 1,
             }],
             mode='payment',
-            success_url='http://localhost:5000/success?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url='http://localhost:5000/cancel',
+            success_url='http://localhost:3000/loading?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='http://localhost:3000/loading?session_id={CHECKOUT_SESSION_ID}',
             metadata={
                 'username': username
             }
@@ -2116,66 +2115,66 @@ def cancel_placeholder():
     return jsonify(message="Payment was canceled.")
 
 
-# @app.route('/payment-status-checker', methods=['GET'])
-# def payment_status():
-#     session_id = request.args.get('session_id')
-#     if not session_id:
-#         return jsonify({'error': 'session_id is required'}), 400
-#
-#     try:
-#         checkout_session = stripe.checkout.Session.retrieve(session_id)
-#         payment_status = checkout_session.payment_status
-#
-#         if payment_status == 'paid':
-#             # Pobierz nazwę użytkownika z metadanych sesji
-#             username = checkout_session['metadata']['username']
-#
-#             # Połącz z bazą danych
-#             db_connector = DatabaseConnector()
-#             db_connector.connect()
-#
-#             connection = db_connector.get_connection()
-#             cursor = connection.cursor()
-#
-#             try:
-#                 # Pobierz user_id na podstawie username
-#                 user_id_query = "SELECT id FROM Users WHERE username = %s"
-#                 cursor.execute(user_id_query, (username,))
-#                 user_id_result = cursor.fetchone()
-#
-#                 if not user_id_result:
-#                     return jsonify({"message": "Użytkownik nie został znaleziony."}), 404
-#
-#                 user_id = user_id_result[0]
-#
-#                 # Aktualizuj status premium w tabeli preferencje_uzytkownikow
-#                 update_query = """
-#                 UPDATE preferencje_uzytkownikow
-#                 SET uzytkownik_premium = 1
-#                 WHERE UserID = %s
-#                 """
-#                 cursor.execute(update_query, (user_id,))
-#                 connection.commit()
-#
-#             except Exception as e:
-#                 return jsonify({'error': f"Błąd podczas aktualizacji bazy danych: {str(e)}"}), 500
-#
-#             finally:
-#                 if cursor:
-#                     cursor.close()
-#                 if db_connector:
-#                     db_connector.disconnect()
-#
-#             return jsonify({
-#                 'status': 'success',
-#                 'message': 'Payment succeeded!',
-#                 'username': username
-#             })
-#
-#         return jsonify({'status': payment_status}), 200
-#
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
+@app.route('/payment-status-checker', methods=['GET'])
+def payment_status_checker():
+    session_id = request.args.get('session_id')
+    if not session_id:
+        return jsonify({'error': 'session_id is required'}), 400
+
+    try:
+        checkout_session = stripe.checkout.Session.retrieve(session_id)
+        payment_status = checkout_session.payment_status
+
+        if payment_status == 'paid':
+            # Pobierz nazwę użytkownika z metadanych sesji
+            username = checkout_session['metadata']['username']
+
+            # Połącz z bazą danych
+            db_connector = DatabaseConnector()
+            db_connector.connect()
+
+            connection = db_connector.get_connection()
+            cursor = connection.cursor()
+
+            try:
+                # Pobierz user_id na podstawie username
+                user_id_query = "SELECT id FROM Users WHERE username = %s"
+                cursor.execute(user_id_query, (username,))
+                user_id_result = cursor.fetchone()
+
+                if not user_id_result:
+                    return jsonify({"message": "Użytkownik nie został znaleziony."}), 404
+
+                user_id = user_id_result[0]
+
+                # Aktualizuj status premium w tabeli preferencje_uzytkownikow
+                update_query = """
+                UPDATE preferencje_uzytkownikow
+                SET uzytkownik_premium = 1
+                WHERE UserID = %s
+                """
+                cursor.execute(update_query, (user_id,))
+                connection.commit()
+
+            except Exception as e:
+                return jsonify({'error': f"Błąd podczas aktualizacji bazy danych: {str(e)}"}), 500
+
+            finally:
+                if cursor:
+                    cursor.close()
+                if db_connector:
+                    db_connector.disconnect()
+
+            return jsonify({
+                'status': 'success',
+                'message': 'Payment succeeded!',
+                'username': username
+            })
+
+        return jsonify({'status': payment_status}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 
