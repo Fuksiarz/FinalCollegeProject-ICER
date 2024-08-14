@@ -11,7 +11,7 @@ import {handleUserImageChange} from "./hooks/handleUserImageChange";
 import SettingsContext from "../settings/SettingsContext";
 
 
-function EditAccount(props) {
+function EditAccount() {
     //pobieramy informacje na temat aktualnego użytkownika
     const {user,setRefreshTrigger} = useContext(AuthContext);
     //przypisuję sesję aktualnego użytkownika do zmiennej
@@ -36,7 +36,6 @@ function EditAccount(props) {
     //ustawiamy podstawowe informacje formularza
     const [formData, setFormData] = useState({
         username: '',
-        email: props.email,
         new_password: ''
     });
 
@@ -86,7 +85,7 @@ function EditAccount(props) {
 
     };
     const changeUserPhoto = () => {
-        console.log('poszlo change_user_photo')
+        console.log('poszlo change_user_photo ze zdjęciem: ' + pictureToSend)
         // Znajdź produkt o danym ID i zwiększ jego ilość
         axios.post(`${API_URL}/api/change_user_photo`,
             {sessionId:sessionId,
@@ -139,7 +138,7 @@ function EditAccount(props) {
                 <form onSubmit={handleSubmit}>
                     <div className="accountName"> {/*kontener z polem edycji nazwy użytkownika*/}
                         <h3>
-                            Nowa nazwa:
+                            Nowy email:
                         </h3>
                         <input /*element wejściowy tworzenia informacji do zaktualizowania nazwy użytkownika*/
                             type="text" //typ wejścia

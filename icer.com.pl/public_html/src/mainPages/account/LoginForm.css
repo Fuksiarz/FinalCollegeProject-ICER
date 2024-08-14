@@ -47,6 +47,7 @@
     border: 2px solid #b3cffd;
     padding: 0.5vh;
     width: 90%;
+    text-align: center;
 }
 /*style kiedy są używane */
 .username:focus, .password:focus {
@@ -55,6 +56,16 @@
     border-color: #b3cffd;
     box-shadow: 0 0 8px rgba(179, 207, 253, 0.5);
     outline: none;
+}
+/* Przycisk logowania */
+.resetPasswordButton {
+    border: 2px solid #b3cffd;
+    margin-top: 1vh;
+    padding: 0.1vh 0.1vw;
+    width: 80%;
+    background-color: #87a9c5;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 /* Przycisk logowania */

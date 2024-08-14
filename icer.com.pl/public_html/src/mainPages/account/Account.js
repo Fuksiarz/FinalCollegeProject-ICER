@@ -10,12 +10,12 @@ export function Account() {
 
     //pobieramy informacje na temat aktualnego użytkownika
     const {user} = useContext(AuthContext);
-
+    const [image, setImage] = useState();
     //pobieramy nazwę zdjęcia, informację czy jest zdjęcie podstawowe, zmienną, której zmiana to odświeżenie ustawień.
     //oraz informację czy użytkownik jest użytkownikiem premium.
     const {profilePicture,defaultProfile,refresh, premiumUser} = useContext(SettingsContext);
     //inicjacja obrazka
-
+    const picGetter = AccountPictureGetter(image,setImage, defaultProfile , profilePicture)
     useEffect(() => {
         console.log(premiumUser)
 
@@ -35,9 +35,7 @@ export function Account() {
                     </>
                 )}
                 <div className="accountPhoto"> {/*kontener ze zdjęciem użytkownika*/}
-                    <img src={profilePicture ?`${process.env.PUBLIC_URL}/data/userProfilePicture/${profilePicture}` :
-                            `${process.env.PUBLIC_URL}/data/userProfilePicture/face.jpg`} className="accountPhotoImage"
-                         style={{}} alt='profilePicture'/>
+                    <img src={picGetter} className="accountPhotoImage" alt='profilePicture'/>
 
                 </div>
                 <div className="accountName"> {/*kontener z informacjami o użytkowniku*/}

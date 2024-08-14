@@ -28,7 +28,7 @@ function RegisterForm({onRegister, onSwitchToLogin}) {
                        type="text"
                        value={username}
                        onChange={e => setUsername(e.target.value)}
-                       placeholder="Nazwa"
+                       placeholder="Email"
                 />
 
                 {/*pobieramy dane wejściowe od użytkownika odnośnie hasła*/}
@@ -40,7 +40,7 @@ function RegisterForm({onRegister, onSwitchToLogin}) {
                 />
 
                 {/*przycisk zatwierdzający informacje, zarejestruj*/}
-                <button type="submit" className="registerButton">Zarejestruj</button>
+                <button type="submit" className="loginButton">Zarejestruj</button>
 
                 {/*przycisk przenoszący do podstrony logowania*/}
                 <button type="button" className="loginButton" onClick={onSwitchToLogin}>

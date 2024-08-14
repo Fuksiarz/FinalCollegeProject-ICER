@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import './LoginForm.css';
 
 //formularz logowania
-function LoginForm({ onLogin , onSwitchToRegister  }) {
+function LoginForm({ onLogin , onSwitchToResetPassword, onSwitchToRegister, showResetPassword }) {
 
     //inicjalizacja zmiennych przetrzymujących nazwę oraz hasło
     const [username, setUsername] = useState('');
@@ -32,7 +32,7 @@ function LoginForm({ onLogin , onSwitchToRegister  }) {
                     type="text"
                     value={username}
                     onChange={e => setUsername(e.target.value)}
-                    placeholder="Nazwa"
+                    placeholder="Email"
                 />
                 {/*pobieramy dane wejściowe od użytkownika odnośnie hasła*/}
                 <input className="password"
@@ -41,11 +41,16 @@ function LoginForm({ onLogin , onSwitchToRegister  }) {
                     onChange={e => setPassword(e.target.value)}
                     placeholder="Hasło"
                 />
+                {showResetPassword && (
+                    <button type="button" className="resetPasswordButton" onClick={onSwitchToResetPassword}>
+                        Resetuj hasło
+                    </button>
+                )}
                 {/*przycisk zatwierdzający informacje, zaloguj*/}
                 <button type="submit" className="loginButton">Zaloguj</button>
 
                 {/*przycisk przenoszący do podstrony rejestracji*/}
-                <button type="button" className="registerButton" onClick={onSwitchToRegister}>
+                <button type="button" className="loginButton" onClick={onSwitchToRegister}>
                     Zarejestruj się
                 </button>
 

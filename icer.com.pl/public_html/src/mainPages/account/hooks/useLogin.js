@@ -1,5 +1,5 @@
 // Hook używany do logowania
-import { useContext } from 'react';
+import {useContext, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from "../auth-context";
@@ -9,10 +9,12 @@ import { toast } from "react-toastify";
 export const useLogin = () => {
     const authContext = useContext(AuthContext); // Pobranie kontekstu uwierzytelniania
     const navigate = useNavigate(); // Hook do nawigacji między stronami
-
+    const [showResetPassword, setShowResetPassword] = useState(false); // Stan błędu
     // Funkcja obsługująca logowanie
     const handleLogin = async (credentials) => {
         try {
+            setShowResetPassword(false);
+            console.log("halo")
             // Wysłanie żądania POST do API w celu zalogowania
             const response = await axios.post(`${API_URL}/login`, credentials);
             const { data } = response;
@@ -28,6 +30,7 @@ export const useLogin = () => {
         } catch (error){
             // Obsługa błędu podczas logowania
             if (error.response && error.response.data && error.response.data.message) {
+                setShowResetPassword(true); // Ustawienie błędu
                 toast.error(error.response.data.message); // Wyświetlenie wiadomości o błędzie z odpowiedzi API
             } else {
                 // Wyświetlenie wiadomości o błędzie
@@ -36,5 +39,5 @@ export const useLogin = () => {
         }
     };
 
-    return handleLogin; // Zwrócenie funkcji obsługującej logowanie
+    return {handleLogin, showResetPassword}; // Zwrócenie funkcji obsługującej logowanie
 };
