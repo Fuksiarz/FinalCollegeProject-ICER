@@ -1,0 +1,18 @@
+{
+    "class_names": [
+        "ciasto_czekoladowe",
+        "donut",
+        "frytki",
+        "hamburger",
+        "lasagne",
+        "makaroniki",
+        "nalesniki",
+        "pizza",
+        "salatka_cezar",
+        "skrzydelka_z_kurczaka",
+        "sushi",
+        "szarlotka",
+        "tiramisu",
+        "zeberka"
+    ]
+}

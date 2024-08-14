@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stripe Payment</title>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <h1>Buy Premium Account</h1>
+    <button id="checkout-button">Checkout</button>
+    <script type="text/javascript">
+        // Ustaw swój klucz publiczny Stripe tutaj
+        var stripe = Stripe('your_publishable_key');
+        
+        var checkoutButton = document.getElementById('checkout-button');
+
+        checkoutButton.addEventListener('click', function () {
+            fetch('/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: 'example_user'  // Zamień na dynamiczny identyfikator użytkownika
+                }),
+            })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                // Użyj identyfikatora sesji, aby przekierować użytkownika na Stripe Checkout
+                return stripe.redirectToCheckout({ sessionId: data.session_id });
+            })
+            .then(function (result) {
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            })
+            .catch(function (error) {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
