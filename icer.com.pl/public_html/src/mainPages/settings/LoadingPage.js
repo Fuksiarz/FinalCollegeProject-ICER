@@ -18,13 +18,13 @@ const LoadingPage = () => {
 
                     if (status === 'success') {
                         toast.success(response.data.message);
-                        navigate('/settings'); // Przekierowanie do ustawień
+                        navigate('/Ustawienia'); // Przekierowanie do ustawień
                     } else if (status === 'canceled') {
                         toast.error("Payment was canceled.");
-                        navigate('/settings'); // Przekierowanie do ustawień
+                        navigate('/Ustawienia'); // Przekierowanie do ustawień
                     } else {
                         toast.warn(`Payment status: ${status}`);
-                        navigate('/settings'); // Przekierowanie do ustawień
+                        navigate('/Ustawienia'); // Przekierowanie do ustawień
                     }
                 } catch (error) {
                     console.error('Error checking payment status:', error);

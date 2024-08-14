@@ -93,11 +93,10 @@ export function Settings({where}) {
             if (error) {
                 console.error('Error redirecting to checkout:', error);
 
-                return;
             }
 
             // Po przekierowaniu użytkownika do Stripe i z powrotem, użytkownik trafi na trasę `/loading`
-            navigate(`/loading?session_id=${session_id}`);
+
         } catch (error) {
             console.error('Error during Stripe checkout:', error);
 

@@ -1562,7 +1562,7 @@ def get_response():
         response = get_bot_response(user_input)
 
         # Utwórz JSON z odpowiedzią bota
-        response_data = {'odpowiedź': response}
+        response_data = {'response': response}
 
         # Zwróć odpowiedź
         return jsonify(response_data), 200, {'Content-Type': 'application/json; charset=utf-8'}

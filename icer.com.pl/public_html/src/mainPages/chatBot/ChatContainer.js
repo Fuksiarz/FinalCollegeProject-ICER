@@ -1,5 +1,5 @@
 // ChatContainer.js
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import MessageList from './MessageList';
 import ChatInput from './ChatInput';
 import './ChatContainer.css';
@@ -7,25 +7,34 @@ import axios from "axios";
 import {API_URL} from "../settings/config";
 import {Icon} from "@iconify/react";
 import {Link} from "react-router-dom";
+import {AuthContext} from "../account/auth-context";
 
 //funkcja chatu z botem
 function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
 
-    //zmienna posiadająca historię konwersacji
-    const [messages, setMessages] = useState(() => {
-        const savedMessages = localStorage.getItem('chatMessages');
-        return savedMessages ? JSON.parse(savedMessages) : [];
-    });
-    //funkcja do zapisywania historii do locallStorage
-    const saveMessagesToLocalStorage = (messages) => {
-        localStorage.setItem('chatMessages', JSON.stringify(messages));
+    const { user } = useContext(AuthContext);
+    // wyodrębnienie sesji użytkownika do przesłania do api w ramach autoryzacji
+    const username = user ? user.username : null;
+
+
+    // Zapisz historię wiadomości w localStorage na podstawie username
+    const saveMessagesToLocalStorage = (messages, username) => {
+        localStorage.setItem(`chatMessages_${username}`, JSON.stringify(messages));
     };
+    // Odczytaj historię wiadomości z localStorage na podstawie username
+    const getMessagesFromLocalStorage = (username) => {
+        const savedMessages = localStorage.getItem(`chatMessages_${username}`);
+        return savedMessages ? JSON.parse(savedMessages) : [];
+    };
+    //zmienna posiadająca historię konwersacji
+    const [messages, setMessages] = useState(() => getMessagesFromLocalStorage(username));
+    useEffect(() => {
+        saveMessagesToLocalStorage(messages, username);//zapisz historię
+    }, [messages,username]);//wykonaj przy zmianie wartości messages
 
     useEffect(() => {
-        saveMessagesToLocalStorage(messages);//zapisz historię
-    }, [messages]);//wykonaj przy zmianie wartości messages
-
-
+        console.log(messages);
+    }, [messages]);
     //funkcja wysyłająca wiadomość od uzytkownika i pobierająca odpowiedź
     const handleBotResponse = async (userMessage) => {
         try {
@@ -34,10 +43,11 @@ function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
 
             });
             //zapisywanie odpowiedzi
-            console.log(response.data)
+
             const botResponse = response.data.response;
             //dodawanie odpowiedzi do zmiennej posiadającej całą konwersację
             setMessages(prevMessages => [...prevMessages, {text: botResponse, id: Date.now(), sender: 'bot'}]);
+
         } catch (error) {
             //w ramach błędu z wykonaniem zapytania do api wyświetla komunikat w konsoli
             console.error("There was an error:", error);

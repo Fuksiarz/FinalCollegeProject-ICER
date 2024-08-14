@@ -25,14 +25,13 @@ if ('serviceWorker' in navigator) {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 //renderuje drzewo elementów:
 root.render(
-  <React.StrictMode>{/* jest narzędziem do wskazywania potencjalnych problemów w aplikacji*/}
-      {/* Jest to komponent kontekstowy, który dostarcza logikę i stan uwierzytelniania dla pozostałych komponentów w drzewie*/}
+
       <AuthProvider>
           <SettingsProvider>
               <App /> {/* główny komponent aplikacji */}
           </SettingsProvider>
       </AuthProvider>
-  </React.StrictMode>
+
 );
 
 reportWebVitals();
