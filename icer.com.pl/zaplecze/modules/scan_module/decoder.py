@@ -1,7 +1,9 @@
 from pyzbar.pyzbar import decode
-from PIL import Image
 import json
 import os
+from PIL import Image
+import numpy as np
+
 
 # Dekodowanie QR z obrazu
 def decode_qr_code(image_path):
@@ -33,12 +35,19 @@ def decode_qr_code(image_path):
         return "Kod QR nie został wykryty"
 
 
-def decode_qr_code_frames(image_path):
-    qr_image = Image.open(image_path)
-    decoded_objects = decode(qr_image)
+def decode_qr_code_frames(image):
+    """
+    Dekoduje kod QR z obrazu.
+    """
+    # Jeśli obraz jest w formacie numpy, konwertuj go do formatu PIL
+    if isinstance(image, np.ndarray):
+        image = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+
+    # Przetwarzanie obrazu
+    decoded_objects = decode(image)
 
     if decoded_objects:
-        # Wymuszenie utf-8 dla zwiększenia kompatybilnośći
+        # Wymuszenie utf-8 dla zwiększenia kompatybilności
         decoded_data = decoded_objects[0].data.decode('utf-8')
 
         # Zamień ciąg na słownik
@@ -50,3 +59,4 @@ def decode_qr_code_frames(image_path):
         return data_dict
     else:
         return "Kod QR nie został wykryty"
+
