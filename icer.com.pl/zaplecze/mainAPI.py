@@ -7,23 +7,18 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr
 from email.header import Header
-import getpass
 import secrets
 import string
-
-
 import jwt
-
 from dotenv import load_dotenv
 import base64
-import tempfile
 import cv2
 from flask import session, jsonify, request
-import unicodedata
 import numpy as np
+from PIL import Image
+import stripe
 
 import bcrypt
-from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 from flask import current_app
 from flask import render_template, redirect, url_for, make_response, \
@@ -32,7 +27,7 @@ from flask_cors import CORS
 from flask_socketio import SocketIO
 from werkzeug.utils import secure_filename
 
-from modules.advert_module.monitor import detect_faces_and_eyes
+from modules.advert_module.monitor import detect_faces_and_eyes, preload_haar
 from modules.bot_module.bot import get_bot_response
 from modules.database_connector import DatabaseConnector
 from modules.foodIdent_module.foodIdent import pred_and_plot, load_model
@@ -70,9 +65,9 @@ video_state = {
     "video_choice": None
 }
 
-# Ladowanie modeli
+# Ladowanie modelu do /upload_test_AI_QR
 model = load_model('model3.h5')
-print("Model loaded successfully:", model is not None)
+print("Image model loaded successfully:", model is not None)
 
 # Otwórz plik JSON i załaduj jego zawartość
 json_file_path = 'modules/foodIdent_module/classes.json'
@@ -1747,12 +1742,22 @@ def get_frame():
 
     for idx, image_data in enumerate(images_data):
         try:
+            # Dekodowanie danych base64 bezpośrednio do bajtów
             image_bytes = base64.b64decode(image_data)
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.png', dir=temp_dir) as tmp:
-                tmp.write(image_bytes)
-                tmp_path = tmp.name
 
-            decoded_data = decode_qr_code_frames(tmp_path)
+            # Konwersja bajtów do obrazu OpenCV
+            image_np = np.frombuffer(image_bytes, np.uint8)
+            image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
+
+            if image is None:
+                responses.append({'error': 'Nie udało się załadować obrazu'})
+                continue
+
+            # Konwersja obrazu OpenCV do formatu PIL, jeśli funkcje tego wymagają
+            image_pil = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+
+            # Przetwarzanie obrazu, np. dekodowanie kodu QR
+            decoded_data = decode_qr_code_frames(image_pil)
             if decoded_data and decoded_data != "Kod QR nie został wykryty":
                 # Normalizacja kluczy w decoded_data
                 normalized_data = {normalize_key(key): value for key, value in decoded_data.items()}
@@ -1768,15 +1773,12 @@ def get_frame():
                 })
                 responses.append(normalized_data)
             else:
-                pred_class = predict_and_update_food_list(tmp_path, username)
+                pred_class = predict_and_update_food_list(image_pil, username)
                 updated_food_list = update_food_list([pred_class])
                 responses.extend(updated_food_list)
 
-            os.remove(tmp_path)
         except Exception as e:
             responses.append({'error': str(e)})
-            if 'tmp_path' in locals():
-                os.remove(tmp_path)
 
     print(responses)
     return jsonify(responses), 200
@@ -1886,26 +1888,21 @@ def advert_reciever():
         return jsonify({"error": "Brak danych obrazu"}), 400
     image_data = data['image']
 
-    # Usunięcie prefiksu `data:image/png;base64,` jeśli istnieje
+    # Usunięcie prefiksu data:image/png;base64, jeśli istnieje
     if image_data.startswith('data:image'):
         image_data = image_data.split(',')[1]
     try:
         # Dekodowanie danych base64
         image_bytes = base64.b64decode(image_data)
-        # Tworzenie pliku tymczasowego w katalogu tmp i zapisywanie obrazu jako JPG
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg', dir=temp_dir) as tmp:
-            tmp.write(image_bytes)
-            tmp_path = tmp.name
-        # Odczytywanie zapisanego obrazu
-        image = cv2.imread(tmp_path)
+
+        # Konwersja bajtów na obraz OpenCV
+        image_np = np.frombuffer(image_bytes, np.uint8)
+        image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
         if image is None:
             return jsonify({"error": "Nie udało się załadować obrazu"}), 500
 
         # Wykrywanie twarzy i oczu
         detected_faces, detected_eyes = detect_faces_and_eyes(image)
-
-        # Usuwanie pliku tymczasowego
-        os.remove(tmp_path)
 
         # Aktualizacja stanu wideo
         if video_state["video_choice"] == 1:
@@ -1957,7 +1954,7 @@ def start_video():
         video_url = f'/video/{video_file}'
         # Zwróć odpowiedź JSON z URL wideo i informacją o sukcesie
         return jsonify({"video_url": video_url, "message": "Rozpoczynam odtwarzanie wideo"}), 200
-    # Jeśli nie znaleziono pliku zwróć błąd    
+    # Jeśli nie znaleziono pliku zwróć błąd
 
     except FileNotFoundError:
         return jsonify({"error": "Nie znaleziono pliku"}), 404
@@ -1990,15 +1987,8 @@ def control_video():
 
 
 # Stripe -------------------------------------------------------
-import stripe
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
-
-# FEJKOWA BAZA DO TESTOW WITEK ZMIEN ZEBY DO PRAWDZIWEJ SZLO!!!
-# W SENSIE NIŻEJ W KODZIE TO MOŻESZ SKASOWAĆ
-users_db = {
-    'example_user': {'status': 'basic'}
-}
 
 
 @app.route('/create-checkout-session', methods=['POST'])
@@ -2019,8 +2009,8 @@ def create_checkout_session():
                 'quantity': 1,
             }],
             mode='payment',
-            success_url='http://localhost:3000/loading?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url='http://localhost:3000/loading?session_id={CHECKOUT_SESSION_ID}',
+            success_url='http://localhost:5000/success?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='http://localhost:5000/cancel',
             metadata={
                 'username': username
             }
@@ -2115,79 +2105,66 @@ def cancel_placeholder():
     return jsonify(message="Payment was canceled.")
 
 
-@app.route('/payment-status-checker', methods=['GET'])
-def payment_status_checker():
-    session_id = request.args.get('session_id')
-    if not session_id:
-        return jsonify({'error': 'session_id is required'}), 400
-
-    try:
-        checkout_session = stripe.checkout.Session.retrieve(session_id)
-        payment_status = checkout_session.payment_status
-
-        if payment_status == 'paid':
-            # Pobierz nazwę użytkownika z metadanych sesji
-            username = checkout_session['metadata']['username']
-
-            # Połącz z bazą danych
-            db_connector = DatabaseConnector()
-            db_connector.connect()
-
-            connection = db_connector.get_connection()
-            cursor = connection.cursor()
-
-            try:
-                # Pobierz user_id na podstawie username
-                user_id_query = "SELECT id FROM Users WHERE username = %s"
-                cursor.execute(user_id_query, (username,))
-                user_id_result = cursor.fetchone()
-
-                if not user_id_result:
-                    return jsonify({"message": "Użytkownik nie został znaleziony."}), 404
-
-                user_id = user_id_result[0]
-
-                # Aktualizuj status premium w tabeli preferencje_uzytkownikow
-                update_query = """
-                UPDATE preferencje_uzytkownikow
-                SET uzytkownik_premium = 1
-                WHERE UserID = %s
-                """
-                cursor.execute(update_query, (user_id,))
-                connection.commit()
-
-            except Exception as e:
-                return jsonify({'error': f"Błąd podczas aktualizacji bazy danych: {str(e)}"}), 500
-
-            finally:
-                if cursor:
-                    cursor.close()
-                if db_connector:
-                    db_connector.disconnect()
-
-            return jsonify({
-                'status': 'success',
-                'message': 'Payment succeeded!',
-                'username': username
-            })
-
-        return jsonify({'status': payment_status}), 200
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
-
-
-
-
-
-
-
-
-
-
-
+# @app.route('/payment-status-checker', methods=['GET'])
+# def payment_status():
+#     session_id = request.args.get('session_id')
+#     if not session_id:
+#         return jsonify({'error': 'session_id is required'}), 400
+#
+#     try:
+#         checkout_session = stripe.checkout.Session.retrieve(session_id)
+#         payment_status = checkout_session.payment_status
+#
+#         if payment_status == 'paid':
+#             # Pobierz nazwę użytkownika z metadanych sesji
+#             username = checkout_session['metadata']['username']
+#
+#             # Połącz z bazą danych
+#             db_connector = DatabaseConnector()
+#             db_connector.connect()
+#
+#             connection = db_connector.get_connection()
+#             cursor = connection.cursor()
+#
+#             try:
+#                 # Pobierz user_id na podstawie username
+#                 user_id_query = "SELECT id FROM Users WHERE username = %s"
+#                 cursor.execute(user_id_query, (username,))
+#                 user_id_result = cursor.fetchone()
+#
+#                 if not user_id_result:
+#                     return jsonify({"message": "Użytkownik nie został znaleziony."}), 404
+#
+#                 user_id = user_id_result[0]
+#
+#                 # Aktualizuj status premium w tabeli preferencje_uzytkownikow
+#                 update_query = """
+#                 UPDATE preferencje_uzytkownikow
+#                 SET uzytkownik_premium = 1
+#                 WHERE UserID = %s
+#                 """
+#                 cursor.execute(update_query, (user_id,))
+#                 connection.commit()
+#
+#             except Exception as e:
+#                 return jsonify({'error': f"Błąd podczas aktualizacji bazy danych: {str(e)}"}), 500
+#
+#             finally:
+#                 if cursor:
+#                     cursor.close()
+#                 if db_connector:
+#                     db_connector.disconnect()
+#
+#             return jsonify({
+#                 'status': 'success',
+#                 'message': 'Payment succeeded!',
+#                 'username': username
+#             })
+#
+#         return jsonify({'status': payment_status}), 200
+#
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
 
 
@@ -2203,4 +2180,5 @@ def logout():
 if __name__ == '__main__':
     # Preładowanie modeli do rozpoznawania z video
     preload()
+    preload_haar()
     app.run()
