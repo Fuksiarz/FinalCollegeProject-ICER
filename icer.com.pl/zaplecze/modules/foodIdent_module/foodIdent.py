@@ -5,7 +5,6 @@ import numpy as np
 from pathlib import Path
 from flask import current_app as app
 
-
 def load_and_prep_image(filename, img_shape=224):
     # Funkcja do wczytywania i przygotowywania obrazu
     # Wczytanie pliku obrazu
@@ -57,7 +56,6 @@ def pred_and_plot(model, filename, class_names, username):
         json.dump(prediction_result, json_file, indent=4)
 
     return pred_class
-
 
 # Kopia czysczenia listy
 
