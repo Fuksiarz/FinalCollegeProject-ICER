@@ -85,18 +85,22 @@ export function Settings({where}) {
     const handleStripeCheckout = async () => {
         try {
             const stripe = await stripePromise;
-            console.log('username:' + user.username)
+            console.log('username:' + user.username);
             const { data } = await axios.post(`${API_URL}/create-checkout-session`, { username: user.username });
             const { session_id } = data;
 
             const { error } = await stripe.redirectToCheckout({ sessionId: session_id });
             if (error) {
                 console.error('Error redirecting to checkout:', error);
-                navigate(-1)
+
+                return;
             }
+
+            // Po przekierowaniu użytkownika do Stripe i z powrotem, użytkownik trafi na trasę `/loading`
+            navigate(`/loading?session_id=${session_id}`);
         } catch (error) {
             console.error('Error during Stripe checkout:', error);
-            navigate(-1)
+
         }
     };
 

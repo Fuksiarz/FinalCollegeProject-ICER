@@ -17,6 +17,7 @@ import {Settings} from "./mainPages/settings/Settings";
 import {Advert} from "./mainPages/advert/Advert";
 import {GenerateQR} from "./mainPages/products/QR/GenerateQR";
 import {handleClickToggleMenu} from "./mainPages/hooks/handleClickToggleMenu";
+import LoadingPage from "./mainPages/settings/LoadingPage";
 
 //główna funkcja na której podmieniają się elementy podstron aplikacji
 function Main({chatIsMinimized,setChatIsMinimized}) {
@@ -93,7 +94,7 @@ function Main({chatIsMinimized,setChatIsMinimized}) {
                                                                            setChatIsMinimized={setChatIsMinimized} />} />
                             <Route path="/Advert" element={<Advert/>}/>
                             <Route path="/GenerujQR" element={<GenerateQR/>}/>
-
+                            <Route path="/loading" element={<LoadingPage/>}/>
                         </Routes>
 
                     </nav>
