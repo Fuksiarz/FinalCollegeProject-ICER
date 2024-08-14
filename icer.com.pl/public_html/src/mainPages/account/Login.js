@@ -22,6 +22,7 @@ function Login() {
                 <LoginForm onSwitchToRegister={() => setMode('register')} onLogin={handleLogin}/>
                 :
                 <RegisterForm onSwitchToLogin={() => setMode('login')} onRegister={handleRegister}/>
+
             }
         </div>
     );

@@ -22,7 +22,7 @@
     max-width: 500px; /* maksymalna szerokość kontenera */
     width: 100%;
     background-color: #d4e8f5;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
 
 }
@@ -30,13 +30,14 @@
 .loginFormBox::before {
     content: "";
     position: absolute;
-    right: -30px;
+    right: -35px;
     top: 50%;
     transform: translateY(-50%);
     width: 20px;
-    height: 60px;
-    background: linear-gradient(#9dc5e8, #b3cffd, #9dc5e8); /* kolor tła */
+    height: 80px;
+    background: linear-gradient(#9dc5e8, #b3cffd, #9dc5e8);
     border-radius: 10px 0 0 10px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2); /* cień dla efektu głębi */
 }
 
 /* kontenery przyjmujące informacje od użytkownika */
