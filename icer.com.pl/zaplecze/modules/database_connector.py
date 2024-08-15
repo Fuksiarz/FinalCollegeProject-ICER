@@ -5,7 +5,6 @@ from flask import jsonify
 from urllib.parse import urlparse
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 
@@ -17,7 +16,7 @@ class DatabaseConnector:
     db_password = url.password
     db_name = url.path[1:]
 
-    def __init__(self, host=db_host, user=db_user, password=db_password, database= db_name):
+    def __init__(self, host=db_host, user=db_user, password=db_password, database=db_name):
         self.host = host
         self.user = user
         self.password = password
@@ -39,8 +38,6 @@ class DatabaseConnector:
                 password=self.password,
                 database=self.database
             )
-            print('polaczylem z baza danych ')
-            # print("Połączono z bazą danych!")
         except mysql.connector.Error as error:
             print("Błąd połączenia z bazą danych: ", error)
 
@@ -104,7 +101,7 @@ class DatabaseConnector:
                     WHERE produktID = %s
                     AND userID = %s
                 """
-                cursor.execute(update_userphotos_query, (new_product_id, product_id, user_id))
+                cursor.execute(insert_userphotos_query, (new_product_id, product_id, user_id))
 
             else:
                 # Zaktualizuj Produkt bez tworzenia kopii

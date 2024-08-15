@@ -825,7 +825,6 @@ def get_icer():
             else:
                 # Obsługa, gdy lokalizacja zdjęcia nie została znaleziona
                 result['zdjecie_lokalizacja'] = None
-        print(results)
         return jsonify(results)
 
     except ValueError as ve:
@@ -1015,24 +1014,24 @@ def update_preferences():
             update_preferences_query = """
                 UPDATE preferencje_uzytkownikow
                 SET wielkosc_lodowki = %s, wielkosc_strony_produktu = %s, 
-                    widocznosc_informacji_o_produkcie = %s, uzytkownik_premium = %s
+                    widocznosc_informacji_o_produkcie = %s
                 WHERE UserID = %s
             """
             cursor.execute(update_preferences_query, (
                 data['wielkosc_lodowki'], data['wielkosc_strony_produktu'],
-                data['widocznosc_informacji_o_produkcie'], data.get('uzytkownik_premium', False),
+                data['widocznosc_informacji_o_produkcie'],
                 user_id))
         else:
             # Tworzenie nowego wpisu w tabeli preferencje_uzytkownikow
             insert_preferences_query = """
                 INSERT INTO preferencje_uzytkownikow 
                 (UserID, wielkosc_lodowki, wielkosc_strony_produktu, 
-                 widocznosc_informacji_o_produkcie, uzytkownik_premium)
-                VALUES (%s, %s, %s, %s, %s)
+                 widocznosc_informacji_o_produkcie)
+                VALUES (%s, %s, %s, %s)
             """
             cursor.execute(insert_preferences_query, (
                 user_id, data['wielkosc_lodowki'], data['wielkosc_strony_produktu'],
-                data['widocznosc_informacji_o_produkcie'], data.get('uzytkownik_premium', False)))
+                data['widocznosc_informacji_o_produkcie']))
 
         connection.commit()
         cursor.close()
@@ -1278,7 +1277,6 @@ def send_verification_email(email, token):
             server.login(SMTP_USER, SMTP_PASSWORD)  # Zaloguj się
             # Zamiast msg.as_string() użyj str() z kodowaniem UTF-8
             server.sendmail(SMTP_USER, email, msg.as_string().encode('utf-8'))  # Wyślij e-mail
-        print('Email wysłany pomyślnie!')
     except Exception as e:
         print(f'Błąd podczas wysyłania e-maila: {e}')
 
@@ -1413,7 +1411,6 @@ def send_new_password_email(email, new_password):
             # Kodowanie wiadomości w UTF-8
             message_string = msg.as_string().encode('utf-8')
             server.sendmail(SMTP_USER, email, message_string)
-        print('Email z nowym hasłem wysłany pomyślnie!')
     except Exception as e:
         print(f'Błąd podczas wysyłania e-maila: {e}')
         import traceback
