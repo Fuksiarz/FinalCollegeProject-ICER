@@ -49,7 +49,6 @@ export const SettingsProvider = ({ children }) => {
                     updateSetting('photo', lokalizacja_zdj);
                     updateSetting('defaultPhoto', podstawowe_profilowe);
                     updateSetting('premiumUser', uzytkownik_premium);
-                    console.log("user preferences: " + response.data.lokalizacja_zdj)
                 })
                 .catch((error) => {
                     console.error(`There was an error retrieving the data: ${error}`);

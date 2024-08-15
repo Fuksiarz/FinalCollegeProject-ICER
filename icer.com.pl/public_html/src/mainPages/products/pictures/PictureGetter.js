@@ -14,7 +14,6 @@ export const PictureGetter=(image, setImage, photo)=>{
                 //ustawia zdjęcie produktu na te, do którego zdjęcie jest przypisane
                 const imageData = `data:image/jpeg;base64,${photo}`;
                 setImage(imageData);
-                console.log(image)
             }
         } catch (e) {
             console.error("Nie udało się załadować obrazu: ", e);

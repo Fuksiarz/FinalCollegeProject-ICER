@@ -17,7 +17,6 @@ export function Account() {
     //inicjacja obrazka
     const picGetter = AccountPictureGetter(image,setImage, defaultProfile , profilePicture)
     useEffect(() => {
-        console.log(premiumUser)
 
     },[refresh,profilePicture,defaultProfile,defaultProfile, premiumUser]);
 

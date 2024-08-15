@@ -18,7 +18,6 @@ function Login() {
     const {handleLogin,showResetPassword} = useLogin();
     const handleRegister = useRegister();
     const handleResetPassword = useResetPassword();
-    console.log(mode)
     const renderMode = () => {
         switch (mode) {
             case 'login':
