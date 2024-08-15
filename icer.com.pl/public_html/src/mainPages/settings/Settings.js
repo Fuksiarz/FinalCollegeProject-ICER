@@ -57,7 +57,6 @@ export function Settings({where}) {
     }`;
 
     useEffect(() => {
-        console.log("publickey: ", process.env.REACT_APP_PUBLIC_STRIPE_KEY)
         //przypisuje ustawienia do wartości wysyłanych do API
         const preferences = {
             wielkosc_lodowki: fridgeSizeElements,
@@ -84,7 +83,6 @@ export function Settings({where}) {
     const handleStripeCheckout = async () => {
         try {
             const stripe = await stripePromise;
-            console.log('username:' + user.username);
             const { data } = await axios.post(`${API_URL}/create-checkout-session`, { username: user.username });
             const { session_id } = data;
 

@@ -14,7 +14,6 @@ export const useLogin = () => {
     const handleLogin = async (credentials) => {
         try {
             setShowResetPassword(false);
-            console.log("halo")
             // Wysłanie żądania POST do API w celu zalogowania
             const response = await axios.post(`${API_URL}/login`, credentials);
             const { data } = response;
