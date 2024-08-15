@@ -1844,8 +1844,7 @@ def upload_predictor():
                 # Dokonanie predykcji na podstawie przesłanego obrazu
                 pred_class = pred_and_plot(model, file_path, class_names, username)
                 if pred_class:
-                    return jsonify("Zidentyfikowano jedzenie: ", pred_class)
-
+                    return jsonify({"status": "success", "message": "Zidentyfikowano jedzenie: ", "data": pred_class})
                     # Aktualizacja listy jedzenia na podstawie wyniku predykcji
                     updated_food_list = update_food_list([pred_class])
                     return jsonify({"status": "success", "type": "food", "data": updated_food_list})
