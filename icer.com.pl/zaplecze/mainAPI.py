@@ -1839,7 +1839,7 @@ def upload_predictor():
 
                 else:
                     # Informacja o braku kodu QR i przejście do predykcji jedzenia
-                    return jsonify("Nie wykryto kodu QR, przechodzę do klasyfikacji jedzenia.")
+                    return jsonify({"status": "info", "message": "Nie wykryto kodu QR, przechodzę do klasyfikacji jedzenia."})
 
                 # Dokonanie predykcji na podstawie przesłanego obrazu
                 pred_class = pred_and_plot(model, file_path, class_names, username)
