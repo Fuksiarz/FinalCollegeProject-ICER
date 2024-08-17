@@ -88,20 +88,31 @@ class DatabaseConnector:
                 # Zaktualizuj przypisanie w tabeli icer tylko dla konkretnego użytkownika
                 update_icer_query = """
                     UPDATE icer
-                    SET produktID = %s
+                    SET produktID = %s, default_photo = 0
                     WHERE produktID = %s
                     AND UserID = %s
                 """
                 cursor.execute(update_icer_query, (new_product_id, product_id, user_id))
 
-                # Zaktualizuj wpisy w tabeli UserPhotos
-                update_userphotos_query = """
-                    UPDATE UserPhotos
-                    SET produktID = %s
-                    WHERE produktID = %s
-                    AND userID = %s
+                # Pobierz lokalizację zdjęcia dla starego produktu z tabeli Photos
+                get_photo_location_query = """
+                    SELECT lokalizacja FROM Photos WHERE produktID = %s
                 """
-                cursor.execute(insert_userphotos_query, (new_product_id, product_id, user_id))
+                cursor.execute(get_photo_location_query, (product_id,))
+                photo_location_result = cursor.fetchone()
+
+                if photo_location_result:
+                    photo_location = photo_location_result['lokalizacja']
+
+                    # Dodaj nowy wpis do tabeli UserPhotos
+                    insert_userphotos_query = """
+                        INSERT INTO UserPhotos (produktID, userID, lokalizacja)
+                        VALUES (%s, %s, %s)
+                    """
+                    cursor.execute(insert_userphotos_query, (new_product_id, user_id, photo_location))
+                else:
+                    raise Exception("Lokalizacja zdjęcia nie została znaleziona dla produktID: {}".format(product_id))
+
 
             else:
                 # Zaktualizuj Produkt bez tworzenia kopii
@@ -146,7 +157,6 @@ class DatabaseConnector:
 
     @staticmethod
     def get_user_id_by_username(cursor, session):
-        print(f'W get_user_id_by_username sesja: {session}')
         # Sprawdzenie, czy użytkownik jest zalogowany
         if 'username' not in session:
             return None, None, jsonify({"error": "User not logged in"}), 401
