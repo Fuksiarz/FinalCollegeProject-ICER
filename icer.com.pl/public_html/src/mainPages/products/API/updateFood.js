@@ -29,3 +29,4 @@ export const updateFood = (setProductBackpack, setStreamCamera) => {
 
         });
 };
+

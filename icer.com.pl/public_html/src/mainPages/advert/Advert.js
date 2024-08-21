@@ -65,8 +65,8 @@ export function Advert({adIsOn, setAdIsOn}) {
     useEffect(() => {
         //jeśli reklama trwa to przesyłaj informację z obrazu
         if (adIsOn && isRecording) {
-            const stopRecording = cameraControlForAdvert(videoRef, canvasRef, isRecording, setIsRecording, setAdIsOn,
-                setGotCamera, eyes, setEyes, isCameraStopped, setIsCameraStopped);
+            const stopRecording = cameraControlForAdvert(videoRef, canvasRef, isRecording, setIsRecording,
+                setAdIsOn, setGotCamera, eyes, setEyes, isCameraStopped, setIsCameraStopped);
             stopRecordingRef.current = stopRecording; // Przypisanie funkcji stopRecording do ref
 
             return () => {// zwraca funkcje zakończenia przesyłu danych, wywoływana kiedy zakończymy reklamę
@@ -90,10 +90,12 @@ export function Advert({adIsOn, setAdIsOn}) {
 
             }
             <video className="invisibleTargetsForCamera" ref={videoRef} autoPlay muted></video>
-            <canvas className="invisibleTargetsForCamera" ref={canvasRef} style={{display: "none"}}></canvas>
+            <canvas className="invisibleTargetsForCamera" ref={canvasRef} style={{display: "none"}}>
+            </canvas>
             {/* kiedy włączona jest reklama i posiadamy jej obraz to pokaż obraz */}
             {adIsOn && videoFeedUrl && (
-                <video className="advertImage" ref={advertRef} src={videoFeedUrl} autoPlay={gotCamera !== ('' || 1)}
+                <video className="advertImage" ref={advertRef} src={videoFeedUrl}
+                       autoPlay={gotCamera !== ('' || 1)}
                        muted onEnded={handleVideoEnd} alt="Video Feed"/>
             )}
             {/*ukryty przycisk służący jedynie za odnośnik czy skupienie pada na tym kontenerze*/}

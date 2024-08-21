@@ -4,9 +4,11 @@ import {toast} from "react-toastify";
 import {initializeProduct} from "../hooks/initializeProduct";
 
 
-//funkcja do komunikacji z API odnośnie wysłania produktu. Przyjmuje: produkt, id sesji użytkownika, obrazek, ustawienie
-// obrazka, podgląd obrazka, ustawienie podglądu obrazka, ustawienie odświeżenia po dodaniu, ustawienie produktu.
-export const submitProduct = async (product, sessionId, image, setImage, setImagePreview, setRefresh, setProduct) => {
+//funkcja do komunikacji z API odnośnie wysłania produktu. Przyjmuje: produkt, id sesji użytkownika, obrazek,
+// ustawienie obrazka, podgląd obrazka, ustawienie podglądu obrazka, ustawienie odświeżenia po dodaniu,
+// ustawienie produktu.
+export const submitProduct =
+    async (product, sessionId, image, setImage, setImagePreview, setRefresh, setProduct) => {
     try {
         const response = await axios.post(`${API_URL}/api/add_product`, product, {
             headers: {

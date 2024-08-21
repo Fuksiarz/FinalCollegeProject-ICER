@@ -19,16 +19,15 @@ export const sendImageToFlask = async (setProduct, file, setImageForIdentyficati
                 'Content-Type': 'multipart/form-data' // Wskazuje, że dane będą w formacie form-data
             }
         });
-
         if (response.data && response.data.type === 'qr') {
             const identified = response.data.data;
             toast.success('Rozpoznano kod!');
 
             const updatedProduct = {
                 ...identified,
-                data_waznosci: identified.data || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // Dodajemy datę ważności
+                data_waznosci: identified.data || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+                    .toISOString().split('T')[0] // Dodajemy datę ważności
             };
-
             setProduct(updatedProduct);
 
         } else if (response.data && response.data.type === 'food'){
@@ -37,7 +36,8 @@ export const sendImageToFlask = async (setProduct, file, setImageForIdentyficati
                 // Dodajemy datę ważności do produktu
                 const updatedProduct = {
                     ...identified,
-                    data_waznosci: identified.data || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // Dodajemy datę ważności
+                    data_waznosci: identified.data || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+                        .toISOString().split('T')[0] // Dodajemy datę ważności
                 };
                 setProduct(updatedProduct);
 

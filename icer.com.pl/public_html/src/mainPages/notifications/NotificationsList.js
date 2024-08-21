@@ -59,18 +59,25 @@ export function NotificationsList({data, small = false, action, left = false}) {
                         {/* kontener z powiadomieniem*/}
                         <div className="notificationsNameDiv">
                             {/* kontener z nazwą powiadomienia*/}
-                            <h5 className="notificationText"
+                            {small ? <h3 className="notificationText"
                                 onClick={() => {
 
                                     handleNotificationClick(product.id, product.powiadomienie)
                                 }}
-                            >{product.nazwa}</h5>
+                            >{product.nazwa}</h3> :
+                                <h2 className="notificationText"
+                                    onClick={() => {
+
+                                        handleNotificationClick(product.id, product.powiadomienie)
+                                    }}
+                                >{product.nazwa}</h2>
+                            }
                             {/* kontener z ikonami*/}
                             <div className="notificationIcons">
                                 {/* kontener z ikoną powiadomienia*/}
                                 <div className="notificationAlertIconDiv">
                                     {/*ikona powiadomienia ze zmianą styli względem tego czy powiadomienie zostało odczytane oraz wartości przekazanej 'small'*/}
-                                    <Icon
+                                    <Icon className="notificationAlertIcon"
                                           style={
                                               small
                                                   ? {
@@ -116,10 +123,10 @@ export function NotificationsList({data, small = false, action, left = false}) {
                                 {expandedProduct === product.id && (
                                     <>{/*po spełnieniu warunku wyświetla element z dodatkowymi informacjami o produkcie*/}
                                     {product.data_waznosci &&
-                                        <p>Data ważności: {formatDate(product.data_waznosci)}</p>}
-                                    {product.ilosc === 0 ? <p> Ilość: {product.ilosc}</p>: product.ilosc > 0 && <p> Ilość: {product.ilosc}</p>}
-                                    {product.cena && <p>Cena: {product.cena}</p>}
-                                    {product.kategoria &&<p>Kategoria: {product.kategoria}</p>}
+                                        <h4>Data ważności: {formatDate(product.data_waznosci)}</h4>}
+                                    {product.ilosc === 0 ? <h4> Ilość: {product.ilosc}</h4>: product.ilosc > 0 && <h4> Ilość: {product.ilosc}</h4>}
+                                    {product.cena && <h4>Cena: {product.cena}</h4>}
+                                    {product.kategoria &&<h4>Kategoria: {product.kategoria}</h4>}
                                     </>
                                 )}
                             </div>

@@ -45,7 +45,8 @@ function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
 
             const botResponse = response.data.response;
             //dodawanie odpowiedzi do zmiennej posiadającej całą konwersację
-            setMessages(prevMessages => [...prevMessages, {text: botResponse, id: Date.now(), sender: 'bot'}]);
+            setMessages(prevMessages => [...prevMessages,
+                {text: botResponse, id: Date.now(), sender: 'bot'}]);
 
         } catch (error) {
             //w ramach błędu z wykonaniem zapytania do api wyświetla komunikat w konsoli
@@ -86,7 +87,8 @@ function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
                         <MessageList messages={messages}/>
 
                         {/*funkcja przyjmująca wiadomość od użytkownika, przyjmuje funkcję wysyłania wiadomości*/}
-                        <ChatInput onSendMessage={handleSendMessage} onToggleMinimize={handleToggleMinimize}/>
+                        <ChatInput onSendMessage={handleSendMessage}
+                                   onToggleMinimize={handleToggleMinimize}/>
 
                     </div> :
                     null
