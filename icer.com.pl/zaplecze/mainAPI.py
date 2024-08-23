@@ -17,6 +17,8 @@ from flask import session, jsonify, request
 import numpy as np
 from PIL import Image
 import stripe
+import logging
+import traceback
 
 import bcrypt
 from flask import Flask
@@ -85,6 +87,21 @@ def allowed_file(filename):
     # Sprawdź, czy nazwa pliku zawiera kropkę i czy rozszerzenie pliku jest dozwolone
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# Ustal lokalizację katalogu repozytorium (root project directory)
+repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Pobieranie ścieżki do pliku logów z .env
+log_file_path = os.getenv('LOG_FILE_PATH', 'zaplecze/logs/application.log')
+# Tworzenie pełnej ścieżki do pliku logów
+full_log_file_path = os.path.join(repo_root, log_file_path)
+
+# Konfiguracja logowania
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    filename=full_log_file_path,
+    filemode='a'
+)
+
 
 @app.route('/api/add_to_product', methods=['POST'])
 def add_to_product():
@@ -132,8 +149,6 @@ def add_to_product():
 
         # Użycie klasy ProductManager do dodawania ilości produktu w bazie danych
         product_manager.dodaj_jednostke_produktu(id_produktu, user_id)
-        print("dodaje?")
-
         return jsonify({"message": "Ilość produktu została dodana!"})
 
     except ValueError as ve:
@@ -196,7 +211,6 @@ def reset_product_quantity():
 
         # Użycie klasy ProductManager do zerowania ilości produktu w bazie danych
         product_manager.zeruj_ilosc_produktu(id_produktu, user_id)
-        print("zeruje?")
 
         return jsonify({"message": "Ilość produktu została zresetowana!"})
 
@@ -304,10 +318,7 @@ def remove_product_for_user():
             product_id = data['produktID']
         except KeyError:
             return jsonify({"error": "produktID is required"}), 400
-
-        # Wydrukowanie zapytania do bazy danych
         query_to_execute = f"CALL ModifyProductQuantity({product_id}, {user_id}, 'remove');"
-        print(query_to_execute)
 
         # Użycie klasy ProductManager do usunięcia produktu
         product_manager = ProductManager(db_connector)
@@ -343,15 +354,12 @@ def add_product():
         # Pobieranie danych z żądania
         data = request.json
         image_data = data.get('imageData')
-
         connection = db_connector.get_connection()
         cursor = connection.cursor(dictionary=True)
-
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
         if response:
             return response, status_code
-
         # Sprawdzenie, czy istnieje produkt z takimi samymi wartościami i który jest podstawowy
         check_product_query = """
             SELECT id 
@@ -389,10 +397,8 @@ def add_product():
                 data['bialko'],
                 data['kategoria']
             )
-
             if product_id is None:
                 return jsonify({"error": "Failed to add product to Produkty table."})
-
         # Dodanie daty dodania do tabeli 'Icer'
         add_icer_query = """
             INSERT INTO Icer (UserID, produktID, ilosc, data_waznosci, data_dodania)
@@ -401,16 +407,12 @@ def add_product():
         cursor.execute(add_icer_query, (user_id, product_id, data['ilosc'], data['data_waznosci']))
         # Wywołanie procedury UpdateSwiezosc dla nowo dodanego produktu
         cursor.callproc('UpdateSwiezosc', (cursor.lastrowid,))
-
         # Wywołanie funkcji do obsługi przesyłania zdjęcia tylko jeśli dostępne są dane zdjęcia
         if image_data:
             handle_image_upload(db_connector, image_data, user_id, product_id)
-
         connection.commit()
         cursor.close()
-
         return jsonify({"message": "Produkt dodany poprawnie!"})
-
     except Exception as error:
         return jsonify({"error": str(error)}), 500
 
@@ -419,45 +421,34 @@ def add_product():
 def edit_product(product_id):
     # Tworzenie instancji klasy DatabaseConnector
     db_connector = DatabaseConnector()
-
     # Łączenie z bazą danych
     db_connector.connect()
-
     try:
         # Pobieranie danych produktu z żądania
         data = request.json
         image_data = data.get('imageData')
         # Pobieranie user_id z funkcji get_user_id_by_username
         connection = db_connector.get_connection()
-
         cursor = connection.cursor(dictionary=True)
-
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
-
         if response:
             cursor.close()
             connection.close()
             return response, status_code
-
         # Aktualizacja produktu w bazie danych
         new_product_id = db_connector.update_product(product_id, data, user_id)
-
         # Jeśli new_product_id nie jest None, oznacza to, że został utworzony nowy produkt
         if new_product_id is not None:
             product_id_to_use = new_product_id
         else:
             product_id_to_use = product_id
-
         # Wywołanie funkcji do obsługi przesyłania zdjęcia tylko jeśli dostępne są dane zdjęcia
         if image_data:  # Dodatkowa warunek sprawdzający, czy jest nowe id produktu
             handle_image_upload(db_connector, image_data, user_id, product_id_to_use)
-
         cursor.close()
         connection.close()
-
         return jsonify({"message": "Produkt został zaktualizowany!"})
-
     except Exception as error:
         return jsonify({"error": str(error)}), 500
 
@@ -468,28 +459,22 @@ def get_icer_shopping():
     db_connector = DatabaseConnector()
     # Łączenie z bazą danych
     db_connector.connect()
-
     try:
         # Uzyskanie połączenia z bazą danych
         connection = db_connector.get_connection()
         if not connection:
             raise ConnectionError("Failed to establish a connection with the database.")
-
         cursor = connection.cursor(dictionary=True)
         if not cursor:
             raise Exception("Failed to create a cursor for the database.")
-
         data = request.get_json()
-
         # Upewnienie się co do sesji
         received_session_id = data.get('sessionId', None)
         if not received_session_id:
             raise ValueError("Session ID not provided")
-
         # Jeśli użytkownik nie jest zalogowany
         if 'username' not in session:
             raise PermissionError("User not logged in")
-
         # Pobranie ID aktualnie zalogowanego użytkownika
         username = session['username']
         user_query = "SELECT id FROM Users WHERE username = %s"
@@ -497,7 +482,6 @@ def get_icer_shopping():
         user_result = cursor.fetchone()
         if not user_result:
             raise LookupError("User not found")
-
         # Modyfikacja zapytania SQL, aby pokazywać wszystkie informacje o produkcie
         user_id = user_result['id']
         query = """
@@ -634,26 +618,21 @@ def get_notifications():
         connection = db_connector.get_connection()
         if not connection:
             raise ConnectionError("Failed to establish a connection with the database.")
-
         cursor = connection.cursor(dictionary=True)
         if not cursor:
             raise Exception("Failed to create a cursor for the database.")
-
         data = request.get_json()
         received_session_id = data.get('sessionId', None)
         if not received_session_id:
             raise ValueError("Session ID not provided")
-
         if 'username' not in session:
             raise PermissionError("User not logged in")
-
         username = session['username']
         user_query = "SELECT id FROM Users WHERE username = %s"
         cursor.execute(user_query, (username,))
         user_result = cursor.fetchone()
         if not user_result:
             raise LookupError("User not found")
-
         user_id = user_result['id']
 
         query = """
@@ -771,26 +750,20 @@ def get_products_with_red_flag():
 def get_icer():
     # Tworzenie instancji klasy DatabaseConnector
     db_connector = DatabaseConnector()
-
     # Łączenie z bazą danych
     db_connector.connect()
-
     try:
         # Uzyskanie połączenia z bazą danych
         connection = db_connector.get_connection()
         if not connection:
             raise ConnectionError("Failed to establish a connection with the database.")
-
         cursor = connection.cursor(dictionary=True)
         if not cursor:
             raise Exception("Failed to create a cursor for the database.")
-
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
-
         if response:
             return response, status_code
-
         # Modyfikacja zapytania SQL, aby pokazywać wszystkie informacje o produkcie
         query = """
             SELECT DISTINCT Icer.id, Icer.UserID, Icer.produktID, Icer.ilosc, 
@@ -809,11 +782,10 @@ def get_icer():
         """
         cursor.execute(query, (user_id, user_id))
         results = cursor.fetchall()
-
         for result in results:
             zdjecie_lokalizacja = result['zdjecie_lokalizacja']
             if zdjecie_lokalizacja:
-                # Zakodowanie zdjęcia w Base64
+                # Odkodowanie  zdjęcia z Base64
                 try:
                     image_path = os.path.join("../zaplecze/photos", zdjecie_lokalizacja)
                     with open(image_path, "rb") as image_file:
@@ -836,10 +808,8 @@ def get_icer():
     except ConnectionError as ce:
         return jsonify({"error": str(ce)}), 500
     except Exception as error:
-        # Tutaj możemy logować błąd w bardziej szczegółowy sposób
-        current_app.logger.error(f"Unexpected error: {error}")
+        logging.error(f'Błąd get_icer: {error}')
         return jsonify({"error": "Unexpected server error"}), 500
-
     finally:
         if cursor:
             cursor.close()
@@ -989,26 +959,21 @@ def update_preferences():
         def validate_size(value):
             valid_sizes = ['bardzo male', 'male', 'srednie', 'duze', 'bardzo duze']
             return value.lower() in valid_sizes
-
         # Sprawdzenie poprawności wartości
         if not validate_size(data['wielkosc_lodowki']) or not validate_size(data['wielkosc_strony_produktu']):
             return jsonify({"error": "Nieprawidłowe wartości wielkości."}), 400
-
         connection = db_connector.get_connection()
         cursor = connection.cursor(dictionary=True)
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
-
         if response:
             return response, status_code
-
         # Sprawdzenie, czy istnieje wpis w tabeli preferencje_uzytkownikow
         check_preferences_query = """
             SELECT UserID FROM preferencje_uzytkownikow WHERE UserID = %s
         """
         cursor.execute(check_preferences_query, (user_id,))
         existing_user = cursor.fetchone()
-
         if existing_user:
             # Aktualizacja preferencji użytkownika
             update_preferences_query = """
@@ -1045,16 +1010,12 @@ def get_user_preferences():
     try:
         # Tworzenie instancji klasy DatabaseConnector
         db_connector = DatabaseConnector()
-
         # Łączenie z bazą danych
         db_connector.connect()
-
         connection = db_connector.get_connection()
         cursor = connection.cursor(dictionary=True)
-
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
-
         if response:
             return response, status_code
 
@@ -1068,7 +1029,6 @@ def get_user_preferences():
         """
         cursor.execute(get_preferences_query, (user_id,))
         preferences = cursor.fetchone()
-
         if preferences:
             # Sprawdzenie, czy okres premium minął
             if preferences['uzytkownik_premium'] == 1 and preferences['data_koniec_premium']:
@@ -1090,7 +1050,6 @@ def get_user_preferences():
             else:
                 profile_photo_path = os.path.join("../zaplecze/photos/userProfilePicture",
                                                   preferences['lokalizacja_zdj'])
-
             try:
                 # Otwieranie i kodowanie zdjęcia do Base64
                 with open(profile_photo_path, "rb") as image_file:
@@ -1098,7 +1057,6 @@ def get_user_preferences():
                 preferences['profile_photo'] = encoded_image
             except FileNotFoundError:
                 preferences['profile_photo'] = None
-
             return jsonify(preferences)
         else:
             return jsonify({"error": "Preferences not found."}), 404
@@ -1143,7 +1101,6 @@ def update_food_list(food_list):
         db_connector.connect()
         connection = db_connector.get_connection()
         cursor = connection.cursor(dictionary=True)
-
         # Pobieranie danych produktów z bazy danych
         select_query = """
             SELECT nazwa, cena, kalorie, tluszcze, weglowodany, bialko, kategoria
@@ -1174,7 +1131,6 @@ def update_food_list(food_list):
                 "kategoria": product['kategoria'],
                 "ilosc": 1  # Zawsze ustaw ilość na 1
             })
-
         # Zwróć zaktualizowaną listę produktów
         return updated_food_list
     except Exception as error:
@@ -1216,7 +1172,6 @@ def user_exists(username):
                 result = cursor.fetchone()
             return True if result else False
         except Exception as error:
-            print("Error during user existence check:", error)
             return False
 
 
@@ -1240,8 +1195,6 @@ def save_user(username, password):
             connection.commit()
             return True
         except Exception as error:
-            # Obsłuż błędy podczas rejestracji użytkownika
-            print("Błąd podczas rejestracji użytkownika:", error)
             if connection:
                 # Cofnij transakcję w przypadku błędu
                 connection.rollback()
@@ -1260,9 +1213,9 @@ SMTP_PORT = 587
 
 def send_verification_email(email, token):
     subject = 'Potwierdzenie rejestracji'
-    link = url_for('confirm_email', token=token, _external=True)
+    # Ręcznie ustawiona domena
+    link = f'http://localhost:3000/confirm_email/{token}'
     body = f'Kliknij w ten link, aby potwierdzić swoją rejestrację: {link}'
-
     msg = MIMEMultipart()
     msg['From'] = formataddr((str(Header('Icer Poland', 'utf-8')), SMTP_USER))
     msg['To'] = email
@@ -1275,10 +1228,11 @@ def send_verification_email(email, token):
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()  # Rozpocznij TLS
             server.login(SMTP_USER, SMTP_PASSWORD)  # Zaloguj się
-            # Zamiast msg.as_string() użyj str() z kodowaniem UTF-8
-            server.sendmail(SMTP_USER, email, msg.as_string().encode('utf-8'))  # Wyślij e-mail
+            # Wyślij e-mail
+            server.sendmail(SMTP_USER, email, msg.as_string().encode('utf-8'))
+        logging.info(f'E-mail weryfikacyjny został wysłany do {email}')
     except Exception as e:
-        print(f'Błąd podczas wysyłania e-maila: {e}')
+        logging.error(f'Błąd podczas wysyłania e-maila do {email}: {e}')
 
 
 def generate_confirmation_token(email):
@@ -1345,7 +1299,8 @@ def confirm_user(email):
             return jsonify({"message": "Nie znaleziono użytkownika."}), 404
 
     except Exception as error:
-        print("Błąd podczas zatwierdzania użytkownika:", error)
+        logging.error(f"Błąd podczas zatwierdzania użytkownika: {error}")
+        return jsonify({"message": "Wystąpił błąd podczas zatwierdzania użytkownika."}), 500
         return jsonify({"message": "Wystąpił błąd podczas zatwierdzania użytkownika."}), 500
 
     finally:
@@ -1383,7 +1338,7 @@ def check_user(username, password):
         return False
 
     except Exception as error:
-        print("Błąd podczas uwierzytelniania użytkownika:", error)
+        logging.error(f"Błąd podczas uwierzytelniania użytkownika: {error}")
         return jsonify({"message": "Wystąpił błąd podczas logowania."}), 500
 
     finally:
@@ -1412,9 +1367,8 @@ def send_new_password_email(email, new_password):
             message_string = msg.as_string().encode('utf-8')
             server.sendmail(SMTP_USER, email, message_string)
     except Exception as e:
-        print(f'Błąd podczas wysyłania e-maila: {e}')
-        import traceback
-        print(traceback.format_exc())
+        error_message = f'Błąd podczas wysyłania e-maila do {email}: {e}\n{traceback.format_exc()}'
+        logging.error(error_message)
 
 
 def generate_random_password(length=12):
@@ -1460,8 +1414,9 @@ def reset_password():
 
         return jsonify({"message": "Hasło zostało zresetowane i wysłane na Twój adres e-mail"}), 200
 
-    except Exception as error:
-        print(f"Błąd podczas resetowania hasła: {error}")
+    except Exception as e:
+        error_message = f'Błąd podczas resetowania hasła {email}: {e}\n{traceback.format_exc()}'
+        logging.error(error_message)
         return jsonify({"message": "Wystąpił błąd podczas resetowania hasła"}), 500
 
     finally:
@@ -1476,7 +1431,6 @@ def edit_user():
     # Sprawdzanie, czy użytkownik jest zalogowany
     if 'username' not in session:
         return jsonify({"error": "Musisz być zalogowany, aby edytować dane."})
-
     try:
         data = request.json
         new_password = data.get('new_password')
@@ -1484,7 +1438,6 @@ def edit_user():
         db_connector = DatabaseConnector()
         db_connector.connect()  # Nawiązanie połączenia
         cursor = db_connector.get_connection().cursor()
-
         # Jeśli użytkownik dostarczył nowe hasło, aktualizuj hasło
         if new_password:
             # Szyfrowanie nowego hasła
@@ -1500,17 +1453,13 @@ def edit_user():
             cursor.execute(check_query, (new_username,))
             if cursor.fetchone():
                 return jsonify({"error": "Nazwa użytkownika jest już zajęta."})
-
             query = "UPDATE Users SET username = %s WHERE username = %s"
             values = (new_username, session['username'])
             cursor.execute(query, values)
-
             # Aktualizacja nazwy użytkownika w sesji
             session['username'] = new_username
-
         db_connector.get_connection().commit()
         cursor.close()
-
         return jsonify({"message": "Dane zostały zaktualizowane!"})
 
     except Exception as error:
