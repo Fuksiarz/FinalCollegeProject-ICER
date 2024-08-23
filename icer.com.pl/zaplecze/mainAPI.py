@@ -87,15 +87,18 @@ def allowed_file(filename):
     # Sprawdź, czy nazwa pliku zawiera kropkę i czy rozszerzenie pliku jest dozwolone
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
+# Ustal lokalizację katalogu repozytorium (root project directory)
+repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Pobieranie ścieżki do pliku logów z .env
-log_file_path = os.getenv('LOG_FILE_PATH', '/var/www/icer.com.pl/zaplecze/logs/application.log')
+log_file_path = os.getenv('LOG_FILE_PATH', 'zaplecze/logs/application.log')
+# Tworzenie pełnej ścieżki do pliku logów
+full_log_file_path = os.path.join(repo_root, log_file_path)
 
 # Konfiguracja logowania
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    filename=log_file_path,
+    filename=full_log_file_path,
     filemode='a'
 )
 
@@ -1210,9 +1213,9 @@ SMTP_PORT = 587
 
 def send_verification_email(email, token):
     subject = 'Potwierdzenie rejestracji'
-    link = url_for('confirm_email', token=token, _external=True)
+    # Ręcznie ustawiona domena
+    link = f'http://localhost:3000/confirm_email/{token}'
     body = f'Kliknij w ten link, aby potwierdzić swoją rejestrację: {link}'
-
     msg = MIMEMultipart()
     msg['From'] = formataddr((str(Header('Icer Poland', 'utf-8')), SMTP_USER))
     msg['To'] = email

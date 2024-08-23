@@ -709,3 +709,70 @@ INFO:werkzeug:127.0.0.1 - - [09/Jun/2024 23:52:52] "POST /api/Icer HTTP/1.1" 200
 INFO:werkzeug:127.0.0.1 - - [09/Jun/2024 23:52:52] "POST /api/Icer HTTP/1.1" 200 -
 INFO:werkzeug:127.0.0.1 - - [09/Jun/2024 23:52:52] "POST /api/Icer HTTP/1.1" 200 -
 INFO:werkzeug:127.0.0.1 - - [09/Jun/2024 23:52:52] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-23 15:41:59,091 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-23 15:41:59,091 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-23 15:42:29,527 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:42:29] "OPTIONS /register HTTP/1.1" 200 -
+2024-08-23 15:42:33,969 - root - INFO - E-mail weryfikacyjny zosta³ wys³any do fovocix423@ndiety.com
+2024-08-23 15:42:33,969 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:42:33] "POST /register HTTP/1.1" 200 -
+2024-08-23 15:42:46,687 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:42:46] "GET /confirm_email/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZvdm9jaXg0MjNAbmRpZXR5LmNvbSIsImV4cCI6MTcyNDUwNjk1MX0.nPWVoXdhPjuOb5BJeTuqGfpz38QnOf2mWPuMxbvg8mQ HTTP/1.1" 200 -
+2024-08-23 15:42:47,027 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:42:47] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-08-23 15:43:01,469 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:01] "OPTIONS /login HTTP/1.1" 200 -
+2024-08-23 15:43:01,748 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:01] "POST /login HTTP/1.1" 200 -
+2024-08-23 15:43:02,090 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:02] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-23 15:43:02,091 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:02] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-23 15:43:02,095 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:02] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-23 15:43:02,097 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:02] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-23 15:43:02,142 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:02] "[33mGET /api/get_user_preferences?sessionId=703cdf20-df31-4bf2-a8e7-fb19289f612d HTTP/1.1[0m" 404 -
+2024-08-23 15:43:02,401 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:02] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
+2024-08-23 15:43:02,402 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:02] "POST /start_video HTTP/1.1" 200 -
+2024-08-23 15:43:02,460 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:02] "[35m[1mGET /video/videoplaybackalt.mp4 HTTP/1.1[0m" 206 -
+2024-08-23 15:43:02,521 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:02] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-23 15:43:02,568 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:02] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-23 15:43:06,948 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:06] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-23 15:43:06,951 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 15:43:06] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-23 16:19:47,623 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-23 16:19:47,623 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-23 16:20:34,606 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:20:34] "OPTIONS /register HTTP/1.1" 200 -
+2024-08-23 16:20:37,074 - root - INFO - E-mail weryfikacyjny zosta³ wys³any do xafibes607@ndiety.com
+2024-08-23 16:20:37,074 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:20:37] "POST /register HTTP/1.1" 200 -
+2024-08-23 16:21:06,253 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:21:06] "OPTIONS /login HTTP/1.1" 200 -
+2024-08-23 16:21:06,266 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:21:06] "[31m[1mPOST /login HTTP/1.1[0m" 403 -
+2024-08-23 16:25:36,094 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-23 16:25:36,094 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-23 16:26:52,873 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-23 16:26:52,873 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-23 16:27:25,090 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:25] "OPTIONS /login HTTP/1.1" 200 -
+2024-08-23 16:27:25,657 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:25] "POST /login HTTP/1.1" 200 -
+2024-08-23 16:27:25,668 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:25] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-23 16:27:25,843 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:25] "GET /api/get_user_preferences?sessionId=88f8ec21-237d-4277-9737-2e615f7919e2 HTTP/1.1" 200 -
+2024-08-23 16:27:25,978 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:25] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-23 16:27:25,980 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:25] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-23 16:27:25,983 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:25] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-23 16:27:26,166 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:26] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-23 16:27:26,174 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:26] "GET /api/get_user_preferences?sessionId=88f8ec21-237d-4277-9737-2e615f7919e2 HTTP/1.1" 200 -
+2024-08-23 16:27:26,210 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:26] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-23 16:27:26,222 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:26] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-23 16:27:26,291 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:26] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
+2024-08-23 16:27:26,293 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:26] "POST /start_video HTTP/1.1" 200 -
+2024-08-23 16:27:26,301 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:26] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-23 16:27:26,499 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:27:26] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-23 16:28:04,595 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-23 16:28:04,595 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-23 16:28:06,192 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:06] "OPTIONS /login HTTP/1.1" 200 -
+2024-08-23 16:28:06,754 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:06] "POST /login HTTP/1.1" 200 -
+2024-08-23 16:28:06,766 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:06] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-23 16:28:06,781 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:06] "GET /api/get_user_preferences?sessionId=8b89cf09-1714-474e-8bcd-ef2ceec9b06a HTTP/1.1" 200 -
+2024-08-23 16:28:07,071 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:07] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-23 16:28:07,107 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:07] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-23 16:28:07,399 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:07] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-23 16:28:10,153 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:10] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-23 16:28:10,163 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:10] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-23 16:28:10,166 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:10] "GET /api/get_user_preferences?sessionId=8b89cf09-1714-474e-8bcd-ef2ceec9b06a HTTP/1.1" 200 -
+2024-08-23 16:28:10,396 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:10] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
+2024-08-23 16:28:10,475 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:10] "POST /start_video HTTP/1.1" 200 -
+2024-08-23 16:28:10,490 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:10] "GET /api/get_user_preferences?sessionId=8b89cf09-1714-474e-8bcd-ef2ceec9b06a HTTP/1.1" 200 -
