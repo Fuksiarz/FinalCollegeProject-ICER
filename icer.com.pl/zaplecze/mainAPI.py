@@ -303,10 +303,8 @@ def remove_product_for_user():
         # Tworzenie instancji ProductManager
         connection = db_connector.get_connection()
         cursor = connection.cursor(dictionary=True)
-
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
-
         if response:
             return response, status_code
 
@@ -507,8 +505,7 @@ def get_icer_shopping():
     except ConnectionError as ce:
         return jsonify({"error": str(ce)}), 500
     except Exception as error:
-        # Tutaj możemy logować błąd w bardziej szczegółowy sposób
-        current_app.logger.error(f"Unexpected error: {error}")
+        logging.error(f'Błąd get_icer: {error}')
         return jsonify({"error": "Unexpected server error"}), 500
     finally:
         if cursor:
@@ -532,10 +529,8 @@ def edit_shopping_cart():
 
         connection = db_connector.get_connection()
         cursor = connection.cursor(dictionary=True)
-
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
-
         if response:
             return response, status_code
 
@@ -680,24 +675,19 @@ def get_products_with_red_flag():
 
     # Łączenie z bazą danych
     db_connector.connect()
-
     try:
         # Uzyskanie połączenia z bazą danych
         connection = db_connector.get_connection()
         if not connection:
             raise ConnectionError("Failed to establish a connection with the database.")
-
         cursor = connection.cursor(dictionary=True)
         if not cursor:
             raise Exception("Failed to create a cursor for the database.")
-
         data = request.get_json()
-
         # Upewnienie się co do sesji
         received_session_id = data.get('sessionId', None)
         if not received_session_id:
             raise ValueError("Session ID not provided")
-
         # Jeśli użytkownik nie jest zalogowany
         if 'username' not in session:
             raise PermissionError("User not logged in")
@@ -737,8 +727,7 @@ def get_products_with_red_flag():
     except ConnectionError as ce:
         return jsonify({"error": str(ce)}), 500
     except Exception as error:
-        # Tutaj możemy logować błąd w bardziej szczegółowy sposób
-        current_app.logger.error(f"Unexpected error: {error}")
+        logging.error(f'Błąd get_icer: {error}')
         return jsonify({"error": "Unexpected server error"}), 500
 
     finally:
@@ -869,7 +858,6 @@ def delete_notification():
     except Exception as error:
         current_app.logger.error(f"Unexpected error: {error}")
         return jsonify({"error": "Unexpected server error"}), 500
-
     finally:
         if cursor:
             cursor.close()
@@ -889,7 +877,6 @@ def delete_all_notification():
         received_session_id = data.get('sessionId', None)
         if not received_session_id:
             raise ValueError("Session ID not provided")
-
         if 'username' not in session:
             raise PermissionError("User not logged in")
 
@@ -936,7 +923,6 @@ def delete_all_notification():
     except Exception as error:
         current_app.logger.error(f"Unexpected error: {error}")
         return jsonify({"error": "Unexpected server error"}), 500
-
     finally:
         if cursor:
             cursor.close()
@@ -1072,7 +1058,6 @@ def change_user_photo():
     try:
         # Tworzenie instancji klasy DatabaseConnector
         db_connector = DatabaseConnector()
-
         # Łączenie z bazą danych
         db_connector.connect()
         connection = db_connector.get_connection()
