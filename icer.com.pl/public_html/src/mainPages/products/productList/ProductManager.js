@@ -141,8 +141,10 @@ function ProductManager({
 
                     }
 
-                    {/* jeśli nie jesteśmy na stronie produktów to pokaż tylko listę, w zależności od miejsca różni się jej wysokość */}
-                    <div className="productList" ref={productListRef} style={size === 'small' ? {height: "100vh"} : {height: "90vh"}}>
+                    {/* jeśli nie jesteśmy na stronie produktów to pokaż tylko listę,
+                     w zależności od miejsca różni się jej wysokość */}
+                    <div className="productList" ref={productListRef} style={size === 'small' ?
+                        {height: "100vh"} : {height: "90vh"}}>
                         {productData.filteredProducts && productData.filteredProducts.map((data, index) =>
 
                         /* przypisz do funkcji każdy element z danych pobranych o produktach wraz z wartościami */
@@ -160,9 +162,11 @@ function ProductManager({
                                 size={size} //wielkość - gdzie wyświetlamy
                                 rightButtonDivRef={rightButtonDivRef} //referencja do prawego przycisku ("wyczerpane")
                                 isSelected={selectedProductId === data.id} //czy element jest naciśnięty
-                                isHidden={selectedProductId !== null && selectedProductId !== data.id} // czy element ma mieć ukryte informacje
+                                 // czy element ma mieć ukryte informacje
+                                isHidden={selectedProductId !== null && selectedProductId !== data.id}
                                 setIsSelected={setSelectedProductId} // ustawianie elementu naciśniętego
-                                onProductClick={() => handleProductClick(data.id)} //ustawianie konkretnego produktu jako zaznaczonego
+                                //ustawianie konkretnego produktu jako zaznaczonego
+                                onProductClick={() => handleProductClick(data.id)}
 
                             />
                         )}

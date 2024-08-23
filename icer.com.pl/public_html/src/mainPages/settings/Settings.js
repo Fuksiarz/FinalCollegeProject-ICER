@@ -19,9 +19,9 @@ export function Settings({where}) {
     const navigate = useNavigate(); // Use navigate
     //pobieranie wartości ustawień z kontekstu ustawień
     const { fridgeSizeElements, setFridgeSizeElements, productsSizeElements,
-        setProductsSizeElements, infoProducts, setInfoProducts, premiumUser, setPremiumUser  } = useContext(SettingsContext);
+        setProductsSizeElements, infoProducts, setInfoProducts, premiumUser, refresh,setRefresh } = useContext(SettingsContext);
     //zmienna odpowiedzialna za odświeżanie
-    const [refresh,setRefresh] = useState(false);
+    const [refreshSettings,setRefreshSettings] = useState(false);
     //tablica z nazwami ustawień wielkości elelemntów na stronie lodówki
     const fridgeSizeElementsArray = ['bardzo małe', 'małe', 'średnie', 'duże', 'bardzo duże'];
 
@@ -29,12 +29,9 @@ export function Settings({where}) {
     const handleOptionClick = (optionValue, setter) => {
 
         setter(optionValue);
-        setRefresh(!refresh);
+        setRefreshSettings(!refreshSettings);
     };
-    const handleOptionClickPremium = () => {
-        setPremiumUser(!premiumUser);
-        setRefresh(!refresh);
-    };
+
     // Nazwy dla drugiej grupy opcji
     const productsSizeElementsArray = ['bardzo małe', 'małe', 'średnie', 'duże', 'bardzo duże'];
 
@@ -57,7 +54,6 @@ export function Settings({where}) {
     }`;
 
     useEffect(() => {
-        console.log("publickey: ", process.env.REACT_APP_PUBLIC_STRIPE_KEY)
         //przypisuje ustawienia do wartości wysyłanych do API
         const preferences = {
             wielkosc_lodowki: fridgeSizeElements,
@@ -72,7 +68,7 @@ export function Settings({where}) {
             .catch((error) => {
                 console.error('Error updating preferences:', error);
             });
-    },[refresh,user]);
+    },[refreshSettings,user]);
 
     //hook do wybierania ustawień, podajemy pozycję w tablicy nazewnictwa
     const mapSizeToApiValue = (sizeIndex) => {
@@ -84,11 +80,11 @@ export function Settings({where}) {
     const handleStripeCheckout = async () => {
         try {
             const stripe = await stripePromise;
-            console.log('username:' + user.username);
             const { data } = await axios.post(`${API_URL}/create-checkout-session`, { username: user.username });
             const { session_id } = data;
 
             const { error } = await stripe.redirectToCheckout({ sessionId: session_id });
+            setRefresh(!refresh);
             if (error) {
                 console.error('Error redirecting to checkout:', error);
 
@@ -172,18 +168,22 @@ export function Settings({where}) {
                     </>
                 }
                 {(where === 'settings') &&<>
-                    <div className="settings-section">
-                        {premiumUser? <h2 className={sectionHeaderClass}>Już nie chcę premium!</h2> :
-                            <h2 className={sectionHeaderClass}>Zdobądź premium!</h2>}
-                        <div className="custom-radio-container">
+                  <div className="settings-section">
+
+                      {premiumUser ?
+                          <h2 className={sectionHeaderClass}>Jesteś premium!</h2>:
+                          <h2 className={sectionHeaderClass}>Zdobądź premium!
+                      </h2>
+                      }
+                    {!premiumUser && <div className="custom-radio-container">
                             <div
                                 className={`${customRadioButtonClass} . 'selected'`}
                                 // Przy naciśnięciu ma się ustawiać wybrana opcja
                                 onClick={handleStripeCheckout}
                             >
-                                {premiumUser ? <label>Pozbądź się premium</label> : <label>Zdobądź premium za $5</label>}
+                                <label>Zdobądź premium za $5</label>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 </>
                 }

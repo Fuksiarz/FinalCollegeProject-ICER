@@ -85,7 +85,6 @@ function EditAccount() {
 
     };
     const changeUserPhoto = () => {
-        console.log('poszlo change_user_photo ze zdjęciem: ' + pictureToSend)
         // Znajdź produkt o danym ID i zwiększ jego ilość
         axios.post(`${API_URL}/api/change_user_photo`,
             {sessionId:sessionId,

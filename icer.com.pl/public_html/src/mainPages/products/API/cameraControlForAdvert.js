@@ -11,7 +11,6 @@ export const cameraControlForAdvert = (videoRef, canvasRef, isRecording, setIsRe
             videoRef.current.srcObject = null; // Usunięcie źródła wideo
             setAdIsOn(false); // Wyłączenie stanu reklamy
             setIsRecording(false); // Zatrzymanie nagrywania
-            console.log('Kamera zatrzymana'); // Log do debugowania
         }
     };
 
@@ -73,10 +72,8 @@ export const cameraControlForAdvert = (videoRef, canvasRef, isRecording, setIsRe
 
                             if (analysisResult && analysisResult.length > 0) {
                                 const firstResponse = analysisResult[0];
-                                if (firstResponse.message) {
-                                    console.log(`Otrzymano wiadomość: ${firstResponse.message}`); // Wyświetlenie wiadomości
-                                } else if (firstResponse.error) {
-                                    console.log(`Wystąpił błąd: ${firstResponse.error}`); // Wyświetlenie błędu
+                                if (firstResponse.error) {
+                                    console.log(`error: ${firstResponse.error}`); // Wyświetlenie błędu
                                 }
                             }
                         }

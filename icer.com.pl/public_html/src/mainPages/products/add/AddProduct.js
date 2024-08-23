@@ -107,16 +107,11 @@ function AddProduct() {
     };
     const stopCamera = () => { //zatrzymaj kamerę i zaktualizuj kosz z zakupami
 
-
         setProductBackpack(foodItems);//dodajemy zaktualizowane dane do torby z zakupami
-
-
-        console.log("Attempting to stop the camera.");
         if (stopRecording) {
             console.log("stopRecording is defined, calling it.");
             stopRecording();
             setStreamCamera(false);
-
         } else {
             console.log("stopRecording is undefined.");
         }

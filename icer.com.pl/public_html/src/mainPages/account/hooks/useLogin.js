@@ -6,7 +6,8 @@ import { AuthContext } from "../auth-context";
 import { API_URL } from "../../settings/config";
 import { toast } from "react-toastify";
 
-export const useLogin = () => {
+export const useLogin = () =>
+{
     const authContext = useContext(AuthContext); // Pobranie kontekstu uwierzytelniania
     const navigate = useNavigate(); // Hook do nawigacji między stronami
     const [showResetPassword, setShowResetPassword] = useState(false); // Stan błędu
@@ -14,7 +15,6 @@ export const useLogin = () => {
     const handleLogin = async (credentials) => {
         try {
             setShowResetPassword(false);
-            console.log("halo")
             // Wysłanie żądania POST do API w celu zalogowania
             const response = await axios.post(`${API_URL}/login`, credentials);
             const { data } = response;
@@ -34,6 +34,7 @@ export const useLogin = () => {
                 toast.error(error.response.data.message); // Wyświetlenie wiadomości o błędzie z odpowiedzi API
             } else {
                 // Wyświetlenie wiadomości o błędzie
+                setShowResetPassword(true);
                 toast.error('Wystąpił problem w trakcie logowania. Proszę spróbować ponownie.');
             }
         }
