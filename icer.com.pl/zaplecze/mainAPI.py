@@ -1720,6 +1720,7 @@ def upload_predictor():
     Obsługuje przesyłanie plików przez użytkowników, identyfikuje QR kody i klasyfikuje jedzenie przy użyciu AI.
     """
     try:
+        print("Endpoint wywołany: ", request.method)  # Logowanie metody żądania
         db_connector = DatabaseConnector()
         db_connector.connect()  # Nawiązanie połączenia
 
@@ -1729,9 +1730,11 @@ def upload_predictor():
         cursor = connection.cursor(dictionary=True)
 
         if request.method == 'POST':
+            logging.info("Otrzymano zapytanie POST")
             # Sprawdzenie, czy w żądaniu znajdują się plik i nazwa użytkownika
             if 'file' not in request.files or 'username' not in request.form:
                 flash('Brak części pliku lub nazwy użytkownika', 'error')
+                logging.info("Brak części pliku lub nazwy użytkownika")
                 return jsonify({"status": "error", "message": "Brak części pliku lub nazwy użytkownika"})
 
             file = request.files['file']
@@ -1739,6 +1742,7 @@ def upload_predictor():
             # Sprawdzenie, czy plik został wybrany
             if file.filename == '':
                 flash('Nie wybrano pliku', 'error')
+                logging.info("Nie wybrano pliku")
                 return jsonify({"status": "error", "message": "Nie wybrano pliku"})
 
             # Sprawdzenie, czy plik ma dozwolone rozszerzenie
@@ -1748,10 +1752,12 @@ def upload_predictor():
                 upload_folder = 'static/uploads/'
                 file_path = os.path.join(upload_folder, filename)
                 file.save(file_path)
+                logging.info("Plik zapisano do: ", file_path)  # Logowanie ścieżki pliku
 
                 # Próba odczytu kodu QR
                 decoded_data = decode_qr_code(file_path)
                 if decoded_data and decoded_data != "Kod QR nie został wykryty":
+                    logging.info("Kod QR rozszyfrowany: ", decoded_data)
 
                     # Normalizacja kluczy oraz wartości w danych z QR kodu
                     normalized_data = {normalize_key(key): value for key, value in decoded_data.items()}
@@ -1770,25 +1776,32 @@ def upload_predictor():
 
                 else:
                     # Informacja o braku kodu QR i przejście do predykcji jedzenia
-                    logging("Nie wykryto kodu QR, przechodzę do klasyfikacji jedzenia.")
+                    logging.info("Nie wykryto kodu QR, przechodzę do klasyfikacji jedzenia.")
 
                 # Dokonanie predykcji na podstawie przesłanego obrazu
                 pred_class = pred_and_plot(model, file_path, class_names, username)
                 if pred_class:
+                    logging.info("Zidentyfikowano jedzenie: ", pred_class)
+
                     # Aktualizacja listy jedzenia na podstawie wyniku predykcji
                     updated_food_list = update_food_list([pred_class])
                     return jsonify({"status": "success", "type": "food", "data": updated_food_list})
                 else:
+                    logging.info("Nie wykryto jedzenia.")
                     return jsonify({"status": "error", "message": "Nie wykryto kodu QR i jedzenia."})
             else:
+                logging.info("Zły typ pliku.")
                 return jsonify({"status": "error", "message": "Zły typ pliku, prześlij poprawny"})
 
         # Obsługa żądania innego niż POST
+        logging.info("Oczekiwano żądania POST z obrazem.")
         return jsonify({"status": "error", "message": "Wysłano zapytanie POST z obrazem"})
 
     # Obsługa wyjątków i błędów
     except Exception as e:
+        logging.info(f"An error occurred: {e}")
         return jsonify({"status": "error", "message": "Błąd wewnętrzny serwera."})
+
 
 
 # Analiza klatek reklama + podawanie statusu dla odtwarzana video
