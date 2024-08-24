@@ -1198,9 +1198,9 @@ SMTP_PORT = 587
 
 def send_verification_email(email, token):
     subject = 'Potwierdzenie rejestracji'
-    # Ręcznie ustawiona domena
-    link = f'http://localhost:3000/confirm_email/{token}'
+    link = url_for('confirm_email', token=token, _external=True)
     body = f'Kliknij w ten link, aby potwierdzić swoją rejestrację: {link}'
+
     msg = MIMEMultipart()
     msg['From'] = formataddr((str(Header('Icer Poland', 'utf-8')), SMTP_USER))
     msg['To'] = email
@@ -1235,7 +1235,7 @@ def confirm_email(token):
     try:
         email = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])['email']
         if confirm_user(email):
-            return jsonify({"message": "Adres e-mail został potwierdzony."})
+            return redirect('http://localhost:3000/login')  # Przekierowanie na stronę logowania
         else:
             return jsonify({"message": "Błąd podczas potwierdzania adresu e-mail."}), 500
     except jwt.ExpiredSignatureError:
