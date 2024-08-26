@@ -94,6 +94,9 @@ log_file_path = os.getenv('LOG_FILE_PATH', 'zaplecze/logs/application.log')
 # Tworzenie pełnej ścieżki do pliku logów
 full_log_file_path = os.path.join(repo_root, log_file_path)
 
+# Odczytaj wartość zmiennej ENVIRONMENT
+environment = os.getenv('ENVIRONMENT')
+
 # Konfiguracja logowania
 logging.basicConfig(
     level=logging.INFO,
@@ -1198,7 +1201,10 @@ SMTP_PORT = 587
 
 def send_verification_email(email, token):
     subject = 'Potwierdzenie rejestracji'
-    link = url_for('confirm_email', token=token, _external=True)
+    if environment == 'LOCAL':
+        link = url_for('confirm_email', token=token, _external=True)
+    elif environment == 'PRODUCTION':
+        link = f'http://localhost:5000/confirm_email/{token}'
     body = f'Kliknij w ten link, aby potwierdzić swoją rejestrację: {link}'
 
     msg = MIMEMultipart()
@@ -1235,7 +1241,10 @@ def confirm_email(token):
     try:
         email = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])['email']
         if confirm_user(email):
-            return redirect('http://localhost:3000/login')  # Przekierowanie na stronę logowania
+            if environment == 'LOCAL':
+                return redirect('http://localhost:3000/login')
+            elif environment == 'PRODUCTION':
+                return redirect('https://icer.net.pl:443/login')
         else:
             return jsonify({"message": "Błąd podczas potwierdzania adresu e-mail."}), 500
     except jwt.ExpiredSignatureError:
