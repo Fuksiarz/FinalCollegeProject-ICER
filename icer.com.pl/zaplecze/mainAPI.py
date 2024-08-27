@@ -498,7 +498,7 @@ INNER JOIN Produkty ON Icer.produktID = Produkty.id
 INNER JOIN Shopping ON Icer.produktID = Shopping.produktID 
                      AND Icer.UserID = Shopping.UserID 
                      AND Shopping.in_cart = 1
-WHERE Icer.UserID = 1;
+WHERE Icer.UserID = %s;
         """
         cursor.execute(query, (user_id,))
         results = cursor.fetchall()
