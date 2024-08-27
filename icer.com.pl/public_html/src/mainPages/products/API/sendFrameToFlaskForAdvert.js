@@ -11,6 +11,7 @@ export const sendFrameToFlaskForAdvert = async (frameBase64,eyes,setEyes) => {
                 "Content-Type": "application/json",
             },
         });
+
         //ustawiamy informację czy wykryto oczy w zmiennej eyes
         setEyes(response.data.eyes_detected)
 

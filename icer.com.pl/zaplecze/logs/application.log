@@ -776,3 +776,1476 @@ INFO:werkzeug:127.0.0.1 - - [09/Jun/2024 23:52:52] "POST /api/Icer HTTP/1.1" 200
 2024-08-23 16:28:10,396 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:10] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
 2024-08-23 16:28:10,475 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:10] "POST /start_video HTTP/1.1" 200 -
 2024-08-23 16:28:10,490 - werkzeug - INFO - 127.0.0.1 - - [23/Aug/2024 16:28:10] "GET /api/get_user_preferences?sessionId=8b89cf09-1714-474e-8bcd-ef2ceec9b06a HTTP/1.1" 200 -
+2024-08-24 21:16:27,953 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-24 21:16:27,953 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-24 21:17:17,778 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-24 21:17:17,778 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-24 21:18:07,722 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:07] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:18:07,724 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:07] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:18:07,742 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:07] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-24 21:18:07,796 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:07] "GET /api/get_user_preferences?sessionId=ace4d821-15ec-4675-82f4-1ddea4e7ccf9 HTTP/1.1" 200 -
+2024-08-24 21:18:08,034 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:08] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
+2024-08-24 21:18:08,044 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:08] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:18:08,063 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:08] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:18:08,064 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:08] "GET /api/get_user_preferences?sessionId=ace4d821-15ec-4675-82f4-1ddea4e7ccf9 HTTP/1.1" 200 -
+2024-08-24 21:18:08,115 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:08] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:18:08,128 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:08] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:18:12,298 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:12] "OPTIONS /login HTTP/1.1" 200 -
+2024-08-24 21:18:12,817 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:12] "POST /login HTTP/1.1" 200 -
+2024-08-24 21:18:12,864 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:12] "GET /api/get_user_preferences?sessionId=c4e055ca-2367-4229-b226-389f465b69f7 HTTP/1.1" 200 -
+2024-08-24 21:18:13,131 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:13] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:18:13,133 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:13] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:18:13,154 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:13] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:18:13,448 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:13] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:18:20,813 - root - INFO - Otrzymano zapytanie POST
+2024-08-24 21:18:20,861 - root - INFO - Nie wykryto kodu QR, przechodzê do klasyfikacji jedzenia.
+2024-08-24 21:18:21,443 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:21] "POST /upload_test_AI_QR HTTP/1.1" 200 -
+2024-08-24 21:18:24,740 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:24] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:29,196 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:29] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:30,117 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:30] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:30,657 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:30] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:31,022 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:31] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:31,974 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:31] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:32,584 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:32] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:33,468 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:33] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:34,039 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:34] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:34,936 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:34] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:35,516 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:35] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:35,791 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:35] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:36,464 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:36] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:37,081 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:37] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:37,968 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:37] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:38,536 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:38] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:39,476 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:39] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:43,536 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:43] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:43,918 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:43] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:44,827 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:44] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:45,405 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:45] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:46,308 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:46] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:46,874 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:46] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:47,747 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:47] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:48,320 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:48] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:48,545 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:48] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:49,223 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:49] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:49,804 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:49] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:50,688 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:50] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:51,289 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:51] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:52,231 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:52] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:52,799 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:52] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:53,704 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:53] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:54,229 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:54] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:54,638 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:54] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:55,509 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:55] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:56,081 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:56] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:56,946 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:56] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:57,502 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:57] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:58,365 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:58] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:58,963 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:58] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:18:59,860 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:18:59] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:00,082 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:00] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:00,443 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:00] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:01,313 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:01] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:01,902 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:01] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:02,801 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:02] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:03,389 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:03] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:06,674 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:06] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-24 21:19:07,000 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:07] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-24 21:19:09,215 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:09] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:09,644 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:09] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:10,521 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:10] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:11,110 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:11] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:11,985 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:11] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:12,561 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:12] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:13,466 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:13] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:14,050 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:14] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:14,586 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:14] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:15,260 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:15] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:15,863 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:15] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:16,782 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:16] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:17,360 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:17] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:18,261 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:18] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:18,834 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:18] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:19,706 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:19] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:19,929 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:19] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:20,310 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:20] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:25,934 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:25] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:26,622 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:26] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:27,245 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:27] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:28,137 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:28] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:28,760 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:28] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:29,633 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:29] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:30,252 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:30] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:31,173 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:31] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:31,382 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:31] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:31,780 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:31] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:19:32,667 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:19:32] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:28,467 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-24 21:35:28,467 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-24 21:35:33,708 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:33] "OPTIONS /login HTTP/1.1" 200 -
+2024-08-24 21:35:34,254 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:34] "POST /login HTTP/1.1" 200 -
+2024-08-24 21:35:34,265 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:34] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:35:34,286 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:34] "GET /api/get_user_preferences?sessionId=b16ca88d-8ad8-4254-aecd-e60522d0d4a6 HTTP/1.1" 200 -
+2024-08-24 21:35:34,573 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:34] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:35:34,584 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:34] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:35:34,597 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:34] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:35:39,774 - root - INFO - Otrzymano zapytanie POST
+2024-08-24 21:35:39,879 - root - INFO - Nie wykryto kodu QR, przechodzê do klasyfikacji jedzenia.
+2024-08-24 21:35:40,191 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:40] "POST /upload_test_AI_QR HTTP/1.1" 200 -
+2024-08-24 21:35:41,577 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:41] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-24 21:35:41,585 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:41] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-24 21:35:44,824 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:44] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:47,349 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:47] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:47,789 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:47] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:48,541 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:48] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:48,979 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:48] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:49,717 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:49] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:50,243 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:50] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:50,461 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:50] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:51,200 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:51] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:51,646 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:51] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:52,390 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:52] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:52,846 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:52] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:53,598 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:53] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:54,059 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:54] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:54,812 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:54] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:55,240 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:55] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:55,455 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:55] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:55,996 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:55] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:56,430 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:56] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:57,177 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:57] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:57,610 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:57] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:58,352 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:58] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:58,804 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:58] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:35:59,564 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:35:59] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:36:00,001 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:00] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:36:00,753 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:00] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:36:01,268 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:01] "OPTIONS /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:36:01,499 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:01] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:36:02,257 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:02] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:36:02,700 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:02] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:36:03,456 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:03] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:36:03,897 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:03] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:36:04,653 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:04] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:36:05,108 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:05] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:36:05,858 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:05] "POST /adison_molotow HTTP/1.1" 200 -
+2024-08-24 21:36:21,978 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:21] "OPTIONS /login HTTP/1.1" 200 -
+2024-08-24 21:36:22,196 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:22] "POST /login HTTP/1.1" 200 -
+2024-08-24 21:36:22,518 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:22] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:36:22,520 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:22] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:36:22,530 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:22] "GET /api/get_user_preferences?sessionId=f4714cb2-954c-47dc-97e2-88b2fb1ba5f0 HTTP/1.1" 200 -
+2024-08-24 21:36:22,792 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:22] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:36:22,840 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:22] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:36:50,280 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:50] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:36:50,290 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:50] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:36:50,593 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:50] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:36:50,595 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:50] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-24 21:36:50,601 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:50] "GET /api/get_user_preferences?sessionId=f4714cb2-954c-47dc-97e2-88b2fb1ba5f0 HTTP/1.1" 200 -
+2024-08-24 21:36:50,903 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:50] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
+2024-08-24 21:36:50,908 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:50] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:36:50,915 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:50] "GET /api/get_user_preferences?sessionId=f4714cb2-954c-47dc-97e2-88b2fb1ba5f0 HTTP/1.1" 200 -
+2024-08-24 21:36:51,790 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:51] "OPTIONS /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:51,791 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:51] "POST /start_video HTTP/1.1" 200 -
+2024-08-24 21:36:52,137 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:52] "[35m[1mGET /video/videoplayback.mp4 HTTP/1.1[0m" 206 -
+2024-08-24 21:36:52,208 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:52] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:52,420 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:52] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:52,940 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:52] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:53,207 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:53] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:53,474 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:53] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:53,735 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:53] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:54,004 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:54] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:54,267 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:54] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:54,475 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:54] "[35m[1mGET /video/videoplayback.mp4 HTTP/1.1[0m" 206 -
+2024-08-24 21:36:54,529 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:54] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:54,791 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:54] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:55,053 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:55] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:55,320 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:55] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:55,590 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:55] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:55,850 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:55] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:56,116 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:56] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:56,378 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:56] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:56,648 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:56] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:56,857 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:56] "OPTIONS /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:56,909 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:56] "POST /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:36:57,385 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:57] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:36:57,387 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:57] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:36:57,400 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:57] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:36:57,711 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:36:57] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:38:51,224 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-24 21:38:51,225 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-24 21:39:21,291 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:21] "OPTIONS /login HTTP/1.1" 200 -
+2024-08-24 21:39:21,838 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:21] "POST /login HTTP/1.1" 200 -
+2024-08-24 21:39:21,853 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:21] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:39:21,877 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:21] "GET /api/get_user_preferences?sessionId=58343dc0-dd5d-4c9f-a904-626b0e28a04d HTTP/1.1" 200 -
+2024-08-24 21:39:22,168 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:22] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:39:22,175 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:22] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-24 21:39:22,197 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:22] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-24 21:39:22,494 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:22] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-24 21:39:22,500 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:22] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
+2024-08-24 21:39:23,368 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:23] "OPTIONS /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:39:23,372 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:23] "POST /start_video HTTP/1.1" 200 -
+2024-08-24 21:39:23,632 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:23] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:23,706 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:23] "[35m[1mGET /video/videoplayback.mp4 HTTP/1.1[0m" 206 -
+2024-08-24 21:39:23,842 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:23] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:24,371 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:24] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:24,614 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:24] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:24,895 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:24] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:25,138 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:25] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:25,425 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:25] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:25,655 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:25] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:25,955 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:25] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:26,182 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:26] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:26,476 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:26] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:26,708 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:26] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:26,990 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:26] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:27,235 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:27] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:27,519 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:27] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:27,763 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:27] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:28,045 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:28] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:28,307 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:28] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:28,517 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:28] "OPTIONS /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:39:28,568 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:28] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:28,832 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:28] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:29,100 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:29] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:29,349 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:29] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:29,637 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:29] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:29,869 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:29] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:30,162 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:30] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:30,390 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:30] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:30,692 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:30] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:30,929 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:30] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:31,248 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:31] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:31,468 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:31] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:31,994 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:31] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:32,258 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:32] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:32,522 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:32] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:32,784 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:32] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:33,059 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:33] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:33,308 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:33] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:33,868 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:33] "OPTIONS /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:39:33,873 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:33] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:34,395 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:34] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:34,655 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:34] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:34,919 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:34] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:35,181 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:35] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:35,443 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:35] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:35,722 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:35] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:35,972 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:35] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:36,265 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:36] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:36,487 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:36] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:36,801 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:36] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:37,028 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:37] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:37,327 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:37] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:37,555 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:37] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:37,855 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:37] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:38,086 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:38] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:38,381 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:38] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:38,608 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:38] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:38,920 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:38] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:39,141 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:39] "OPTIONS /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:39:39,143 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:39] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:39,665 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:39] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:39,929 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:39] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:40,179 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:40] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:40,458 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:40] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:40,703 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:40] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:40,986 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:40] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:41,233 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:41] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:41,519 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:41] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:41,764 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:41] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:42,044 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:42] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:42,293 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:42] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:42,574 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:42] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:42,836 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:42] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:43,099 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:43] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:43,366 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:43] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:43,630 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:43] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:43,894 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:43] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:44,159 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:44] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:44,701 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:44] "OPTIONS /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:39:44,705 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:44] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:45,243 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:45] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:45,492 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:45] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:45,772 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:45] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:46,033 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:46] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:46,299 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:46] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:46,563 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:46] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:46,828 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:46] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:47,089 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:47] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:47,354 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:47] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:47,618 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:47] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:47,882 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:47] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:48,143 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:48] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:48,409 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:48] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:48,670 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:48] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:48,939 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:48] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:49,202 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:49] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:49,469 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:49] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:49,750 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:49] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:49,969 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:49] "OPTIONS /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:39:49,994 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:49] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:50,274 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:50] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:50,526 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:50] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:50,803 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:50] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:51,050 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:51] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:51,325 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:51] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:51,583 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:51] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:51,847 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:51] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:52,113 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:52] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:52,364 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:52] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:52,630 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:52] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:52,899 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:52] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:53,160 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:53] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:53,424 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:53] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:53,688 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:53] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:53,953 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:53] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:54,218 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:54] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:54,481 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:54] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:54,738 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:54] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:54,996 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:54] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:55,524 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:55] "OPTIONS /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:39:55,528 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:55] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:56,054 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:56] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:56,309 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:56] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:56,585 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:56] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:56,832 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:56] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:57,110 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:57] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:57,360 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:57] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:57,640 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:57] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:57,887 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:57] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:58,169 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:58] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:58,415 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:58] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:58,698 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:58] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:58,929 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:58] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:59,225 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:59] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:59,461 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:59] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:59,754 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:59] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:39:59,984 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:39:59] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:40:00,282 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:40:00] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:40:00,515 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:40:00] "[35m[1mPOST /advert_reciever HTTP/1.1[0m" 500 -
+2024-08-24 21:40:00,729 - werkzeug - INFO - 127.0.0.1 - - [24/Aug/2024 21:40:00] "OPTIONS /advert_reciever HTTP/1.1" 200 -
+2024-08-24 21:50:43,104 - waitress - INFO - Serving on http://0.0.0.0:5000
+2024-08-24 22:03:17,597 - waitress - INFO - Serving on http://0.0.0.0:5000
+2024-08-24 22:12:28,178 - waitress - INFO - Serving on http://0.0.0.0:5000
+2024-08-24 22:17:48,494 - waitress - INFO - Serving on http://0.0.0.0:5000
+2024-08-24 22:18:41,240 - waitress - ERROR - Exception while serving /
+Traceback (most recent call last):
+  File "G:\pythonProject3\Lib\site-packages\waitress\channel.py", line 428, in service
+    task.service()
+  File "G:\pythonProject3\Lib\site-packages\waitress\task.py", line 168, in service
+    self.execute()
+  File "G:\pythonProject3\Lib\site-packages\waitress\task.py", line 436, in execute
+    app_iter = self.channel.server.application(environ, start_response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\waitress\proxy_headers.py", line 64, in translate_proxy_headers
+    return app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\flask\app.py", line 2213, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\flask_socketio\__init__.py", line 43, in __call__
+    return super(_SocketIOMiddleware, self).__call__(environ,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\engineio\middleware.py", line 74, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\flask\app.py", line 2193, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Projekt\icer.com.pl\zaplecze\mainAPI.py", line 1470, in index
+    response = make_response(render_template('index.html', bot_response=bot_response, ))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\flask\templating.py", line 151, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\flask\templating.py", line 132, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "G:\pythonProject3\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "G:\pythonProject3\Projekt\icer.com.pl\zaplecze\templates\index.html", line 64, in top-level template code
+    <form action="{{ url_for('start_camera_monitoring_route') }}" method="post">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\flask\app.py", line 1697, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\flask\app.py", line 1686, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "G:\pythonProject3\Lib\site-packages\werkzeug\routing\map.py", line 950, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'start_camera_monitoring_route'. Did you mean 'get_username_route' instead?
+2024-08-24 22:20:40,507 - waitress - INFO - Serving on http://0.0.0.0:5000
+2024-08-24 22:21:10,333 - waitress - INFO - Serving on http://0.0.0.0:5000
+2024-08-24 22:31:47,597 - waitress - INFO - Serving on http://0.0.0.0:5000
+2024-08-24 22:31:55,340 - root - INFO - przed splitem
+2024-08-24 22:32:15,686 - root - INFO - przed splitem
+2024-08-24 22:32:26,007 - root - INFO - przed splitem
+2024-08-24 22:32:51,362 - waitress - INFO - Serving on http://0.0.0.0:5000
+2024-08-24 22:32:55,937 - root - INFO - przed splitem
+2024-08-24 22:33:09,052 - root - INFO - przed splitem
+2024-08-24 22:34:27,812 - waitress - INFO - Serving on http://0.0.0.0:5000
+2024-08-24 22:34:29,403 - root - INFO - przed splitem
+2024-08-24 22:34:31,171 - root - INFO - przed splitem
+2024-08-24 22:34:32,451 - root - INFO - przed splitem
+2024-08-24 22:34:33,400 - root - INFO - przed splitem
+2024-08-24 22:36:17,317 - waitress - INFO - Serving on http://0.0.0.0:5000
+2024-08-24 22:36:20,389 - root - INFO - przed splitem
+2024-08-24 22:36:22,446 - root - INFO - przed splitem
+2024-08-25 01:38:53,682 - root - INFO - Classifiers loaded successfully.
+2024-08-25 01:38:53,692 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-25 01:38:53,692 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-25 01:39:15,004 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:15] "OPTIONS /login HTTP/1.1" 200 -
+2024-08-25 01:39:15,789 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:15] "POST /login HTTP/1.1" 200 -
+2024-08-25 01:39:15,812 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:15] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-25 01:39:15,826 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:15] "GET /api/get_user_preferences?sessionId=9b80aa8b-aeb2-4879-872e-b4e549d8fbc5 HTTP/1.1" 200 -
+2024-08-25 01:39:16,118 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:16] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 01:39:16,121 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:16] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-25 01:39:16,152 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:16] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 01:39:16,160 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:16] "GET /api/get_user_preferences?sessionId=9b80aa8b-aeb2-4879-872e-b4e549d8fbc5 HTTP/1.1" 200 -
+2024-08-25 01:39:16,430 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:16] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
+2024-08-25 01:39:16,446 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:16] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 01:39:16,469 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:16] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 01:39:28,086 - root - INFO - results w api/icer: {results}
+2024-08-25 01:39:28,086 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,086 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-25 01:39:28,087 - root - INFO - results w api/icer: {results}
+2024-08-25 01:39:28,088 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,088 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,088 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-25 01:39:28,089 - root - INFO - image_path w api/icer: ../zaplecze/photos\donut.jpg
+2024-08-25 01:39:28,089 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,090 - root - INFO - image_path w api/icer: ../zaplecze/photos\donut.jpg
+2024-08-25 01:39:28,090 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,090 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-25 01:39:28,090 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,091 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-25 01:39:28,092 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,092 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-25 01:39:28,094 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,094 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-25 01:39:28,096 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,096 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-25 01:39:28,098 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,098 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-25 01:39:28,099 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,099 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 01:39:28,100 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,100 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 01:39:28,101 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,102 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-25 01:39:28,102 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,102 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-25 01:39:28,104 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,104 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-25 01:39:28,106 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,106 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-25 01:39:28,107 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,107 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 01:39:28,107 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,108 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 01:39:28,108 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,108 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-25 01:39:28,108 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,110 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-25 01:39:28,111 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,111 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-25 01:39:28,111 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,111 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-25 01:39:28,114 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,115 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-25 01:39:28,115 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,116 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-25 01:39:28,118 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,118 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-25 01:39:28,120 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,120 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-25 01:39:28,123 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,123 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-25 01:39:28,125 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:39:28,125 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-25 01:39:28,145 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:28] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-25 01:39:28,154 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:28] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-25 01:39:32,291 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:32] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 01:39:32,552 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:32] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-25 01:39:32,605 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:32] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 01:39:32,660 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:32] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 01:39:32,890 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:39:32] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 01:40:51,036 - root - ERROR - B³¹d get_icer: 2014 (HY000): Commands out of sync; you can't run this command now
+2024-08-25 01:40:51,039 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:40:51] "[35m[1mPOST /api/Icer HTTP/1.1[0m" 500 -
+2024-08-25 01:40:53,242 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:40:53] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 01:40:53,505 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:40:53] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-25 01:40:53,559 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:40:53] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 01:40:53,614 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:40:53] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 01:40:53,825 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:40:53] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 01:41:29,671 - root - ERROR - B³¹d get_icer: 2014 (HY000): Commands out of sync; you can't run this command now
+2024-08-25 01:41:29,672 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:41:29] "[35m[1mPOST /api/Icer HTTP/1.1[0m" 500 -
+2024-08-25 01:42:04,116 - root - INFO - Classifiers loaded successfully.
+2024-08-25 01:42:04,123 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-25 01:42:04,123 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-25 01:43:00,649 - root - INFO - Classifiers loaded successfully.
+2024-08-25 01:43:00,655 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-25 01:43:00,655 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-25 01:43:06,611 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:43:06] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
+2024-08-25 01:43:06,627 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:43:06] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 01:43:31,338 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:43:31] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
+2024-08-25 01:44:25,185 - root - INFO - Classifiers loaded successfully.
+2024-08-25 01:44:25,191 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-25 01:44:25,191 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-25 01:44:44,357 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:44:44] "OPTIONS /login HTTP/1.1" 200 -
+2024-08-25 01:44:44,897 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:44:44] "POST /login HTTP/1.1" 200 -
+2024-08-25 01:44:44,920 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:44:44] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-25 01:44:44,932 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:44:44] "GET /api/get_user_preferences?sessionId=02479e76-0115-473a-b2c2-51e0e81f2de2 HTTP/1.1" 200 -
+2024-08-25 01:44:45,229 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:44:45] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 01:44:45,238 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:44:45] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-25 01:44:45,245 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:44:45] "GET /api/get_user_preferences?sessionId=02479e76-0115-473a-b2c2-51e0e81f2de2 HTTP/1.1" 200 -
+2024-08-25 01:44:45,278 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:44:45] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 01:44:45,286 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:44:45] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 01:44:45,537 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:44:45] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
+2024-08-25 01:44:45,560 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:44:45] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 01:45:18,775 - root - INFO - results w api/icer: {results}
+2024-08-25 01:45:18,777 - root - INFO - results w api/icer: {results}
+2024-08-25 01:45:24,371 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:24,379 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:27,327 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-25 01:45:27,335 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-25 01:45:32,491 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:32,491 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:32,855 - root - INFO - image_path w api/icer: ../zaplecze/photos\donut.jpg
+2024-08-25 01:45:32,856 - root - INFO - image_path w api/icer: ../zaplecze/photos\donut.jpg
+2024-08-25 01:45:34,064 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:34,065 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:34,308 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-25 01:45:34,308 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-25 01:45:35,571 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:35,574 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:36,131 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-25 01:45:36,131 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-25 01:45:37,112 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:37,113 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:37,385 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-25 01:45:37,389 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-25 01:45:38,139 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:38,139 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:38,363 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 01:45:38,364 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 01:45:39,543 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:39,544 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:39,847 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-25 01:45:39,848 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-25 01:45:40,534 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:40,535 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:40,765 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-25 01:45:40,768 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-25 01:45:41,668 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:41,669 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:41,886 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 01:45:41,887 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 01:45:42,913 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:42,913 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:43,144 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-25 01:45:43,154 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-25 01:45:44,099 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:44,100 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:50,083 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-25 01:45:50,084 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-25 01:45:52,386 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:52,393 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:52,806 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-25 01:45:52,807 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-25 01:45:54,190 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:54,192 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:54,655 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-25 01:45:54,656 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-25 01:45:56,123 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:56,124 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 01:45:56,618 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-25 01:45:56,619 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-25 01:46:04,434 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:46:04] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-25 01:46:04,442 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 01:46:04] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-25 02:30:37,756 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:37] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-25 02:30:37,762 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:37] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 02:30:37,773 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:37] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-25 02:30:37,778 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:37] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-25 02:30:37,789 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:37] "[31m[1mGET /api/get_user_preferences?sessionId=2c622caa-271c-4892-a541-214b2e8770b6 HTTP/1.1[0m" 401 -
+2024-08-25 02:30:38,071 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:38] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
+2024-08-25 02:30:38,074 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:38] "[31m[1mPOST /api/Icer/get_notifications HTTP/1.1[0m" 401 -
+2024-08-25 02:30:38,078 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:38] "POST /start_video HTTP/1.1" 200 -
+2024-08-25 02:30:38,135 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:38] "[35m[1mGET /video/videoplaybackalt.mp4 HTTP/1.1[0m" 206 -
+2024-08-25 02:30:42,531 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:42] "[31m[1mPOST /api/Icer HTTP/1.1[0m" 401 -
+2024-08-25 02:30:42,546 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:42] "[31m[1mPOST /api/Icer/get_notifications HTTP/1.1[0m" 401 -
+2024-08-25 02:30:46,858 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:46] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:30:47,178 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:47] "[31m[1mPOST /api/shoppingList HTTP/1.1[0m" 401 -
+2024-08-25 02:30:47,671 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:47] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-25 02:30:48,002 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:48] "[31m[1mPOST /api/Icer HTTP/1.1[0m" 401 -
+2024-08-25 02:30:49,749 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:49] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-25 02:30:50,059 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:50] "[31m[1mPOST /api/Icer HTTP/1.1[0m" 401 -
+2024-08-25 02:30:50,062 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:50] "[31m[1mGET /api/get_user_preferences?sessionId=2c622caa-271c-4892-a541-214b2e8770b6 HTTP/1.1[0m" 401 -
+2024-08-25 02:30:50,064 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:50] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
+2024-08-25 02:30:50,067 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:50] "POST /start_video HTTP/1.1" 200 -
+2024-08-25 02:30:54,469 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:54] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-25 02:30:54,484 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:54] "[31m[1mPOST /api/Icer HTTP/1.1[0m" 401 -
+2024-08-25 02:30:57,331 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:57] "OPTIONS /login HTTP/1.1" 200 -
+2024-08-25 02:30:57,877 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:57] "POST /login HTTP/1.1" 200 -
+2024-08-25 02:30:57,920 - root - INFO - results w api/icer: {results}
+2024-08-25 02:30:57,920 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,920 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-25 02:30:57,920 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,920 - root - INFO - image_path w api/icer: ../zaplecze/photos\donut.jpg
+2024-08-25 02:30:57,920 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,922 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-25 02:30:57,923 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,923 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-25 02:30:57,924 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,924 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-25 02:30:57,924 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,924 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 02:30:57,926 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,926 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-25 02:30:57,927 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,927 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-25 02:30:57,927 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,927 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 02:30:57,928 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,928 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-25 02:30:57,928 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,928 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-25 02:30:57,929 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,929 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-25 02:30:57,930 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,930 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-25 02:30:57,932 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:57,932 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-25 02:30:57,942 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:57] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-25 02:30:58,216 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:58] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 02:30:58,220 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:58] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-25 02:30:58,226 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:58] "OPTIONS /start_video HTTP/1.1" 200 -
+2024-08-25 02:30:58,233 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:58] "GET /api/get_user_preferences?sessionId=eaf65e0a-a754-4eaa-9bc3-2d871381eb30 HTTP/1.1" 200 -
+2024-08-25 02:30:58,532 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:58] "[31m[1mPOST /start_video HTTP/1.1[0m" 400 -
+2024-08-25 02:30:58,536 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:58] "POST /start_video HTTP/1.1" 200 -
+2024-08-25 02:30:58,545 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:58] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 02:30:58,551 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:58] "GET /api/get_user_preferences?sessionId=eaf65e0a-a754-4eaa-9bc3-2d871381eb30 HTTP/1.1" 200 -
+2024-08-25 02:30:58,552 - root - INFO - results w api/icer: {results}
+2024-08-25 02:30:58,553 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,553 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-25 02:30:58,555 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,555 - root - INFO - image_path w api/icer: ../zaplecze/photos\donut.jpg
+2024-08-25 02:30:58,556 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:58] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-25 02:30:58,558 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,558 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-25 02:30:58,558 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,559 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-25 02:30:58,560 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,560 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-25 02:30:58,561 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,561 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 02:30:58,561 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,561 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-25 02:30:58,562 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,562 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-25 02:30:58,563 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,563 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 02:30:58,563 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,563 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-25 02:30:58,564 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,564 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-25 02:30:58,565 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,565 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-25 02:30:58,566 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,566 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-25 02:30:58,566 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:30:58,568 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-25 02:30:58,579 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:30:58] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-25 02:31:00,561 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:00] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-25 02:31:00,881 - root - INFO - results w api/icer: {results}
+2024-08-25 02:31:00,881 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,881 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-25 02:31:00,882 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,882 - root - INFO - image_path w api/icer: ../zaplecze/photos\donut.jpg
+2024-08-25 02:31:00,883 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,883 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-25 02:31:00,883 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,884 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-25 02:31:00,885 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,885 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-25 02:31:00,886 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,886 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 02:31:00,886 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,886 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-25 02:31:00,888 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,888 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-25 02:31:00,888 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,888 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 02:31:00,889 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,889 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-25 02:31:00,889 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,889 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-25 02:31:00,890 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,890 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-25 02:31:00,891 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,891 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-25 02:31:00,892 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:00,892 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-25 02:31:00,901 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:00] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-25 02:31:01,249 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,251 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,255 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,259 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,262 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,265 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,268 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,563 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,565 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,570 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,576 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,583 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,588 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,589 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,596 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,600 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,601 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,606 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,873 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,876 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,888 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,912 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,920 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,926 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,928 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:01,931 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:01] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:02,204 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:02] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:02,235 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:02] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,278 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "OPTIONS /api/edit_product/2 HTTP/1.1" 200 -
+2024-08-25 02:31:04,298 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,301 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,304 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,306 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,309 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,311 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,630 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,635 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,637 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,638 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,640 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,642 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,957 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,959 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:04,988 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:04] "PUT /api/edit_product/2 HTTP/1.1" 200 -
+2024-08-25 02:31:05,320 - root - INFO - results w api/icer: {results}
+2024-08-25 02:31:05,320 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,320 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-25 02:31:05,321 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,321 - root - INFO - image_path w api/icer: ../zaplecze/photos\donut.jpg
+2024-08-25 02:31:05,323 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,323 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-25 02:31:05,323 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,324 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-25 02:31:05,324 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,324 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-25 02:31:05,325 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,325 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 02:31:05,326 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,326 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-25 02:31:05,327 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,327 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-25 02:31:05,327 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,328 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 02:31:05,328 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,328 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-25 02:31:05,328 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,328 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-25 02:31:05,329 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,330 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-25 02:31:05,330 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,330 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-25 02:31:05,331 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:05,331 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-25 02:31:05,340 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:05] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-25 02:31:16,465 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:16] "OPTIONS /api/edit_product/21 HTTP/1.1" 200 -
+2024-08-25 02:31:16,484 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:16] "PUT /api/edit_product/21 HTTP/1.1" 200 -
+2024-08-25 02:31:16,789 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:16] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:16,792 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:16] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:16,797 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:16] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:16,802 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:16] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:16,805 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:16] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:16,809 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:16] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,109 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,114 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,120 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,126 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,128 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,135 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,137 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,141 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,146 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,149 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,152 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,159 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,422 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,426 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,430 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-25 02:31:17,441 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,452 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,458 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,464 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,470 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,474 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,764 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,770 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:17,774 - root - INFO - results w api/icer: {results}
+2024-08-25 02:31:17,774 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,775 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-25 02:31:17,775 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,775 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724545876.jpg
+2024-08-25 02:31:17,792 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,792 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-25 02:31:17,792 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,792 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-25 02:31:17,793 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,793 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-25 02:31:17,794 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,794 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 02:31:17,795 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,795 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-25 02:31:17,796 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,797 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-25 02:31:17,797 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,797 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 02:31:17,797 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,797 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-25 02:31:17,798 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,798 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-25 02:31:17,799 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,799 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-25 02:31:17,800 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,800 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-25 02:31:17,801 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:17,801 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-25 02:31:17,810 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:17] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-25 02:31:35,707 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:35] "OPTIONS /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:36,046 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:36] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:37,394 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:37] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-25 02:31:37,403 - root - INFO - results w api/icer: {results}
+2024-08-25 02:31:37,403 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,403 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-25 02:31:37,404 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,404 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724545876.jpg
+2024-08-25 02:31:37,404 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,404 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-25 02:31:37,405 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,405 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-25 02:31:37,407 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,407 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-25 02:31:37,408 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,408 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 02:31:37,408 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,408 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-25 02:31:37,409 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,409 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-25 02:31:37,410 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,410 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-25 02:31:37,410 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,410 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-25 02:31:37,411 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,411 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-25 02:31:37,412 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,412 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-25 02:31:37,413 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,413 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-25 02:31:37,413 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-25 02:31:37,413 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-25 02:31:37,422 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:37] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-25 02:31:37,769 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:37] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:37,774 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:37] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:37,775 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:37] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:37,777 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:37] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:37,781 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:37] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:37,783 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:37] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:38,103 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:38] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:38,105 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:38] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:38,109 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:38] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:38,111 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:38] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:38,113 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:38] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:38,116 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:38] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:38,426 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:38] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-25 02:31:38,432 - werkzeug - INFO - 127.0.0.1 - - [25/Aug/2024 02:31:38] "POST /api/shoppingList HTTP/1.1" 200 -
+2024-08-26 09:33:32,475 - waitress - INFO - Serving on http://0.0.0.0:5000
+2024-08-26 09:33:43,859 - root - INFO - przed splitem 
+2024-08-26 09:33:43,859 - root - INFO - po splicie
+2024-08-26 09:33:43,859 - root - INFO - w try
+2024-08-26 09:33:43,859 - root - INFO - po dekodowaniu
+2024-08-26 09:33:43,860 - root - INFO - po konwersji
+2024-08-26 09:33:43,860 - root - INFO - przed detect
+2024-08-26 09:33:43,860 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:43,934 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:43,934 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:43,935 - root - INFO - po konwersji cieni
+2024-08-26 09:33:44,150 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:44,152 - root - INFO - po detekcji oczu
+2024-08-26 09:33:44,152 - root - INFO - po detect
+2024-08-26 09:33:44,152 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:44,383 - root - INFO - przed splitem 
+2024-08-26 09:33:44,383 - root - INFO - po splicie
+2024-08-26 09:33:44,383 - root - INFO - w try
+2024-08-26 09:33:44,383 - root - INFO - po dekodowaniu
+2024-08-26 09:33:44,384 - root - INFO - po konwersji
+2024-08-26 09:33:44,384 - root - INFO - przed detect
+2024-08-26 09:33:44,384 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:44,419 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:44,420 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:44,420 - root - INFO - po konwersji cieni
+2024-08-26 09:33:44,425 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:44,428 - root - INFO - po detekcji oczu
+2024-08-26 09:33:44,429 - root - INFO - po detect
+2024-08-26 09:33:44,429 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:44,647 - root - INFO - przed splitem 
+2024-08-26 09:33:44,647 - root - INFO - po splicie
+2024-08-26 09:33:44,647 - root - INFO - w try
+2024-08-26 09:33:44,647 - root - INFO - po dekodowaniu
+2024-08-26 09:33:44,648 - root - INFO - po konwersji
+2024-08-26 09:33:44,648 - root - INFO - przed detect
+2024-08-26 09:33:44,648 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:44,673 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:44,673 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:44,673 - root - INFO - po konwersji cieni
+2024-08-26 09:33:44,678 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:44,682 - root - INFO - po detekcji oczu
+2024-08-26 09:33:44,683 - root - INFO - po detect
+2024-08-26 09:33:44,683 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:44,897 - root - INFO - przed splitem 
+2024-08-26 09:33:44,897 - root - INFO - po splicie
+2024-08-26 09:33:44,897 - root - INFO - w try
+2024-08-26 09:33:44,897 - root - INFO - po dekodowaniu
+2024-08-26 09:33:44,897 - root - INFO - po konwersji
+2024-08-26 09:33:44,897 - root - INFO - przed detect
+2024-08-26 09:33:44,897 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:44,931 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:44,931 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:44,931 - root - INFO - po konwersji cieni
+2024-08-26 09:33:44,936 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:44,941 - root - INFO - po detekcji oczu
+2024-08-26 09:33:44,942 - root - INFO - po detect
+2024-08-26 09:33:44,942 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:45,161 - root - INFO - przed splitem 
+2024-08-26 09:33:45,161 - root - INFO - po splicie
+2024-08-26 09:33:45,161 - root - INFO - w try
+2024-08-26 09:33:45,161 - root - INFO - po dekodowaniu
+2024-08-26 09:33:45,162 - root - INFO - po konwersji
+2024-08-26 09:33:45,162 - root - INFO - przed detect
+2024-08-26 09:33:45,162 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:45,195 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:45,195 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:45,195 - root - INFO - po konwersji cieni
+2024-08-26 09:33:45,200 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:45,203 - root - INFO - po detekcji oczu
+2024-08-26 09:33:45,203 - root - INFO - po detect
+2024-08-26 09:33:45,203 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:45,423 - root - INFO - przed splitem 
+2024-08-26 09:33:45,423 - root - INFO - po splicie
+2024-08-26 09:33:45,423 - root - INFO - w try
+2024-08-26 09:33:45,423 - root - INFO - po dekodowaniu
+2024-08-26 09:33:45,424 - root - INFO - po konwersji
+2024-08-26 09:33:45,424 - root - INFO - przed detect
+2024-08-26 09:33:45,424 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:45,452 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:45,452 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:45,452 - root - INFO - po konwersji cieni
+2024-08-26 09:33:45,456 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:45,460 - root - INFO - po detekcji oczu
+2024-08-26 09:33:45,460 - root - INFO - po detect
+2024-08-26 09:33:45,460 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:45,672 - root - INFO - przed splitem 
+2024-08-26 09:33:45,672 - root - INFO - po splicie
+2024-08-26 09:33:45,672 - root - INFO - w try
+2024-08-26 09:33:45,672 - root - INFO - po dekodowaniu
+2024-08-26 09:33:45,672 - root - INFO - po konwersji
+2024-08-26 09:33:45,672 - root - INFO - przed detect
+2024-08-26 09:33:45,672 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:45,709 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:45,709 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:45,709 - root - INFO - po konwersji cieni
+2024-08-26 09:33:45,714 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:45,718 - root - INFO - po detekcji oczu
+2024-08-26 09:33:45,718 - root - INFO - po detect
+2024-08-26 09:33:45,718 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:45,940 - root - INFO - przed splitem 
+2024-08-26 09:33:45,940 - root - INFO - po splicie
+2024-08-26 09:33:45,940 - root - INFO - w try
+2024-08-26 09:33:45,940 - root - INFO - po dekodowaniu
+2024-08-26 09:33:45,941 - root - INFO - po konwersji
+2024-08-26 09:33:45,941 - root - INFO - przed detect
+2024-08-26 09:33:45,941 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:45,972 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:45,972 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:45,973 - root - INFO - po konwersji cieni
+2024-08-26 09:33:45,978 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:45,982 - root - INFO - po detekcji oczu
+2024-08-26 09:33:45,982 - root - INFO - po detect
+2024-08-26 09:33:45,982 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:46,204 - root - INFO - przed splitem 
+2024-08-26 09:33:46,204 - root - INFO - po splicie
+2024-08-26 09:33:46,204 - root - INFO - w try
+2024-08-26 09:33:46,205 - root - INFO - po dekodowaniu
+2024-08-26 09:33:46,205 - root - INFO - po konwersji
+2024-08-26 09:33:46,205 - root - INFO - przed detect
+2024-08-26 09:33:46,206 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:46,244 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:46,244 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:46,244 - root - INFO - po konwersji cieni
+2024-08-26 09:33:46,250 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:46,255 - root - INFO - po detekcji oczu
+2024-08-26 09:33:46,255 - root - INFO - po detect
+2024-08-26 09:33:46,255 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:46,473 - root - INFO - przed splitem 
+2024-08-26 09:33:46,473 - root - INFO - po splicie
+2024-08-26 09:33:46,473 - root - INFO - w try
+2024-08-26 09:33:46,473 - root - INFO - po dekodowaniu
+2024-08-26 09:33:46,474 - root - INFO - po konwersji
+2024-08-26 09:33:46,474 - root - INFO - przed detect
+2024-08-26 09:33:46,474 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:46,506 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:46,506 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:46,506 - root - INFO - po konwersji cieni
+2024-08-26 09:33:46,511 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:46,515 - root - INFO - po detekcji oczu
+2024-08-26 09:33:46,515 - root - INFO - po detect
+2024-08-26 09:33:46,515 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:46,721 - root - INFO - przed splitem 
+2024-08-26 09:33:46,722 - root - INFO - po splicie
+2024-08-26 09:33:46,722 - root - INFO - w try
+2024-08-26 09:33:46,722 - root - INFO - po dekodowaniu
+2024-08-26 09:33:46,722 - root - INFO - po konwersji
+2024-08-26 09:33:46,722 - root - INFO - przed detect
+2024-08-26 09:33:46,722 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:46,760 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:46,760 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:46,761 - root - INFO - po konwersji cieni
+2024-08-26 09:33:46,765 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:46,768 - root - INFO - po detekcji oczu
+2024-08-26 09:33:46,768 - root - INFO - po detect
+2024-08-26 09:33:46,768 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:46,987 - root - INFO - przed splitem 
+2024-08-26 09:33:46,987 - root - INFO - po splicie
+2024-08-26 09:33:46,987 - root - INFO - w try
+2024-08-26 09:33:46,987 - root - INFO - po dekodowaniu
+2024-08-26 09:33:46,988 - root - INFO - po konwersji
+2024-08-26 09:33:46,988 - root - INFO - przed detect
+2024-08-26 09:33:46,988 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:47,027 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:47,027 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:47,027 - root - INFO - po konwersji cieni
+2024-08-26 09:33:47,031 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:47,034 - root - INFO - po detekcji oczu
+2024-08-26 09:33:47,034 - root - INFO - po detect
+2024-08-26 09:33:47,035 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:47,253 - root - INFO - przed splitem 
+2024-08-26 09:33:47,253 - root - INFO - po splicie
+2024-08-26 09:33:47,253 - root - INFO - w try
+2024-08-26 09:33:47,253 - root - INFO - po dekodowaniu
+2024-08-26 09:33:47,254 - root - INFO - po konwersji
+2024-08-26 09:33:47,254 - root - INFO - przed detect
+2024-08-26 09:33:47,254 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:47,291 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:47,291 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:47,291 - root - INFO - po konwersji cieni
+2024-08-26 09:33:47,296 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:47,300 - root - INFO - po detekcji oczu
+2024-08-26 09:33:47,300 - root - INFO - po detect
+2024-08-26 09:33:47,300 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:47,509 - root - INFO - przed splitem 
+2024-08-26 09:33:47,509 - root - INFO - po splicie
+2024-08-26 09:33:47,509 - root - INFO - w try
+2024-08-26 09:33:47,509 - root - INFO - po dekodowaniu
+2024-08-26 09:33:47,510 - root - INFO - po konwersji
+2024-08-26 09:33:47,510 - root - INFO - przed detect
+2024-08-26 09:33:47,510 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:47,549 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:47,549 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:47,549 - root - INFO - po konwersji cieni
+2024-08-26 09:33:47,554 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:47,559 - root - INFO - po detekcji oczu
+2024-08-26 09:33:47,560 - root - INFO - po detect
+2024-08-26 09:33:47,560 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:47,785 - root - INFO - przed splitem 
+2024-08-26 09:33:47,785 - root - INFO - po splicie
+2024-08-26 09:33:47,785 - root - INFO - w try
+2024-08-26 09:33:47,785 - root - INFO - po dekodowaniu
+2024-08-26 09:33:47,786 - root - INFO - po konwersji
+2024-08-26 09:33:47,786 - root - INFO - przed detect
+2024-08-26 09:33:47,786 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:47,826 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:47,826 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:47,826 - root - INFO - po konwersji cieni
+2024-08-26 09:33:47,831 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:47,835 - root - INFO - po detekcji oczu
+2024-08-26 09:33:47,835 - root - INFO - po detect
+2024-08-26 09:33:47,835 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:48,049 - root - INFO - przed splitem 
+2024-08-26 09:33:48,049 - root - INFO - po splicie
+2024-08-26 09:33:48,049 - root - INFO - w try
+2024-08-26 09:33:48,049 - root - INFO - po dekodowaniu
+2024-08-26 09:33:48,050 - root - INFO - po konwersji
+2024-08-26 09:33:48,050 - root - INFO - przed detect
+2024-08-26 09:33:48,050 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:48,084 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:48,085 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:48,085 - root - INFO - po konwersji cieni
+2024-08-26 09:33:48,089 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:48,094 - root - INFO - po detekcji oczu
+2024-08-26 09:33:48,094 - root - INFO - po detect
+2024-08-26 09:33:48,094 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:48,312 - root - INFO - przed splitem 
+2024-08-26 09:33:48,312 - root - INFO - po splicie
+2024-08-26 09:33:48,312 - root - INFO - w try
+2024-08-26 09:33:48,313 - root - INFO - po dekodowaniu
+2024-08-26 09:33:48,313 - root - INFO - po konwersji
+2024-08-26 09:33:48,313 - root - INFO - przed detect
+2024-08-26 09:33:48,313 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:48,355 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:48,355 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:48,355 - root - INFO - po konwersji cieni
+2024-08-26 09:33:48,357 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:48,358 - root - INFO - po detekcji oczu
+2024-08-26 09:33:48,358 - root - INFO - po detect
+2024-08-26 09:33:48,358 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:48,570 - root - INFO - przed splitem 
+2024-08-26 09:33:48,570 - root - INFO - po splicie
+2024-08-26 09:33:48,570 - root - INFO - w try
+2024-08-26 09:33:48,570 - root - INFO - po dekodowaniu
+2024-08-26 09:33:48,571 - root - INFO - po konwersji
+2024-08-26 09:33:48,571 - root - INFO - przed detect
+2024-08-26 09:33:48,571 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:48,601 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:48,601 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:48,602 - root - INFO - po konwersji cieni
+2024-08-26 09:33:48,604 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:48,605 - root - INFO - po detekcji oczu
+2024-08-26 09:33:48,605 - root - INFO - po detect
+2024-08-26 09:33:48,605 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:48,819 - root - INFO - przed splitem 
+2024-08-26 09:33:48,819 - root - INFO - po splicie
+2024-08-26 09:33:48,819 - root - INFO - w try
+2024-08-26 09:33:48,819 - root - INFO - po dekodowaniu
+2024-08-26 09:33:48,820 - root - INFO - po konwersji
+2024-08-26 09:33:48,820 - root - INFO - przed detect
+2024-08-26 09:33:48,820 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:48,850 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:48,850 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:48,850 - root - INFO - po konwersji cieni
+2024-08-26 09:33:48,853 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:48,855 - root - INFO - po detekcji oczu
+2024-08-26 09:33:48,855 - root - INFO - po detect
+2024-08-26 09:33:48,855 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:49,073 - root - INFO - przed splitem 
+2024-08-26 09:33:49,073 - root - INFO - po splicie
+2024-08-26 09:33:49,073 - root - INFO - w try
+2024-08-26 09:33:49,074 - root - INFO - po dekodowaniu
+2024-08-26 09:33:49,075 - root - INFO - po konwersji
+2024-08-26 09:33:49,075 - root - INFO - przed detect
+2024-08-26 09:33:49,075 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:49,105 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:49,105 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:49,106 - root - INFO - po konwersji cieni
+2024-08-26 09:33:49,109 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:49,111 - root - INFO - po detekcji oczu
+2024-08-26 09:33:49,111 - root - INFO - po detect
+2024-08-26 09:33:49,111 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:49,333 - root - INFO - przed splitem 
+2024-08-26 09:33:49,333 - root - INFO - po splicie
+2024-08-26 09:33:49,334 - root - INFO - w try
+2024-08-26 09:33:49,334 - root - INFO - po dekodowaniu
+2024-08-26 09:33:49,334 - root - INFO - po konwersji
+2024-08-26 09:33:49,334 - root - INFO - przed detect
+2024-08-26 09:33:49,334 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:49,367 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:49,367 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:49,367 - root - INFO - po konwersji cieni
+2024-08-26 09:33:49,370 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:49,371 - root - INFO - po detekcji oczu
+2024-08-26 09:33:49,371 - root - INFO - po detect
+2024-08-26 09:33:49,371 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:49,582 - root - INFO - przed splitem 
+2024-08-26 09:33:49,582 - root - INFO - po splicie
+2024-08-26 09:33:49,582 - root - INFO - w try
+2024-08-26 09:33:49,582 - root - INFO - po dekodowaniu
+2024-08-26 09:33:49,583 - root - INFO - po konwersji
+2024-08-26 09:33:49,583 - root - INFO - przed detect
+2024-08-26 09:33:49,583 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:49,617 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:49,617 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:49,617 - root - INFO - po konwersji cieni
+2024-08-26 09:33:49,620 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:49,622 - root - INFO - po detekcji oczu
+2024-08-26 09:33:49,622 - root - INFO - po detect
+2024-08-26 09:33:49,622 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:33:49,843 - root - INFO - przed splitem 
+2024-08-26 09:33:49,843 - root - INFO - po splicie
+2024-08-26 09:33:49,843 - root - INFO - w try
+2024-08-26 09:33:49,843 - root - INFO - po dekodowaniu
+2024-08-26 09:33:49,843 - root - INFO - po konwersji
+2024-08-26 09:33:49,843 - root - INFO - przed detect
+2024-08-26 09:33:49,843 - root - INFO - w  detect_faces_and_eyes
+2024-08-26 09:33:49,872 - root - INFO - Classifiers loaded successfully.
+2024-08-26 09:33:49,872 - root - INFO - w  detect_faces_and_eyes po preload_haar
+2024-08-26 09:33:49,872 - root - INFO - po konwersji cieni
+2024-08-26 09:33:49,875 - root - INFO - po detekcji twarzy
+2024-08-26 09:33:49,876 - root - INFO - po detekcji oczu
+2024-08-26 09:33:49,876 - root - INFO - po detect
+2024-08-26 09:33:49,876 - root - INFO - po  aktualizacji stanu
+2024-08-26 09:34:04,421 - waitress.queue - WARNING - Task queue depth is 1
+2024-08-26 09:34:04,427 - root - INFO - results w api/icer: {results}
+2024-08-26 09:34:04,427 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,427 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-26 09:34:04,437 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,437 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724545876.jpg
+2024-08-26 09:34:04,444 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,444 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-26 09:34:04,446 - root - INFO - results w api/icer: {results}
+2024-08-26 09:34:04,446 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,446 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-26 09:34:04,448 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,448 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724545876.jpg
+2024-08-26 09:34:04,449 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,449 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-26 09:34:04,454 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,454 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,454 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-26 09:34:04,454 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-26 09:34:04,462 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,463 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-26 09:34:04,463 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,463 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-26 09:34:04,472 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,472 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,472 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 09:34:04,472 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 09:34:04,478 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,478 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-26 09:34:04,478 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,478 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-26 09:34:04,488 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,488 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,488 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-26 09:34:04,488 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-26 09:34:04,493 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,493 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,493 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 09:34:04,493 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 09:34:04,494 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,494 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,494 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-26 09:34:04,494 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-26 09:34:04,500 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,500 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,500 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-26 09:34:04,501 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-26 09:34:04,508 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,509 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-26 09:34:04,509 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,510 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-26 09:34:04,518 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,518 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,518 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-26 09:34:04,518 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-26 09:34:04,530 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,530 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:04,530 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-26 09:34:04,530 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-26 09:34:13,538 - root - INFO - results w api/icer: {results}
+2024-08-26 09:34:13,538 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,538 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-26 09:34:13,538 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,538 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724657653.jpg
+2024-08-26 09:34:13,544 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,544 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-26 09:34:13,545 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,545 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-26 09:34:13,546 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,546 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-26 09:34:13,547 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,547 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 09:34:13,547 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,547 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-26 09:34:13,548 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,548 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-26 09:34:13,549 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,549 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 09:34:13,549 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,549 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-26 09:34:13,549 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,549 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-26 09:34:13,550 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,550 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-26 09:34:13,552 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,552 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-26 09:34:13,552 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:13,553 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-26 09:34:20,047 - root - INFO - results w api/icer: {results}
+2024-08-26 09:34:20,047 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,047 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-26 09:34:20,048 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,048 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724657653.jpg
+2024-08-26 09:34:20,049 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,049 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-26 09:34:20,049 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,049 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-26 09:34:20,050 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,050 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-26 09:34:20,051 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,051 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 09:34:20,051 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,051 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-26 09:34:20,052 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,052 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-26 09:34:20,053 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,053 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 09:34:20,053 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,053 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-26 09:34:20,053 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,053 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-26 09:34:20,054 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,054 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-26 09:34:20,055 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,055 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-26 09:34:20,056 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:20,056 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-26 09:34:50,374 - root - INFO - results w api/icer: {results}
+2024-08-26 09:34:50,374 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,374 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-26 09:34:50,375 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,375 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724657653.jpg
+2024-08-26 09:34:50,377 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,377 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-26 09:34:50,378 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,378 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-26 09:34:50,379 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,379 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-26 09:34:50,380 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,380 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 09:34:50,380 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,380 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-26 09:34:50,381 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,381 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-26 09:34:50,382 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,382 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 09:34:50,382 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,382 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-26 09:34:50,382 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,382 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-26 09:34:50,383 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,383 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-26 09:34:50,384 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,384 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-26 09:34:50,385 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 09:34:50,385 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-26 09:46:06,770 - waitress - INFO - Serving on http://0.0.0.0:5000
+2024-08-26 09:47:03,045 - root - INFO - weszlo w change_user_photo
+2024-08-26 09:47:03,045 - root - INFO - weszlo w try w change_user_photo
+2024-08-26 09:47:03,050 - root - INFO - przypisanie image w change_user_photo
+2024-08-26 09:47:03,052 - root - INFO - przed change_user_profile w change_user_photo
+2024-08-26 10:19:14,408 - root - INFO - Classifiers loaded successfully.
+2024-08-26 10:19:14,414 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-08-26 10:19:14,414 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-08-26 10:19:20,247 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:19:20] "OPTIONS /login HTTP/1.1" 200 -
+2024-08-26 10:19:20,781 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:19:20] "POST /login HTTP/1.1" 200 -
+2024-08-26 10:19:20,788 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:19:20] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-26 10:19:20,825 - root - INFO - results w api/icer: {results}
+2024-08-26 10:19:20,825 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,825 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-26 10:19:20,826 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,826 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724657653.jpg
+2024-08-26 10:19:20,827 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,827 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-26 10:19:20,828 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,828 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-26 10:19:20,829 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,829 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-26 10:19:20,830 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,831 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 10:19:20,831 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,831 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-26 10:19:20,833 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,833 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-26 10:19:20,834 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,834 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 10:19:20,834 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,835 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-26 10:19:20,835 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,835 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-26 10:19:20,836 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,836 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-26 10:19:20,837 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,837 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-26 10:19:20,839 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:19:20,839 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-26 10:19:20,849 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:19:20] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-26 10:19:21,090 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:19:21] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-26 10:19:21,100 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:19:21] "GET /api/get_user_preferences?sessionId=653ba456-1b0a-4f37-9c9f-ba420e27d153 HTTP/1.1" 200 -
+2024-08-26 10:19:21,109 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:19:21] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-26 10:19:28,423 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:19:28] "OPTIONS /api/edit_user HTTP/1.1" 200 -
+2024-08-26 10:19:28,433 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:19:28] "POST /api/edit_user HTTP/1.1" 200 -
+2024-08-26 10:19:28,688 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:19:28] "OPTIONS /api/change_user_photo HTTP/1.1" 200 -
+2024-08-26 10:19:29,033 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:19:29] "POST /api/change_user_photo HTTP/1.1" 200 -
+2024-08-26 10:19:29,284 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:19:29] "GET /api/get_user_preferences?sessionId=653ba456-1b0a-4f37-9c9f-ba420e27d153 HTTP/1.1" 200 -
+2024-08-26 10:21:52,986 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:21:52] "OPTIONS /api/Icer HTTP/1.1" 200 -
+2024-08-26 10:21:52,991 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:21:52] "OPTIONS /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-26 10:21:53,316 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:21:53] "POST /api/Icer/get_notifications HTTP/1.1" 200 -
+2024-08-26 10:21:53,316 - root - INFO - results w api/icer: {results}
+2024-08-26 10:21:53,316 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,317 - root - INFO - image_path w api/icer: ../zaplecze/photos\ciasto_czekoladowe.jpg
+2024-08-26 10:21:53,317 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,317 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724657653.jpg
+2024-08-26 10:21:53,320 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,320 - root - INFO - image_path w api/icer: ../zaplecze/photos\frytki.jpg
+2024-08-26 10:21:53,321 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,321 - root - INFO - image_path w api/icer: ../zaplecze/photos\hamburger.jpg
+2024-08-26 10:21:53,322 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,322 - root - INFO - image_path w api/icer: ../zaplecze/photos\lasagne.jpg
+2024-08-26 10:21:53,323 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,323 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 10:21:53,323 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,323 - root - INFO - image_path w api/icer: ../zaplecze/photos\nalesniki.jpg
+2024-08-26 10:21:53,324 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,324 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535396.jpg
+2024-08-26 10:21:53,325 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,325 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535733.jpg
+2024-08-26 10:21:53,325 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,325 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535789.jpg
+2024-08-26 10:21:53,326 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,326 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535808.jpg
+2024-08-26 10:21:53,327 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,327 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535853.jpg
+2024-08-26 10:21:53,328 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,328 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724535886.jpg
+2024-08-26 10:21:53,329 - root - INFO - przed try do dekodowania zdjêcia w api/icer
+2024-08-26 10:21:53,329 - root - INFO - image_path w api/icer: ../zaplecze/photos\1724536311.jpg
+2024-08-26 10:21:53,340 - werkzeug - INFO - 127.0.0.1 - - [26/Aug/2024 10:21:53] "POST /api/Icer HTTP/1.1" 200 -
+2024-08-26 21:51:06,917 - waitress - INFO - Serving on http://0.0.0.0:5000

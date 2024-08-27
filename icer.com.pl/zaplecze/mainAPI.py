@@ -42,14 +42,16 @@ from modules.value_manager import ProductManager
 
 load_dotenv()
 
+
+
 app = Flask(__name__)
+app.debug=True
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 socketio = SocketIO(app, cors_allowed_origins="*")
 app.config['BARCODE_FOLDER'] = os.path.join('static/', 'barcodes')
 app.config['QR_CODE_FOLDER'] = os.path.join('static/', 'qrcodes')
 app.config['FOOD_LIST_DIR'] = 'users_lists'
-
 # Uzyskaj ścieżkę do katalogu głównego (gdzie znajduje się mainAPI.py)
 base_dir = os.path.dirname(os.path.abspath(__file__))
 # Ścieżka do katalogu tmp
@@ -57,7 +59,7 @@ temp_dir = os.path.join(base_dir, 'tmp')
 os.makedirs(temp_dir, exist_ok=True)
 # Ścieżka do katalogu z plikami wideo
 video_dir = os.path.join(base_dir, 'static', 'adverts')
-
+preload()
 # Upewnij się, że katalog tmp istnieje
 os.makedirs(temp_dir, exist_ok=True)
 
@@ -98,10 +100,8 @@ full_log_file_path = os.path.join(repo_root, log_file_path)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    filename=full_log_file_path,
-    filemode='a'
-)
 
+)
 
 @app.route('/api/add_to_product', methods=['POST'])
 def add_to_product():
@@ -417,11 +417,13 @@ def add_product():
 
 @app.route('/api/edit_product/<int:product_id>', methods=['PUT'])
 def edit_product(product_id):
+    logging.info("weszlo w edit_product")
     # Tworzenie instancji klasy DatabaseConnector
     db_connector = DatabaseConnector()
     # Łączenie z bazą danych
     db_connector.connect()
     try:
+        logging.info("weszlo w try w edit_product")
         # Pobieranie danych produktu z żądania
         data = request.json
         image_data = data.get('imageData')
@@ -430,11 +432,13 @@ def edit_product(product_id):
         cursor = connection.cursor(dictionary=True)
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
+        logging.info("po ustawieniu bazy i przed if w edit_product")
         if response:
             cursor.close()
             connection.close()
             return response, status_code
         # Aktualizacja produktu w bazie danych
+        logging.info("przed update_product w edit_product")
         new_product_id = db_connector.update_product(product_id, data, user_id)
         # Jeśli new_product_id nie jest None, oznacza to, że został utworzony nowy produkt
         if new_product_id is not None:
@@ -442,10 +446,12 @@ def edit_product(product_id):
         else:
             product_id_to_use = product_id
         # Wywołanie funkcji do obsługi przesyłania zdjęcia tylko jeśli dostępne są dane zdjęcia
+        logging.info("przed handle_image_upload w edit_product")
         if image_data:  # Dodatkowa warunek sprawdzający, czy jest nowe id produktu
             handle_image_upload(db_connector, image_data, user_id, product_id_to_use)
         cursor.close()
         connection.close()
+        logging.info("przed zakończeniem w edit_product")
         return jsonify({"message": "Produkt został zaktualizowany!"})
     except Exception as error:
         return jsonify({"error": str(error)}), 500
@@ -771,16 +777,20 @@ def get_icer():
         """
         cursor.execute(query, (user_id, user_id))
         results = cursor.fetchall()
+        logging.info("results w api/icer: {results}")
         for result in results:
             zdjecie_lokalizacja = result['zdjecie_lokalizacja']
-            if zdjecie_lokalizacja:
+            if  zdjecie_lokalizacja:
                 # Odkodowanie  zdjęcia z Base64
+                logging.info("przed try do dekodowania zdjęcia w api/icer")
                 try:
                     image_path = os.path.join("../zaplecze/photos", zdjecie_lokalizacja)
+                    logging.info(f"image_path w api/icer: {image_path}")
                     with open(image_path, "rb") as image_file:
                         encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
                     result['zdjecie_lokalizacja'] = encoded_image
                 except FileNotFoundError:
+                    logging.info(f"error w kodowaniu zdjęcia")
                     # Obsługa, gdy plik zdjęcia nie został znaleziony
                     result['zdjecie_lokalizacja'] = None
             else:
@@ -931,7 +941,7 @@ def delete_all_notification():
 
 
 # Endpoint do aktualizacji preferencji użytkownika
-@app.route('/api/update_preferences', methods=['POST'])
+@app.route('/api/update_repferences', methods=['POST'])
 def update_preferences():
     try:
         # Tworzenie instancji klasy DatabaseConnector
@@ -993,6 +1003,7 @@ def update_preferences():
 
 @app.route('/api/get_user_preferences', methods=['GET'])
 def get_user_preferences():
+    logging.info("weszlo w get_user_preferences")
     try:
         # Tworzenie instancji klasy DatabaseConnector
         db_connector = DatabaseConnector()
@@ -1055,7 +1066,9 @@ def get_user_preferences():
 # Endpoint do zmiany zdjęcia użytkownika
 @app.route('/api/change_user_photo', methods=['POST'])
 def change_user_photo():
+    logging.info("weszlo w change_user_photo")
     try:
+        logging.info("weszlo w try w change_user_photo")
         # Tworzenie instancji klasy DatabaseConnector
         db_connector = DatabaseConnector()
         # Łączenie z bazą danych
@@ -1066,11 +1079,12 @@ def change_user_photo():
         # Pobranie danych obrazu z zapytania
         data = request.get_json()
         image_data = data['image_data_base64']
+        logging.info("przypisanie image w change_user_photo")
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
-
+        logging.info("przed change_user_profile w change_user_photo")
         # Wywołanie funkcji do zmiany zdjęcia użytkownika
         response = change_user_profile(db_connector, user_id, image_data)
-
+        logging.info(f"odpowiedz: {response}")
         return response
 
     except Exception as error:
@@ -1198,7 +1212,7 @@ SMTP_PORT = 587
 
 def send_verification_email(email, token):
     subject = 'Potwierdzenie rejestracji'
-    link = url_for('confirm_email', token=token, _external=True)
+    link = f'https://icer.net.pl:8443/confirm_email/{token}'
     body = f'Kliknij w ten link, aby potwierdzić swoją rejestrację: {link}'
 
     msg = MIMEMultipart()
@@ -1235,7 +1249,7 @@ def confirm_email(token):
     try:
         email = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])['email']
         if confirm_user(email):
-            return redirect('http://localhost:3000/login')  # Przekierowanie na stronę logowania
+            return redirect('https://icer.net.pl:443/login')  # Przekierowanie na stronę logowania
         else:
             return jsonify({"message": "Błąd podczas potwierdzania adresu e-mail."}), 500
     except jwt.ExpiredSignatureError:
@@ -1413,6 +1427,7 @@ def reset_password():
 
 @app.route('/api/edit_user', methods=['POST'])
 def edit_user():
+
     # Sprawdzanie, czy użytkownik jest zalogowany
     if 'username' not in session:
         return jsonify({"error": "Musisz być zalogowany, aby edytować dane."})
@@ -1663,10 +1678,12 @@ def get_frame():
     Analizuje klatki z video przesłane jako obrazy w formacie base64, przetwarza je, a następnie aktualizuje listę jedzenia dla danego użytkownika.
     """
     # Pobierz dane JSON z żądania
+
+    logging.info("poczatek adison_molotow")
     data = request.json
     if data is None or 'images' not in data or 'username' not in data:
         return jsonify({'error': 'Brak zdjęcia lub nazwy użytkownika '}), 400
-
+    logging.info("po sprawdzeniu czy jest zdjecie")
     images_data = data['images']
     username = data['username']
     responses = []
@@ -1675,23 +1692,27 @@ def get_frame():
         try:
             # Dekodowanie danych base64 bezpośrednio do bajtów
             image_bytes = base64.b64decode(image_data)
-
+            logging.info("po konwersji z base64")
             # Konwersja bajtów do obrazu OpenCV
             image_np = np.frombuffer(image_bytes, np.uint8)
+            logging.info("po image_np")
             image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
-
+            logging.info("cv2.imdecode")
             if image is None:
                 responses.append({'error': 'Nie udało się załadować obrazu'})
                 continue
 
             # Konwersja obrazu OpenCV do formatu PIL, jeśli funkcje tego wymagają
             image_pil = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-
+            logging.info("Konwersja obrazu OpenCV")
             # Przetwarzanie obrazu, np. dekodowanie kodu QR
             decoded_data = decode_qr_code_frames(image_pil)
+            logging.info("Przetwarzanie obrazu")
             if decoded_data and decoded_data != "Kod QR nie został wykryty":
                 # Normalizacja kluczy w decoded_data
+                logging.info("przed normalizacją")
                 normalized_data = {normalize_key(key): value for key, value in decoded_data.items()}
+                logging.info("Normalizacja kluczy")
                 # Aktualizacja z domyślnymi wartościami
                 normalized_data.update({
                     "cena": float(normalized_data.get("cena", 0)),
@@ -1704,8 +1725,11 @@ def get_frame():
                 })
                 responses.append(normalized_data)
             else:
+                logging.info("przed pred_class")
                 pred_class = predict_and_update_food_list(image_pil, username)
+                logging.info("przed udpate_food_list")
                 updated_food_list = update_food_list([pred_class])
+                logging.info("przed responses.extend")
                 responses.extend(updated_food_list)
 
         except Exception as e:
@@ -1818,30 +1842,34 @@ def advert_reciever():
     if 'image' not in data:
         return jsonify({"error": "Brak danych obrazu"}), 400
     image_data = data['image']
-
+    logging.info("przed splitem ")
     # Usunięcie prefiksu data:image/png;base64, jeśli istnieje
     if image_data.startswith('data:image'):
         image_data = image_data.split(',')[1]
+    logging.info("po splicie")
     try:
         # Dekodowanie danych base64
+        logging.info("w try")
         image_bytes = base64.b64decode(image_data)
-
+        logging.info("po dekodowaniu")
         # Konwersja bajtów na obraz OpenCV
         image_np = np.frombuffer(image_bytes, np.uint8)
         image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
+        logging.info("po konwersji")
         if image is None:
             return jsonify({"error": "Nie udało się załadować obrazu"}), 500
 
+        logging.info("przed detect")
         # Wykrywanie twarzy i oczu
         detected_faces, detected_eyes = detect_faces_and_eyes(image)
-
+        logging.info("po detect")
         # Aktualizacja stanu wideo
         if video_state["video_choice"] == 1:
             if len(detected_faces) > 0 and len(detected_eyes) > 0:
                 video_state["playing"] = True
             else:
                 video_state["playing"] = False
-
+        logging.info("po  aktualizacji stanu")
         # Przygotowanie odpowiedzi
         response = {
             "faces_detected": len(detected_faces),
@@ -1940,8 +1968,8 @@ def create_checkout_session():
                 'quantity': 1,
             }],
             mode='payment',
-            success_url='http://localhost:3000/loading?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url='http://localhost:3000/loading?session_id={CHECKOUT_SESSION_ID}',
+            success_url='https://icer.net.pl:443/loading?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='https://icer.net.pl:443/loading?session_id={CHECKOUT_SESSION_ID}',
             metadata={
                 'username': username
             }
@@ -1955,14 +1983,14 @@ def create_checkout_session():
 def success():
     session_id = request.args.get('session_id')
     print(f"Received session_id: {session_id}")  # Logowanie session_id
-
+    logging.info(f"dostalem sessionId: {session_id}")
     if session_id:
         checkout_session = stripe.checkout.Session.retrieve(session_id)
         if checkout_session.payment_status == 'paid':
             # Pobierz nazwę użytkownika z metadanych sesji
             username = checkout_session['metadata']['username']
             print(f"Username from metadata: {username}")  # Logowanie username
-
+            logging.info(f"Username from metadata: {username}")
             # Połącz się z bazą danych
             db_connector = DatabaseConnector()
             db_connector.connect()
@@ -1971,12 +1999,13 @@ def success():
             cursor = connection.cursor()
 
             try:
+                logging.info("wchodzi do try w success")
                 # Sprawdzenie, czy użytkownik jest zalogowany
                 user_id, username, response, status_code = db_connector.get_user_id_by_username(cursor, session)
 
                 if status_code != 200:
                     return jsonify(message="Użytkownik nie jest zalogowany."), 401
-
+                logging.info("po sprawdzaniu status code w success")
                 # Ustaw uzytkownik_premium na 1 (data_koniec_premium jest aktualizowana automatycznie przez trigger)
                 query_update = """
                     UPDATE preferencje_uzytkownikow 
@@ -1985,7 +2014,7 @@ def success():
                 """
                 cursor.execute(query_update, (1, user_id))
                 connection.commit()
-
+                logging.info("po query w success")
                 return jsonify(
                     message="Payment succeeded!",
                     session_id=session_id,

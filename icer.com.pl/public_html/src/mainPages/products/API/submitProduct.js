@@ -9,6 +9,7 @@ import {initializeProduct} from "../hooks/initializeProduct";
 // ustawienie produktu.
 export const submitProduct =
     async (product, sessionId, image, setImage, setImagePreview, setRefresh, setProduct) => {
+        console.log({product})
     try {
         const response = await axios.post(`${API_URL}/api/add_product`, product, {
             headers: {
@@ -17,6 +18,7 @@ export const submitProduct =
             },
         });
         // w razie sukcesu pokaż komunikat
+
         toast.success(`Produkt ${product.nazwa} został dodany!`);
         URL.revokeObjectURL(image); // zwalniamy stan podglądu obrazu tylko po pomyślnym wysłaniu
         setImage(null); //ustawiamy obrazek na null

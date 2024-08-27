@@ -85,6 +85,7 @@ export function Settings({where}) {
 
             const { error } = await stripe.redirectToCheckout({ sessionId: session_id });
             setRefresh(!refresh);
+            setRefreshSettings(!refreshSettings)
             if (error) {
                 console.error('Error redirecting to checkout:', error);
 

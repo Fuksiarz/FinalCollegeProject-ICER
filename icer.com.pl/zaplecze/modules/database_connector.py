@@ -87,7 +87,7 @@ class DatabaseConnector:
 
                 # Zaktualizuj przypisanie w tabeli icer tylko dla konkretnego użytkownika
                 update_icer_query = """
-                    UPDATE icer
+                    UPDATE Icer
                     SET produktID = %s, default_photo = 0
                     WHERE produktID = %s
                     AND UserID = %s
@@ -133,7 +133,7 @@ class DatabaseConnector:
             self.connection.commit()
 
             # Zaktualizuj ilość w tabeli 'icer'
-            update_icer_query = """UPDATE icer SET 
+            update_icer_query = """UPDATE Icer SET 
                                       ilosc=%s
                                     WHERE produktID=%s AND UserID=%s"""
 

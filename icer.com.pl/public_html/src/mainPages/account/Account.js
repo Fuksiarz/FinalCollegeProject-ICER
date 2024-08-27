@@ -18,7 +18,7 @@ export function Account() {
     const picGetter = AccountPictureGetter(image,setImage, defaultProfile , profilePicture)
     useEffect(() => {
 
-    },[refresh,profilePicture,defaultProfile,defaultProfile, premiumUser]);
+    },[refresh,profilePicture,defaultProfile, premiumUser]);
 
     // tworzymy instancje AccountPictureGetter, która decyduje jakie zdjęcie zwrócić na podstawie podanych informacji
 
