@@ -1058,7 +1058,18 @@ def get_user_preferences():
                 preferences['profile_photo'] = None
             return jsonify(preferences)
         else:
-            return jsonify({"error": "Preferences not found."}), 404
+            # Jeśli preferencje nie zostały znalezione, zwróć domyślne wartości
+            default_preferences = {
+                "wielkosc_lodowki": "srednie",
+                "wielkosc_strony_produktu": "srednie",
+                "widocznosc_informacji_o_produkcie": "1",
+                "lokalizacja_zdj": None,
+                "podstawowe_profilowe": "1",
+                "uzytkownik_premium": "0",
+                "data_koniec_premium": None,
+                "profile_photo": None
+            }
+            return jsonify(default_preferences)
 
     except Exception as error:
         # Zwrócenie ogólnego błędu
