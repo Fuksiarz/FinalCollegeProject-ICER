@@ -95,7 +95,7 @@ repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 log_file_path = os.getenv('LOG_FILE_PATH', 'zaplecze/logs/application.log')
 # Tworzenie pełnej ścieżki do pliku logów
 full_log_file_path = os.path.join(repo_root, log_file_path)
-
+environment = os.getenv('ENVIRONMENT')
 # Konfiguracja logowania
 logging.basicConfig(
     level=logging.INFO,
@@ -489,14 +489,16 @@ def get_icer_shopping():
         # Modyfikacja zapytania SQL, aby pokazywać wszystkie informacje o produkcie
         user_id = user_result['id']
         query = """
-            SELECT Icer.id, Icer.UserID, Icer.produktID, Shopping.ilosc,
-                   Produkty.nazwa, Produkty.cena, Produkty.kalorie,
-                   Produkty.tluszcze, Produkty.weglowodany,
-                   Produkty.bialko,Produkty.kategoria
-            FROM Icer
-            INNER JOIN Produkty ON Icer.produktID = Produkty.id
-            LEFT JOIN Shopping ON Icer.produktID = Shopping.produktID
-            WHERE Icer.UserID = %s AND Shopping.in_cart = 1;
+          SELECT Icer.id, Icer.UserID, Icer.produktID, Shopping.ilosc,
+       Produkty.nazwa, Produkty.cena, Produkty.kalorie,
+       Produkty.tluszcze, Produkty.weglowodany,
+       Produkty.bialko, Produkty.kategoria
+FROM Icer
+INNER JOIN Produkty ON Icer.produktID = Produkty.id
+INNER JOIN Shopping ON Icer.produktID = Shopping.produktID 
+                     AND Icer.UserID = Shopping.UserID 
+                     AND Shopping.in_cart = 1
+WHERE Icer.UserID = 1;
         """
         cursor.execute(query, (user_id,))
         results = cursor.fetchall()
@@ -1212,7 +1214,10 @@ SMTP_PORT = 587
 
 def send_verification_email(email, token):
     subject = 'Potwierdzenie rejestracji'
-    link = f'https://icer.net.pl:8443/confirm_email/{token}'
+    if environment == 'LOCAL':
+        link = f'http://localhost:5000/confirm_email/{token}'
+    elif environment == 'PRODUCTION':
+        link = f'https://icer.net.pl:8443/confirm_email/{token}'
     body = f'Kliknij w ten link, aby potwierdzić swoją rejestrację: {link}'
 
     msg = MIMEMultipart()
@@ -1249,7 +1254,10 @@ def confirm_email(token):
     try:
         email = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])['email']
         if confirm_user(email):
-            return redirect('https://icer.net.pl:443/login')  # Przekierowanie na stronę logowania
+            if environment == 'LOCAL':
+                return redirect('http://localhost:3000/login')
+            elif environment == 'PRODUCTION':
+                return redirect('https://icer.net.pl:443/login')
         else:
             return jsonify({"message": "Błąd podczas potwierdzania adresu e-mail."}), 500
     except jwt.ExpiredSignatureError:
