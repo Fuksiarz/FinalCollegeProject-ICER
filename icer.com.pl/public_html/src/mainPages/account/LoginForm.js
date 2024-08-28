@@ -32,7 +32,7 @@ function LoginForm({ onLogin , onSwitchToResetPassword, onSwitchToRegister, show
                     type="text"
                     value={username}
                     onChange={e => setUsername(e.target.value)}
-                    placeholder="Email"
+                    placeholder="E-mail"
                 />
                 {/*pobieramy dane wejściowe od użytkownika odnośnie hasła*/}
                 <input className="password"

@@ -85,7 +85,7 @@ export const cameraControlForAdvert = (videoRef, canvasRef, isRecording, setIsRe
                 }
             })
             .catch((error) => {
-                console.error("Error accessing camera:", error); // Obsługa błędów przy uzyskiwaniu dostępu do kamery
+                console.info("Error accessing camera:", error); // Obsługa błędów przy uzyskiwaniu dostępu do kamery
                 setGotCamera(0); // Aktualizacja stanu kamery w przypadku błędu
             });
     } else {

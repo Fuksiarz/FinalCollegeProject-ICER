@@ -943,7 +943,7 @@ def delete_all_notification():
 
 
 # Endpoint do aktualizacji preferencji użytkownika
-@app.route('/api/update_repferences', methods=['POST'])
+@app.route('/api/update_preferences', methods=['POST'])
 def update_preferences():
     try:
         # Tworzenie instancji klasy DatabaseConnector
@@ -961,6 +961,7 @@ def update_preferences():
         if not validate_size(data['wielkosc_lodowki']) or not validate_size(data['wielkosc_strony_produktu']):
             return jsonify({"error": "Nieprawidłowe wartości wielkości."}), 400
         connection = db_connector.get_connection()
+
         cursor = connection.cursor(dictionary=True)
         # Sprawdzenie, czy użytkownik jest zalogowany
         user_id, username, response, status_code = DatabaseConnector.get_user_id_by_username(cursor, session)
@@ -1005,7 +1006,6 @@ def update_preferences():
 
 @app.route('/api/get_user_preferences', methods=['GET'])
 def get_user_preferences():
-    logging.info("weszlo w get_user_preferences")
     try:
         # Tworzenie instancji klasy DatabaseConnector
         db_connector = DatabaseConnector()
@@ -1058,12 +1058,22 @@ def get_user_preferences():
                 preferences['profile_photo'] = None
             return jsonify(preferences)
         else:
-            return jsonify({"error": "Preferences not found."}), 404
+            # Jeśli preferencje nie zostały znalezione, zwróć domyślne wartości
+            default_preferences = {
+                "wielkosc_lodowki": "srednie",
+                "wielkosc_strony_produktu": "srednie",
+                "widocznosc_informacji_o_produkcie": "1",
+                "lokalizacja_zdj": None,
+                "podstawowe_profilowe": "1",
+                "uzytkownik_premium": "0",
+                "data_koniec_premium": None,
+                "profile_photo": None
+            }
+            return jsonify(default_preferences)
 
     except Exception as error:
         # Zwrócenie ogólnego błędu
         return jsonify({"error": str(error)}), 500
-
 
 # Endpoint do zmiany zdjęcia użytkownika
 @app.route('/api/change_user_photo', methods=['POST'])

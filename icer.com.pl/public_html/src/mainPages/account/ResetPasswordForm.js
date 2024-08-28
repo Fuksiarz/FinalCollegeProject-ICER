@@ -12,13 +12,15 @@ function ResetPasswordForm({ onSwitchToLogin, onResetPassword }) {
     return (
         <form onSubmit={handleSubmit} className="loginFormAll">
             <div className="loginFormBox">
-            <h2>Resetowanie hasła</h2>
+            <h1>Resetowanie hasła</h1>
+                <h1></h1>
+
             {/*pobieramy dane wejściowe od użytkownika odnośnie nazwy*/}
             <input className="username"
                    type="text"
                    value={username}
                    onChange={e => setUsername(e.target.value)}
-                   placeholder="Email"
+                   placeholder="E-mail"
             />
             <button type="submit" className="loginButton" >Resetuj hasło </button>
             <button type="button" className="loginButton" onClick={onSwitchToLogin}>Powrót do logowania</button>

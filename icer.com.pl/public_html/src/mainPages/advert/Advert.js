@@ -32,28 +32,29 @@ export function Advert({adIsOn, setAdIsOn}) {
 
     useEffect(() => {
         //Połączenie z Api, dajemy informację żeby włączyc reklamę i przekazujemy informację czy posiadamy kamerę
-        const fetchVideoFeed = () => {
-            axios.post(`${API_URL}/start_video`, {video_choice: gotCamera}, {
-                headers: {'Content-Type': 'application/json'}
-            })
-                .then((response) => {
-                    //Api z reklamą
-                    const videoUrl = `${API_URL}${response.data.video_url}`;
-                    setVideoFeedUrl(videoUrl);
+        if(gotCamera !==''){
+            const fetchVideoFeed = () => {
+                axios.post(`${API_URL}/start_video`, {video_choice: gotCamera}, {
+                    headers: {'Content-Type': 'application/json'}
+                })
+                    .then((response) => {
+                        //Api z reklamą
+                        const videoUrl = `${API_URL}${response.data.video_url}`;
+                        setVideoFeedUrl(videoUrl);
 
 
-                })//W razie błędu wyświetl error
-                .catch((error) => {
-                    console.error(`Error starting camera monitoring: ${error}`);
-                });
-        };
-        fetchVideoFeed(); //Wykonaj ponownie
-
+                    })//W razie błędu wyświetl error
+                    .catch((error) => {
+                        console.log(`Error starting camera monitoring: ${error}`);
+                    });
+            };
+            fetchVideoFeed(); //Wykonaj ponownie
+        }
     }, [adIsOn, gotCamera, isRecording]); //odśwież przy zmianie tych wartości
 
     //Funkcja odpowiadająca za zmianę zmiennych kiedy reklama się zakończy
     const handleVideoEnd = () => {
-        console.log('Reklama się zakończyła, zatrzymywanie nagrywania...');
+
         setIsRecording(false);
         setAdIsOn(false);
         setVideoFeedUrl(null);
@@ -72,8 +73,6 @@ export function Advert({adIsOn, setAdIsOn}) {
             return () => {// zwraca funkcje zakończenia przesyłu danych, wywoływana kiedy zakończymy reklamę
                 if (stopRecording && !isCameraStopped) {
                     stopRecording();
-                } else {
-                    console.log('stopRecording jest null lub kamera już zatrzymana podczas unmount');
                 }
                 setGotCamera('');
             };

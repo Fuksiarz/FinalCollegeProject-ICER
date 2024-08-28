@@ -9,7 +9,7 @@ import {initializeProduct} from "../hooks/initializeProduct";
 // ustawienie produktu.
 export const submitProduct =
     async (product, sessionId, image, setImage, setImagePreview, setRefresh, setProduct) => {
-        console.log({product})
+
     try {
         const response = await axios.post(`${API_URL}/api/add_product`, product, {
             headers: {
