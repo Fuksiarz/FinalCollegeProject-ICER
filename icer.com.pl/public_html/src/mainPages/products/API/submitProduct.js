@@ -1,7 +1,7 @@
 import axios from "axios";
 import {API_URL} from "../../settings/config";
 import {toast} from "react-toastify";
-import {initializeProduct} from "../hooks/initializeProduct";
+import {initializeProduct} from "../add/initializeProduct";
 
 
 //funkcja do komunikacji z API odnośnie wysłania produktu. Przyjmuje: produkt, id sesji użytkownika, obrazek,

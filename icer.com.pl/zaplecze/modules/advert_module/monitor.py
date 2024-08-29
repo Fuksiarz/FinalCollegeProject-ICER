@@ -17,18 +17,13 @@ def preload_haar():
 
 # Funkcja do wykrywania twarzy i oczu na obrazie
 def detect_faces_and_eyes(image):
-    logging.info("w  detect_faces_and_eyes")
 
     preload_haar()
-    logging.info("w  detect_faces_and_eyes po preload_haar")
     # Konwersja obrazu na odcienie szarości
     gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    logging.info("po konwersji cieni")
     # Wykrywanie twarzy i oczu na obrazie przy użyciu preładowanych classifierów
     detected_faces = face_classifier.detectMultiScale(gray_img, scaleFactor=1.2, minNeighbors=5, minSize=(20, 20))
-    logging.info("po detekcji twarzy")
     detected_eyes = eye_classifier.detectMultiScale(gray_img, scaleFactor=1.2, minNeighbors=4, minSize=(10, 10))
-    logging.info("po detekcji oczu")
     return detected_faces, detected_eyes
 
 

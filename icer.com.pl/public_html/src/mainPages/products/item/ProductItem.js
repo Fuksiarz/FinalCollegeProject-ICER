@@ -8,7 +8,7 @@ import ProductItemMedium from "./ProductItemMedium";
 import ProductItemLarge from "./ProductItemLarge";
 import {PictureGetter} from "../pictures/PictureGetter";
 import SettingsContext from "../../settings/SettingsContext";
-import {getFontSize} from "../hooks/getFontSize";
+import {getFontSize} from "../productList/getFontSize";
 
 //funkcja odpowiedzialna za wyświetlanie produktu, przyjmuje wartości od rodzica
 function ProductItem({

@@ -3,12 +3,12 @@ import "./AddProduct.css";
 import {AuthContext} from '../../account/auth-context';
 import {Icon} from "@iconify/react";
 import 'react-toastify/dist/ReactToastify.css';
-import {initializeProduct} from "../hooks/initializeProduct";
+import {initializeProduct} from "./initializeProduct";
 import {submitProduct} from "../API/submitProduct";
 import {handleImageChange} from "../pictures/handleImageChange";
 import groceryBag from '../../../data/groceryBag.svg'
-import {handleBackpackClick} from "../hooks/handleBackpackClick";
-import {chooseImageForIdentyfiaction} from "../hooks/chooseImageForIdentyfication";
+import {handleBackpackClick} from "./handleBackpackClick";
+import {chooseImageForIdentyfiaction} from "../pictures/chooseImageForIdentyfication";
 import {updateFood} from "../API/updateFood";
 import {cameraControlFoodId} from "../API/cameraControlFoodId";
 import {sendImageToFlask} from "../API/sendImageToFlask";

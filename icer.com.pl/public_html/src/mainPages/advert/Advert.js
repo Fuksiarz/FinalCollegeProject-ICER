@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {API_URL} from "../settings/config";
 import './Advert.css';
 import axios from "axios";
-import {cameraControlForAdvert} from "../products/API/cameraControlForAdvert";
+import {cameraControlForAdvert} from "./cameraControlForAdvert";
 
 //Funkcja odpowiadająca za reklamę
 export function Advert({adIsOn, setAdIsOn}) {
