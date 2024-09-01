@@ -1,3 +1,9 @@
+-- Utworzenie bazy danych o nazwie sklep, jeśli jeszcze nie istnieje
+CREATE DATABASE IF NOT EXISTS sklep;
+
+-- Wybór bazy danych sklep
+USE sklep;
+
 DELIMITER //
 
 -- Tworzenie procedury CreateAllTablesAndProcedures
