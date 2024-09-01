@@ -33,8 +33,43 @@ W konsoli należy użyć komend:
 
     npm install
     npm run
-
 Baza danych:
-Bazę danych należy utworzyć poprzez wykorzystanie narzędza MySQL MYSQL Workbench 8.0, wykorzystując skrypt Database for dummies 
-znajdujący się w icer.com.pl\zaplecze 
-Zalecane jest użycie domyślnych ustawień bazy danych.
+Bazę danych należy utworzyć poprzez wykorzystanie narzędza MySQL MYSQL Workbench 8.0, wykorzystując skrypt skrypt inicjalizacji bazy danych.sql
+1. Utworzenie Nowego Połączenia w MySQL Workbench
+Uruchom MySQL Workbench:
+
+Otwórz MySQL Workbench na swoim komputerze.
+Dodaj nowe połączenie:
+
+Na stronie głównej MySQL Workbench kliknij przycisk „+” obok „MySQL Connections” (Połączenia MySQL), aby dodać nowe połączenie.
+Skonfiguruj połączenie:
+
+Wprowadź nazwę połączenia, na przykład Icer, ale możesz użyć dowolnej nazwy, która pomoże Ci zidentyfikować połączenie.
+Ustaw „Hostname” (Host) na 127.0.0.1.
+Ustaw „Port” na 3306.
+Wprowadź „Username” (Nazwa użytkownika) jako root i „Password” (Hasło) jako root.
+Kliknij „Test Connection” (Testuj połączenie), aby upewnić się, że połączenie działa poprawnie.
+Kliknij „OK” aby zapisać połączenie.
+2. Utworzenie Nowej Bazy Danych
+Połącz się z serwerem MySQL:
+
+Wybierz stworzone połączenie i kliknij „Connect” (Połącz), aby nawiązać połączenie z serwerem MySQL.
+Utwórz nową bazę danych:
+
+W panelu po lewej stronie kliknij zakładkę „Schematy” (Schemas).
+Kliknij prawym przyciskiem myszy w pustym miejscu w sekcji „Schematy” i wybierz „Create Schema” (Utwórz schemat).
+Wprowadź nazwę bazy danych jako icer.
+Kliknij „Apply” (Zastosuj), aby utworzyć bazę danych, a następnie „Finish” (Zakończ), aby zakończyć proces.
+3. Importowanie Skryptu Inicjalizacji Bazy Danych
+Przygotuj plik skryptu:
+
+Upewnij się, że masz plik skryptu inicjalizacji bazy danych o nazwie skrypt inicjalizacji bazy danych.sql znajdujący się w icer.com.pl\zaplecze.
+Importuj skrypt:
+
+W MySQL Workbench wybierz zakładkę „File” (Plik) z górnego menu i wybierz „Open SQL Script” (Otwórz skrypt SQL).
+Znajdź i wybierz plik skrypt inicjalizacji bazy danych.sql, a następnie kliknij „Open” (Otwórz).
+Wykonaj skrypt:
+
+Po otwarciu skryptu w edytorze SQL kliknij przycisk „Execute” (Wykonaj) lub użyj skrótu klawiszowego (Ctrl + Shift + Enter), aby uruchomić skrypt.
+Skrypt utworzy wszystkie niezbędne tabele, wstawi dane i skonfiguruje procedury oraz triggery w bazie danych sklep.
+
