@@ -60,19 +60,24 @@ def bow(sentence, words, show_details=True):
 
 # Pobieranie odpowiedzi od modelu
 def get_response(user_input):
-    p = bow(user_input, words) 
+    p = bow(user_input, words)
     res = model.predict(np.array([p]))[0]
-    ERROR_THRESHOLD = 0.25 
+    ERROR_THRESHOLD = 0.25  # Dolny próg pewności modelu
+    CONFIDENCE_THRESHOLD = 0.65  # Próg pewności procentowej
+
     results = [[i, r] for i, r in enumerate(res) if r > ERROR_THRESHOLD]
     results.sort(key=lambda x: x[1], reverse=True)
-    
+
     if results:
         intent = classes[results[0][0]]
-        for i in intents:
-            if i['tag'] == intent:
-                response = random.choice(i['responses'])
-                return response
-                
+        confidence = results[0][1]  # Pewność predykcji
+
+        if confidence >= CONFIDENCE_THRESHOLD:
+            for i in intents:
+                if i['tag'] == intent:
+                    response = random.choice(i['responses'])
+                    return response
+
     return None
 
 # Wyodrębnianie istotnych zdań z tekstu
@@ -107,27 +112,34 @@ def get_bot_response(user_input):
     model_response = get_response(user_input)
     if model_response:
         return model_response
-#Odpowiedź alternatywna przy braku odpowiedzi z intents, przy użyciu podobieństwa kosinusowego
-#Przy przeszukiwaniu wikipedii
+
+    # Odpowiedź alternatywna przy braku odpowiedzi z intents, 
+    # przy użyciu podobieństwa kosinusowego z wikipedii
     try:
         wiki_page = wiki_wiki.page(user_input)
         if wiki_page.exists():
             wiki_content = wiki_page.text
             user_input_tfidf = vectorizer.fit_transform([user_input, wiki_content])
             cosine_sim = cosine_similarity(user_input_tfidf[0], user_input_tfidf[1])
-            
+
             if cosine_sim > 0.4:
                 bot_response = "Oto informacje z Wikipedii:\n"
                 relevant_sentences = extract_relevant_sentences(wiki_content, user_input)
                 bot_response += "\n".join(relevant_sentences)
                 return bot_response
     except KeyError:
-        pass  
+        pass
     except Exception as e:
-        print(f"Wystąpił błąd: {e}")
+        # Zwracanie błędu w formacie JSON
+        error_response = {
+            "error": "Wystąpił błąd",
+            "message": str(e)
+        }
+        return jsonify(error_response), 500
 
     # Użyj GPT-3 jako ostatecznej opcji, przy braku gotowych odpowiedzi lub zbyt niskiemu podobieństwu cosinusowemu.
     return get_gpt3_response(user_input)
+
 
 
 
