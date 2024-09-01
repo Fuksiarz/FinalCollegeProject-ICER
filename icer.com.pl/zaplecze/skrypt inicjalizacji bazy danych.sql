@@ -1,5 +1,5 @@
 -- Utworzenie bazy danych o nazwie sklep, jeśli jeszcze nie istnieje
-CREATE DATABASE IF NOT EXISTS sklep;
+CREATE DATABASE IF NOT EXISTS icer;
 
 -- Wybór bazy danych sklep
 USE sklep;
