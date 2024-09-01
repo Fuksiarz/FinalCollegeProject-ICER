@@ -1,8 +1,7 @@
--- Utworzenie bazy danych o nazwie sklep, jeśli jeszcze nie istnieje
 CREATE DATABASE IF NOT EXISTS icer;
 
--- Wybór bazy danych sklep
-USE sklep;
+-- Wybór bazy danych icer
+USE icer;
 
 DELIMITER //
 
@@ -261,6 +260,15 @@ END //
 
 DELIMITER ;
 
+
+
+
+
+CALL CreateAllTables();
+CALL UpdateSwiezosc(NULL);
+CALL UpdatePowiadomienia();
+
+
 DELIMITER //
 
 CREATE TRIGGER set_premium_end_date
@@ -279,9 +287,3 @@ BEGIN
 END; //
 
 DELIMITER ;
-
-
-
-CALL CreateAllTables();
-CALL UpdateSwiezosc(NULL);
-CALL UpdatePowiadomienia();
