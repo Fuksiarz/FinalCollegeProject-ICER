@@ -1,3 +1,9 @@
+Aplikacja wymaga uzupełnienia dwóch plików .env znajdujących się w odpowiednich lokalizacjach.
+
+Backend: Plik .env znajduje się w katalogu icer.com.pl\zaplecze. Uzupełnij go swoimi kluczami tam, gdzie jest your key. W przypadku, gdy użytkownik utworzył serwer MySQL z innym loginem i hasłem, należy również zaktualizować te dane w pliku .env.
+    icer.com.pl\zaplecze\.env
+Frontend: Plik .env znajduje się w katalogu icer.com.pl\public_html. Uzupełnij go swoim kluczem Stripe.
+    icer.com.pl\public_html\.env
 By uruchomić poprawnie kod należy zainstalować niezbędne biblioteki z pliku requierments.txt.
     
     pip install -r requirements.txt
