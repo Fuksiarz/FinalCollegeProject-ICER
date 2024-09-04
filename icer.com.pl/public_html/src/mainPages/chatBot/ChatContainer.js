@@ -12,10 +12,9 @@ import {AuthContext} from "../account/auth-context";
 //funkcja chatu z botem
 function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
 
-    const { user } = useContext(AuthContext);
+    const {user} = useContext(AuthContext);
     // wyodrębnienie sesji użytkownika do przesłania do api w ramach autoryzacji
     const username = user ? user.username : null;
-
 
     // Zapisz historię wiadomości w localStorage na podstawie username
     const saveMessagesToLocalStorage = (messages, username) => {
@@ -30,10 +29,10 @@ function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
     const [messages, setMessages] = useState(() => getMessagesFromLocalStorage(username));
     useEffect(() => {
         saveMessagesToLocalStorage(messages, username);//zapisz historię
-    }, [messages,username]);//wykonaj przy zmianie wartości messages
+    }, [messages, username]);//wykonaj przy zmianie wartości messages
 
     useEffect(() => {
-        console.log(messages);
+
     }, [messages]);
     //funkcja wysyłająca wiadomość od uzytkownika i pobierająca odpowiedź
     const handleBotResponse = async (userMessage) => {
@@ -46,7 +45,8 @@ function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
 
             const botResponse = response.data.response;
             //dodawanie odpowiedzi do zmiennej posiadającej całą konwersację
-            setMessages(prevMessages => [...prevMessages, {text: botResponse, id: Date.now(), sender: 'bot'}]);
+            setMessages(prevMessages => [...prevMessages,
+                {text: botResponse, id: Date.now(), sender: 'bot'}]);
 
         } catch (error) {
             //w ramach błędu z wykonaniem zapytania do api wyświetla komunikat w konsoli
@@ -64,7 +64,6 @@ function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
     //funkcja do zmiany wartości chatIsMinimized, wykorzystywana do minimalizowania i przywracania chatu
     const handleToggleMinimize = (x) => {
         setChatIsMinimized(x);
-        console.log(chatIsMinimized)
     };
 
     //zwróć chat
@@ -73,22 +72,25 @@ function ChatContainer({chatIsMinimized, setChatIsMinimized}) {
         <>
 
             {chatIsMinimized === 3 ?
-                <div className='chatbotIconMinimizedDiv' onClick={()=>{handleToggleMinimize(2)}}>
+                <div className='chatbotIconMinimizedDiv' onClick={() => {
+                    handleToggleMinimize(2)
+                }}>
                     <Link to="/Chatbot">
                         <Icon className="chatbotIconMinimized" icon="bx:bot"/>
 
-                </Link>
+                    </Link>
                 </div>
-            :
+                :
                 chatIsMinimized === 2 ?
-            <div className={`chat-container`}>
-                {/*funkcja posiadająca listę wiadomości, przekazujemy jej zmienną, która posiada konwerację*/}
-                <MessageList messages={messages}/>
+                    <div className={`chat-container`}>
+                        {/*funkcja posiadająca listę wiadomości, przekazujemy jej zmienną, która posiada konwerację*/}
+                        <MessageList messages={messages}/>
 
-                {/*funkcja przyjmująca wiadomość od użytkownika, przyjmuje funkcję wysyłania wiadomości*/}
-                <ChatInput onSendMessage={handleSendMessage}  onToggleMinimize={handleToggleMinimize}/>
+                        {/*funkcja przyjmująca wiadomość od użytkownika, przyjmuje funkcję wysyłania wiadomości*/}
+                        <ChatInput onSendMessage={handleSendMessage}
+                                   onToggleMinimize={handleToggleMinimize}/>
 
-            </div>:
+                    </div> :
                     null
             }
         </>

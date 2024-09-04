@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {API_URL} from "../../settings/config";
+import {API_URL} from "../settings/config";
 
 //Funkcja, która wysyła ramkę (część filmu) do serwera w ramach analizy obrazu użytkownika - w celu znalezienia oczu
 export const sendFrameToFlaskForAdvert = async (frameBase64,eyes,setEyes) => {
@@ -11,6 +11,7 @@ export const sendFrameToFlaskForAdvert = async (frameBase64,eyes,setEyes) => {
                 "Content-Type": "application/json",
             },
         });
+
         //ustawiamy informację czy wykryto oczy w zmiennej eyes
         setEyes(response.data.eyes_detected)
 

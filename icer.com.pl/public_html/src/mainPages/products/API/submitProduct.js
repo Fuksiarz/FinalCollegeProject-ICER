@@ -1,12 +1,15 @@
 import axios from "axios";
 import {API_URL} from "../../settings/config";
 import {toast} from "react-toastify";
-import {initializeProduct} from "../hooks/initializeProduct";
+import {initializeProduct} from "../add/initializeProduct";
 
 
-//funkcja do komunikacji z API odnośnie wysłania produktu. Przyjmuje: produkt, id sesji użytkownika, obrazek, ustawienie
-// obrazka, podgląd obrazka, ustawienie podglądu obrazka, ustawienie odświeżenia po dodaniu, ustawienie produktu.
-export const submitProduct = async (product, sessionId, image, setImage, setImagePreview, setRefresh, setProduct) => {
+//funkcja do komunikacji z API odnośnie wysłania produktu. Przyjmuje: produkt, id sesji użytkownika, obrazek,
+// ustawienie obrazka, podgląd obrazka, ustawienie podglądu obrazka, ustawienie odświeżenia po dodaniu,
+// ustawienie produktu.
+export const submitProduct =
+    async (product, sessionId, image, setImage, setImagePreview, setRefresh, setProduct) => {
+
     try {
         const response = await axios.post(`${API_URL}/api/add_product`, product, {
             headers: {
@@ -15,6 +18,7 @@ export const submitProduct = async (product, sessionId, image, setImage, setImag
             },
         });
         // w razie sukcesu pokaż komunikat
+
         toast.success(`Produkt ${product.nazwa} został dodany!`);
         URL.revokeObjectURL(image); // zwalniamy stan podglądu obrazu tylko po pomyślnym wysłaniu
         setImage(null); //ustawiamy obrazek na null

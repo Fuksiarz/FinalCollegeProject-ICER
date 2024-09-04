@@ -30,7 +30,7 @@ export const useProductActions = (refresh,data,sessionId, setData, setRefresh,ed
     };
     //po zdecydowaniu się na edycję porduktu wypełnij pola formularza przyjmowanym produktem, który jest edytowany
     const handleEditClick = (product) => {
-        console.log(product)
+
         setEditingProduct({
             id: product.produktID,
             nazwa: product.nazwa,

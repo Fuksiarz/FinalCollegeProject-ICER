@@ -22,18 +22,20 @@ export function Notifications({small, left}) {
     return (
         <>  {/* w zależności od wartości wejściowych 'small' oraz 'left' wyświetlaj właściwą listę*/}
             {/* mała lista na stronie głównej*/}
-            {small && !left ? <NotificationsList data={notificationsData.data} action={notificationActions} small={true}
-                                                 left={true}/> :
+            {small && !left ? <NotificationsList data={notificationsData.data} action={notificationActions}
+                                                 small={true}  left={true}/> :
                 small && left ?
                     <NotificationsList data={notificationsData.data} action={notificationActions} small={true}/> :
 
                     <> {/* duża lista na stronie powiadomień*/}
-                        <div className="notificationListForBig">  {/* kontener z funkcją, która wyświetla listę powiadomień*/}
+                        <div className="notificationListForBig">
 
-                            {/* funkcja z listą powiadomień przyjmująca dane z powiadomieniami oraz możliwe akcje na powiadomieniach*/}
+                            {/* funkcja z listą powiadomień przyjmująca dane z powiadomieniami
+                            oraz możliwe akcje na powiadomieniach*/}
                             <NotificationsList data={notificationsData.data} action={notificationActions}/>
                         </div>
-                        <div className="spaceBetweenButtonsAndNotifications"></div> {/*element tworzący przestrzeń między kontenerami*/}
+                        {/*element tworzący przestrzeń między kontenerami*/}
+                        <div className="spaceBetweenButtonsAndNotifications"></div>
                         <div className="manageButtons">  {/* kontener z przyciskami */}
                             <button onClick={notificationActions.handleReadAllNotifications}
                                     className="handleReadAllButton"><h2>odczytaj wszystkie</h2></button>
@@ -44,3 +46,4 @@ export function Notifications({small, left}) {
         </>
     );
 }
+

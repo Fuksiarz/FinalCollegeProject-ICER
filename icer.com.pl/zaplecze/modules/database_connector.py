@@ -5,7 +5,6 @@ from flask import jsonify
 from urllib.parse import urlparse
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 
@@ -17,7 +16,7 @@ class DatabaseConnector:
     db_password = url.password
     db_name = url.path[1:]
 
-    def __init__(self, host=db_host, user=db_user, password=db_password, database= db_name):
+    def __init__(self, host=db_host, user=db_user, password=db_password, database=db_name):
         self.host = host
         self.user = user
         self.password = password
@@ -39,8 +38,6 @@ class DatabaseConnector:
                 password=self.password,
                 database=self.database
             )
-            print('polaczylem z baza danych ')
-            # print("Połączono z bazą danych!")
         except mysql.connector.Error as error:
             print("Błąd połączenia z bazą danych: ", error)
 
@@ -90,21 +87,32 @@ class DatabaseConnector:
 
                 # Zaktualizuj przypisanie w tabeli icer tylko dla konkretnego użytkownika
                 update_icer_query = """
-                    UPDATE icer
-                    SET produktID = %s
+                    UPDATE Icer
+                    SET produktID = %s, default_photo = 0
                     WHERE produktID = %s
                     AND UserID = %s
                 """
                 cursor.execute(update_icer_query, (new_product_id, product_id, user_id))
 
-                # Zaktualizuj wpisy w tabeli UserPhotos
-                update_userphotos_query = """
-                    UPDATE UserPhotos
-                    SET produktID = %s
-                    WHERE produktID = %s
-                    AND userID = %s
+                # Pobierz lokalizację zdjęcia dla starego produktu z tabeli Photos
+                get_photo_location_query = """
+                    SELECT lokalizacja FROM Photos WHERE produktID = %s
                 """
-                cursor.execute(update_userphotos_query, (new_product_id, product_id, user_id))
+                cursor.execute(get_photo_location_query, (product_id,))
+                photo_location_result = cursor.fetchone()
+
+                if photo_location_result:
+                    photo_location = photo_location_result['lokalizacja']
+
+                    # Dodaj nowy wpis do tabeli UserPhotos
+                    insert_userphotos_query = """
+                        INSERT INTO UserPhotos (produktID, userID, lokalizacja)
+                        VALUES (%s, %s, %s)
+                    """
+                    cursor.execute(insert_userphotos_query, (new_product_id, user_id, photo_location))
+                else:
+                    raise Exception("Lokalizacja zdjęcia nie została znaleziona dla produktID: {}".format(product_id))
+
 
             else:
                 # Zaktualizuj Produkt bez tworzenia kopii
@@ -125,7 +133,7 @@ class DatabaseConnector:
             self.connection.commit()
 
             # Zaktualizuj ilość w tabeli 'icer'
-            update_icer_query = """UPDATE icer SET 
+            update_icer_query = """UPDATE Icer SET 
                                       ilosc=%s
                                     WHERE produktID=%s AND UserID=%s"""
 
@@ -149,7 +157,6 @@ class DatabaseConnector:
 
     @staticmethod
     def get_user_id_by_username(cursor, session):
-        print(f'W get_user_id_by_username sesja: {session}')
         # Sprawdzenie, czy użytkownik jest zalogowany
         if 'username' not in session:
             return None, None, jsonify({"error": "User not logged in"}), 401

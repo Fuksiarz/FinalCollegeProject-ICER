@@ -12,7 +12,7 @@ import ChatContainer from "./mainPages/chatBot/ChatContainer";
 function App() {
     const {user} = useContext(AuthContext);
     //pobieranie informacji czy użytkownik jest użytkownikiem premium z kontekstu ustawień
-    const {premiumUser} = useContext(SettingsContext);
+    const {premiumUser, refresh} = useContext(SettingsContext);
     // Zmienna określająca czy włączyć kontener z reklamą
     const [adIsOn, setAdIsOn] = useState();
     //zmienna określająca czy chat został zminimalizowany z początkową wartością ustawioną na 1

@@ -3,12 +3,8 @@
 import os
 import base64
 from flask import jsonify
-
 import time
 
-from flask import jsonify
-
-from flask import jsonify
 
 
 def handle_image_upload(db_connector, image_data_base64, user_id, product_id):
@@ -44,7 +40,7 @@ def handle_image_upload(db_connector, image_data_base64, user_id, product_id):
         connection.commit()
 
         # Aktualizacja flagi default_photo w tabeli icer dla konkretnego produktu użytkownika na 0
-        update_query = "UPDATE icer SET default_photo = 0 WHERE UserID = %s AND produktID = %s"
+        update_query = "UPDATE Icer SET default_photo = 0 WHERE UserID = %s AND produktID = %s"
         cursor.execute(update_query, (user_id, product_id))
         connection.commit()
 
@@ -62,29 +58,22 @@ def change_user_profile(db_connector, user_id, image_data_base64):
     try:
         # Odkodowanie danych obrazu z Base64
         image_data = base64.b64decode(image_data_base64.split(",")[1])
-
         # Aktualny timestamp jako unikalna nazwa pliku
         image_name = f"{int(time.time())}.jpg"
-
         # Nowa lokalizacja folderu, gdzie mają być zapisane obrazy
         images_folder = os.path.join("../zaplecze/photos/userProfilePicture")
-
         # Tworzenie ścieżki do zapisu obrazu
         image_path = os.path.join(images_folder, image_name)
-
         # Zapis odkodowanego obrazu na serwerze
         with open(image_path, 'wb') as image_file:
             image_file.write(image_data)
-
         # Uzyskanie połączenia z bazą danych
         connection = db_connector.get_connection()
         cursor = connection.cursor()
-
         # Sprawdzenie, czy wartość podstawowe_profilowe wynosi 0
         check_profile_query = "SELECT podstawowe_profilowe, lokalizacja_zdj FROM preferencje_uzytkownikow WHERE UserID = %s"
         cursor.execute(check_profile_query, (user_id,))
         profile_result = cursor.fetchone()
-
         if profile_result:
             if profile_result[0] == 0:
                 # Usunięcie poprzedniego zdjęcia użytkownika z serwera
